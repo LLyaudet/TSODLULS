@@ -1,0 +1,4 @@
+bin/libTSODLULS_1_0_0.a
+bin/libTSODLULS_1_0_0.so
+bin/TSODLULS_finite_orders.o
+bin/TSODLULS_finite_orders_dyn.o
