@@ -20,10 +20,10 @@ Preamble
 ----------------------------------------------------------------------------
 This folder contains the source of the library TSODLULS (Tree Structured Orders Definition Language, Universal Lexicographic Sort).
 
-This library provides functions to: 
+This library provides functions to:
  - lexicographicalize keys for sorting,
  - parse TSODL (Tree Structured Orders Definition Language) and generate C code from a TSOD (Tree Structured Order Definition) to lexicographicalize the keys,
  - sort string using (Contre)Lexicographic or Next order.
 
-To understand the theory behind this library you can read our article: 
+To understand the theory behind this library you can read our article:
 "A class of orders with linear? time sorting"

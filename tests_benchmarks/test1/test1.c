@@ -119,7 +119,7 @@ int main(int argc, char *argv[]){
       }
       f_float = TSODLULS_get_float_from_uint(ui_32);
       f_float_2 = TSODLULS_get_float_from_uint(ui_32_2);
-      
+
       if(
            (ui_32 == ui_32_2 && f_float != f_float_2)
         || (ui_32 > ui_32_2 && f_float <= f_float_2)
@@ -326,7 +326,7 @@ int main(int argc, char *argv[]){
       }
       i_32 = TSODLULS_get_int32_from_uint32(ui_32);
       i_32_2 = TSODLULS_get_int32_from_uint32(ui_32_2);
-      
+
       if(
            (ui_32 == ui_32_2 && i_32 != i_32_2)
         || (ui_32 > ui_32_2 && i_32 <= i_32_2)
@@ -418,7 +418,7 @@ int main(int argc, char *argv[]){
     printf("The one to one mapping between integers and signed integers (64) preserves the order.\n");
   }
   while(0);
-  
+
   return i_result;
 }//end function main()
 

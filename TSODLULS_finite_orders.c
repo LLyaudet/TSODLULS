@@ -35,16 +35,16 @@ uint32_t TSODLULS_get_uint_from_float(float f_float){
   temp.f = f_float;
   //negative first
   if(temp.ieee.negative == 1){
-    return 
-        (((uint32_t)1) << 31) 
-      - (  (((uint32_t)temp.ieee.exponent) << 23)//8 bits 
+    return
+        (((uint32_t)1) << 31)
+      - (  (((uint32_t)temp.ieee.exponent) << 23)//8 bits
          + ((uint32_t)temp.ieee.mantissa)//23 bits
          + 1
         )
     ;
   }
   else{
-    return (((uint32_t)1) << 31) 
+    return (((uint32_t)1) << 31)
          + (((uint32_t)temp.ieee.exponent) << 23)//8 bits
          + ((uint32_t)temp.ieee.mantissa);//23 bits
   }
@@ -85,8 +85,8 @@ uint64_t TSODLULS_get_uint_from_double(double f_double){
   temp.d = f_double;
   //negative first
   if(temp.ieee.negative == 1){
-    return 
-        (((uint64_t)1) << 63) 
+    return
+        (((uint64_t)1) << 63)
       - (  (((uint64_t)temp.ieee.exponent) << 52)//11 bits
          + (((uint64_t)temp.ieee.mantissa0) << 32)//20 bits
          + ((uint64_t)temp.ieee.mantissa1)//32 bits
@@ -95,8 +95,8 @@ uint64_t TSODLULS_get_uint_from_double(double f_double){
     ;
   }
   else{
-    return (((uint64_t)1) << 63) 
-         + (((uint64_t)temp.ieee.exponent) << 52)//11 bits 
+    return (((uint64_t)1) << 63)
+         + (((uint64_t)temp.ieee.exponent) << 52)//11 bits
          + (((uint64_t)temp.ieee.mantissa0) << 32)//20 bits
          + ((uint64_t)temp.ieee.mantissa1);//32 bits
   }
@@ -272,7 +272,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
     p_sort_element->s_key = (unsigned char*) p_for_realloc;
     p_sort_element->i_allocated_size *= 2;
   }
-  
+
   if(i_number_of_lex_padding_bytes == -1//4 bits are sufficient
     && i_number_of_contrelex_padding_bytes == -1//4 bits are sufficient
   ){

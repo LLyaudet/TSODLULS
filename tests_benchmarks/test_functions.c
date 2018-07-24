@@ -125,7 +125,7 @@ void print_bits_for(void * p_data, size_t i_data_size){
     }
     printf(" ");
   }
-  
+
 }
 
 
