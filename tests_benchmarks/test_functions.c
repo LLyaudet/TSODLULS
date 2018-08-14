@@ -130,3 +130,27 @@ void print_bits_for(void * p_data, size_t i_data_size){
 
 
 
+uint8_t get_random_uint8(){
+  return (uint8_t)rand();
+}
+
+
+
+uint16_t get_random_uint16(){
+  return (uint16_t)rand();
+}
+
+
+
+uint32_t get_random_uint32(){
+  return ((uint32_t)rand()) + ((((uint32_t)rand()) % 2) << 31);//we assume glibc rand with rand max on 31 bits
+}
+
+
+
+uint64_t get_random_uint64(){
+  return ((uint64_t)rand()) + (((uint64_t)rand()) << 31) + ((((uint64_t)rand()) % 4) << 62);//we assume glibc rand with rand max on 31 bits
+}
+
+
+

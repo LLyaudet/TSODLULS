@@ -31,30 +31,47 @@ build: build-static build-dynamic
 #Static library
 build-static: ./bin/libTSODLULS_$(VERSION).a
 
-./bin/libTSODLULS_$(VERSION).a: ./bin/TSODLULS_finite_orders.o
-	ar -rcs ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o
+./bin/libTSODLULS_$(VERSION).a: ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o
+	ar -rcs ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o
 #	ar -rc ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o
 #	ranlib ./bin/libTSODLULS_$(VERSION).a
 
 ./bin/TSODLULS_finite_orders.o: ./TSODLULS.h ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_finite_orders.c -o ./bin/TSODLULS_finite_orders.o
 
+./bin/TSODLULS_sorting.o: ./TSODLULS.h ./TSODLULS_sorting.c
+	$(CC) $(CFLAGS) -c ./TSODLULS_sorting.c -o ./bin/TSODLULS_sorting.o
+
+./bin/TSODLULS_comparison.o: ./TSODLULS.h ./TSODLULS_comparison.c
+	$(CC) $(CFLAGS) -c ./TSODLULS_comparison.c -o ./bin/TSODLULS_comparison.o
+
+./bin/TSODLULS_misc.o: ./TSODLULS.h ./TSODLULS_misc.c
+	$(CC) $(CFLAGS) -c ./TSODLULS_misc.c -o ./bin/TSODLULS_misc.o
+
 
 #Dynamic library
 build-dynamic: ./bin/libTSODLULS_$(VERSION).so
 
-./bin/libTSODLULS_$(VERSION).so: ./bin/TSODLULS_finite_orders_dyn.o
-	$(CC) -shared -o ./bin/libTSODLULS_$(VERSION).so ./bin/TSODLULS_finite_orders_dyn.o
+./bin/libTSODLULS_$(VERSION).so: ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o
+	$(CC) -shared -o ./bin/libTSODLULS_$(VERSION).so ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o
 
 ./bin/TSODLULS_finite_orders_dyn.o: ./TSODLULS.h ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_finite_orders.c -o ./bin/TSODLULS_finite_orders_dyn.o
 
+./bin/TSODLULS_sorting_dyn.o: ./TSODLULS.h ./TSODLULS_sorting.c
+	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting.c -o ./bin/TSODLULS_sorting_dyn.o
+
+./bin/TSODLULS_comparison_dyn.o: ./TSODLULS.h ./TSODLULS_comparison.c
+	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_comparison.c -o ./bin/TSODLULS_comparison_dyn.o
+
+./bin/TSODLULS_misc_dyn.o: ./TSODLULS.h ./TSODLULS_misc.c
+	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_misc.c -o ./bin/TSODLULS_misc_dyn.o
 
 
 #-----------------------------------------------------------
 #Build tests
 #-----------------------------------------------------------
-build-tests: build-test1
+build-tests: build-test1 build-test2
 
 
 #Test 1
@@ -69,6 +86,20 @@ build-test1: ./tests_benchmarks/test1/test1.exe ./tests_benchmarks/test1/test1_d
 
 ./tests_benchmarks/test1/test1.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test1/test1.c
 	$(CC) $(CFLAGS) -c ./tests_benchmarks/test1/test1.c -o ./tests_benchmarks/test1/test1.o
+
+
+#Test 2
+build-test2: ./tests_benchmarks/test2/test2.exe ./tests_benchmarks/test2/test2_dyn.exe
+
+#static linking requires the library to come after the test object
+./tests_benchmarks/test2/test2.exe: ./bin/libTSODLULS_$(VERSION).a ./tests_benchmarks/test2/test2.o
+	$(CC) -static -L./bin/ ./tests_benchmarks/test2/test2.o -lTSODLULS_$(VERSION) -o ./tests_benchmarks/test2/test2.exe
+
+./tests_benchmarks/test2/test2_dyn.exe: ./bin/libTSODLULS_$(VERSION).so ./tests_benchmarks/test2/test2.o
+	$(CC) -L./bin/ -lTSODLULS_$(VERSION) ./tests_benchmarks/test2/test2.o -o ./tests_benchmarks/test2/test2_dyn.exe
+
+./tests_benchmarks/test2/test2.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test2/test2.c
+	$(CC) $(CFLAGS) -c ./tests_benchmarks/test2/test2.c -o ./tests_benchmarks/test2/test2.o
 
 
 
@@ -90,9 +121,11 @@ test: build-tests run-tests
 
 run-tests:
 	cd ./tests_benchmarks/test1/ && echo "\nTest1:" && ./test1.exe && cd ../..
+	cd ./tests_benchmarks/test2/ && echo "\nTest2:" && ./test2.exe && cd ../..
 
 run-tests-dynamic: install
 	cd ./tests_benchmarks/test1/ && echo "\nTest1 dyn:" && ./test1_dyn.exe && cd ../..
+	cd ./tests_benchmarks/test2/ && echo "\nTest2 dyn:" && ./test2_dyn.exe && cd ../..
 
 
 
@@ -136,4 +169,5 @@ run-benchmarks-dynamic: install
 clean:
 	rm -f ./bin/*
 	rm -f ./tests_benchmarks/test1/*.o ./tests_benchmarks/test1/*.exe ./tests_benchmarks/test1/*.test_result
+	rm -f ./tests_benchmarks/test2/*.o ./tests_benchmarks/test2/*.exe ./tests_benchmarks/test2/*.test_result
 	rm -f ./tests_benchmarks/benchmark1/*.o ./tests_benchmarks/benchmark1/*.exe ./tests_benchmarks/benchmark1/*.test_result

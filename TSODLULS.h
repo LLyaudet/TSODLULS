@@ -52,7 +52,7 @@ typedef struct TSODLULS_sort_element {
   void* p_object;
   size_t i_key_size;
   size_t i_allocated_size;
-  unsigned char* s_key;
+  uint8_t* s_key;
 } t_TSODLULS_sort_element;
 
 
@@ -211,6 +211,183 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   int8_t i_number_of_lex_padding_bytes,
   int8_t i_number_of_contrelex_padding_bytes
 );
+
+
+
+//------------------------------------------------------------------------------------
+//Sorting
+//------------------------------------------------------------------------------------
+/**
+ * Sorting functions for nextified strings
+ * The current state of the art sorting function for nextified strings.
+ * Its implementation may change without warning.
+ */
+int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
+
+
+
+/**
+ * Sorting functions for nextified strings
+ * A sorting algorithm for nextified strings based on radix sort with octets digits and counting sort as a subroutine.
+ */
+int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
+
+
+
+//------------------------------------------------------------------------------------
+//Comparing
+//------------------------------------------------------------------------------------
+/**
+ * Comparison function
+ * uint8 pointers
+ */
+int TSODLULS_compare_uint8_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * uint16 pointers
+ */
+int TSODLULS_compare_uint16_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * uint32 pointers
+ */
+int TSODLULS_compare_uint32_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * uint64 pointers
+ */
+int TSODLULS_compare_uint64_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * int8 pointers
+ */
+int TSODLULS_compare_int8_direct(const void *a, const void *b);
+
+
+/**
+ * Comparison function
+ * int16 pointers
+ */
+int TSODLULS_compare_int16_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * int32 pointers
+ */
+int TSODLULS_compare_int32_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * int64 pointers
+ */
+int TSODLULS_compare_int64_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * float pointers
+ */
+int TSODLULS_compare_float_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * double pointers
+ */
+int TSODLULS_compare_double_direct(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * uint8 in TSODLULS cell
+ */
+int TSODLULS_compare_uint8_in_cell(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * uint16 in TSODLULS cell
+ */
+int TSODLULS_compare_uint16_in_cell(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * uint32 in TSODLULS cell
+ */
+int TSODLULS_compare_uint32_in_cell(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * uint64 in TSODLULS cell
+ */
+int TSODLULS_compare_uint64_in_cell(const void *a, const void *b);
+
+
+
+/**
+ * Comparison function
+ * nextified key in TSODLULS cell
+ */
+int TSODLULS_compare_nextified_key_in_cell(const void *a, const void *b);
+
+
+
+//------------------------------------------------------------------------------------
+//Miscellaneous
+//------------------------------------------------------------------------------------
+/**
+ * Miscellaneous functions
+ * Initialize a TSODLULS element
+ */
+void TSODLULS_init_element(t_TSODLULS_sort_element* p_element);
+
+
+
+/**
+ * Miscellaneous functions
+ * Free the key of a TSODLULS element (if necessary) and reinitializes the corresponding fields
+ */
+void TSODLULS_free_key(t_TSODLULS_sort_element* p_element);
+
+
+
+/**
+ * Miscellaneous functions
+ * Initialize an array of TSODLULS elements
+ */
+int TSODLULS_init_array_of_elements(t_TSODLULS_sort_element** p_arr_elements, size_t i_number_of_elements);
+
+
+
+/**
+ * Miscellaneous functions
+ * Free the keys of all TSODLULS elements in an array
+ */
+void TSODLULS_free_keys_in_array_of_elements(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
 
 
 

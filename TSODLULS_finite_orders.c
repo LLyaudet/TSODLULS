@@ -48,7 +48,7 @@ uint32_t TSODLULS_get_uint_from_float(float f_float){
          + (((uint32_t)temp.ieee.exponent) << 23)//8 bits
          + ((uint32_t)temp.ieee.mantissa);//23 bits
   }
-}//end TSODLULS_get_uint_from_float()
+}//end function TSODLULS_get_uint_from_float()
 
 
 
@@ -69,7 +69,7 @@ float TSODLULS_get_float_from_uint(uint32_t i32){
   temp.ieee.exponent = (i32 >> 23) % (((uint32_t)1) << 8);
   temp.ieee.mantissa = i32 % (((uint32_t)1) << 23);
   return temp.f;
-}//end TSODLULS_get_float_from_uint()
+}//end function TSODLULS_get_float_from_uint()
 
 
 
@@ -100,7 +100,7 @@ uint64_t TSODLULS_get_uint_from_double(double f_double){
          + (((uint64_t)temp.ieee.mantissa0) << 32)//20 bits
          + ((uint64_t)temp.ieee.mantissa1);//32 bits
   }
-}//end TSODLULS_get_uint_from_double()
+}//end function TSODLULS_get_uint_from_double()
 
 
 
@@ -122,7 +122,7 @@ double TSODLULS_get_double_from_uint(uint64_t i64){
   temp.ieee.mantissa0 = (i64 >> 32) % (((uint64_t)1) << 20);
   temp.ieee.mantissa1 = i64 % (((uint64_t)1) << 32);
   return temp.d;
-}//end TSODLULS_get_double_from_uint()
+}//end function TSODLULS_get_double_from_uint()
 
 
 
@@ -135,7 +135,7 @@ uint8_t TSODLULS_get_uint8_from_int8(int8_t i8){
     return ((uint8_t)i8) + (((uint8_t)1) << 7);
   }
   return ((uint8_t)((INT8_MAX + i8) + 1));
-}//end TSODLULS_get_uint8_from_int8()
+}//end function TSODLULS_get_uint8_from_int8()
 
 
 
@@ -148,7 +148,7 @@ int8_t TSODLULS_get_int8_from_uint8(uint8_t i8){
     return ((int8_t) (i8 - (((uint8_t)1) << 7)));
   }
   return ((int8_t)((((uint8_t)1) << 7) + i8));
-}//end TSODLULS_get_int8_from_uint8()
+}//end function TSODLULS_get_int8_from_uint8()
 
 
 
@@ -161,7 +161,7 @@ uint16_t TSODLULS_get_uint16_from_int16(int16_t i16){
     return ((uint16_t)i16) + (((uint16_t)1) << 15);
   }
   return ((uint16_t)((INT16_MAX + i16) + 1));
-}//end TSODLULS_get_uint16_from_int16()
+}//end function TSODLULS_get_uint16_from_int16()
 
 
 
@@ -174,7 +174,7 @@ int16_t TSODLULS_get_int16_from_uint16(uint16_t i16){
     return ((int16_t) (i16 - (((uint16_t)1) << 15)));
   }
   return ((int16_t)((((uint16_t)1) << 15) + i16));
-}//end TSODLULS_get_int16_from_uint16()
+}//end function TSODLULS_get_int16_from_uint16()
 
 
 
@@ -187,7 +187,7 @@ uint32_t TSODLULS_get_uint32_from_int32(int32_t i32){
     return ((uint32_t)i32) + (((uint32_t)1) << 31);
   }
   return ((uint32_t)((INT32_MAX + i32) + 1));
-}//end TSODLULS_get_uint32_from_int32()
+}//end function TSODLULS_get_uint32_from_int32()
 
 
 
@@ -200,7 +200,7 @@ int32_t TSODLULS_get_int32_from_uint32(uint32_t i32){
     return ((int32_t) (i32 - (((uint32_t)1) << 31)));
   }
   return ((int32_t)((((uint32_t)1) << 31) + i32));
-}//end TSODLULS_get_int32_from_uint32()
+}//end function TSODLULS_get_int32_from_uint32()
 
 
 
@@ -213,7 +213,7 @@ uint64_t TSODLULS_get_uint64_from_int64(int64_t i64){
     return ((uint64_t)i64) + (((uint64_t)1) << 63);
   }
   return ((uint64_t)((INT64_MAX + i64) + 1));
-}//end TSODLULS_get_uint64_from_int64()
+}//end function TSODLULS_get_uint64_from_int64()
 
 
 
@@ -226,7 +226,7 @@ int64_t TSODLULS_get_int64_from_uint64(uint64_t i64){
     return ((int64_t) (i64 - (((uint64_t)1) << 63)));
   }
   return ((int64_t)((((uint64_t)1) << 63) + i64));
-}//end TSODLULS_get_int64_from_uint64()
+}//end function TSODLULS_get_int64_from_uint64()
 
 
 
@@ -253,15 +253,14 @@ int TSODLULS_add_bytes_to_key_from_uint8(
     i_size_needed += i_number_of_contrelex_padding_bytes;
   }
   if(p_sort_element->i_allocated_size == 0){
-    p_sort_element->s_key = calloc(i_size_needed, sizeof(unsigned char));
+    p_sort_element->s_key = calloc(i_size_needed, sizeof(uint8_t));
     if(p_sort_element ==  NULL){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
     p_sort_element->i_allocated_size = i_size_needed;
-    p_sort_element->i_key_size = i_size_needed;
   }
   else if(p_sort_element->i_allocated_size - p_sort_element->i_key_size < i_size_needed){
-    i_size_for_realloc = 2 * p_sort_element->i_allocated_size * sizeof(unsigned char);
+    i_size_for_realloc = 2 * p_sort_element->i_allocated_size * sizeof(uint8_t);
     if(i_size_for_realloc <= p_sort_element->i_allocated_size){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
@@ -269,7 +268,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
     if(p_for_realloc == NULL){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
-    p_sort_element->s_key = (unsigned char*) p_for_realloc;
+    p_sort_element->s_key = (uint8_t*) p_for_realloc;
     p_sort_element->i_allocated_size *= 2;
   }
 
@@ -277,7 +276,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
     && i_number_of_contrelex_padding_bytes == -1//4 bits are sufficient
   ){
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)i8;
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)i8;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
   }
   else{
@@ -287,7 +286,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)i8;
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)i8;
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -296,7 +295,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
     }
   }
   return 0;
-}//end TSODLULS_add_bytes_to_key_from_uint8
+}//end function TSODLULS_add_bytes_to_key_from_uint8()
 
 
 
@@ -324,15 +323,14 @@ int TSODLULS_add_bytes_to_key_from_uint16(
   }
   i_size_needed *= 2;
   if(p_sort_element->i_allocated_size == 0){
-    p_sort_element->s_key = calloc(i_size_needed, sizeof(unsigned char));
+    p_sort_element->s_key = calloc(i_size_needed, sizeof(uint8_t));
     if(p_sort_element ==  NULL){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
     p_sort_element->i_allocated_size = i_size_needed;
-    p_sort_element->i_key_size = i_size_needed;
   }
   else if(p_sort_element->i_allocated_size - p_sort_element->i_key_size < i_size_needed){
-    i_size_for_realloc = 2 * p_sort_element->i_allocated_size * sizeof(unsigned char);
+    i_size_for_realloc = 2 * p_sort_element->i_allocated_size * sizeof(uint8_t);
     if(i_size_for_realloc <= p_sort_element->i_allocated_size){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
@@ -340,7 +338,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
     if(p_for_realloc == NULL){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
-    p_sort_element->s_key = (unsigned char*) p_for_realloc;
+    p_sort_element->s_key = (uint8_t*) p_for_realloc;
     p_sort_element->i_allocated_size *= 2;
   }
 
@@ -348,10 +346,10 @@ int TSODLULS_add_bytes_to_key_from_uint16(
     && i_number_of_contrelex_padding_bytes == -1//4 bits are sufficient
   ){
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i16 >> 8);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i16 >> 8);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i16 % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i16 % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
   }
   else{
@@ -361,7 +359,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i16 >> 8);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i16 >> 8);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -375,7 +373,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i16 % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i16 % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -384,7 +382,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
     }
   }
   return 0;
-}//end TSODLULS_add_bytes_to_key_from_uint16
+}//end function TSODLULS_add_bytes_to_key_from_uint16()
 
 
 
@@ -412,15 +410,14 @@ int TSODLULS_add_bytes_to_key_from_uint32(
   }
   i_size_needed *= 4;
   if(p_sort_element->i_allocated_size == 0){
-    p_sort_element->s_key = calloc(i_size_needed, sizeof(unsigned char));
+    p_sort_element->s_key = calloc(i_size_needed, sizeof(uint8_t));
     if(p_sort_element ==  NULL){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
     p_sort_element->i_allocated_size = i_size_needed;
-    p_sort_element->i_key_size = i_size_needed;
   }
   else if(p_sort_element->i_allocated_size - p_sort_element->i_key_size < i_size_needed){
-    i_size_for_realloc = 2 * p_sort_element->i_allocated_size * sizeof(unsigned char);
+    i_size_for_realloc = 2 * p_sort_element->i_allocated_size * sizeof(uint8_t);
     if(i_size_for_realloc <= p_sort_element->i_allocated_size){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
@@ -428,7 +425,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     if(p_for_realloc == NULL){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
-    p_sort_element->s_key = (unsigned char*) p_for_realloc;
+    p_sort_element->s_key = (uint8_t*) p_for_realloc;
     p_sort_element->i_allocated_size *= 2;
   }
 
@@ -436,16 +433,16 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     && i_number_of_contrelex_padding_bytes == -1//4 bits are sufficient
   ){
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i32 >> 24);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i32 >> 24);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i32 >> 16) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i32 >> 16) % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i32 >> 8) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i32 >> 8) % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i32 % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i32 % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
   }
   else{
@@ -455,7 +452,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i32 >> 24);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i32 >> 24);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -469,7 +466,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i32 >> 16) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i32 >> 16) % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -483,7 +480,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i32 >> 8) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i32 >> 8) % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -497,7 +494,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i32 % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i32 % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -506,7 +503,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     }
   }
   return 0;
-}//end TSODLULS_add_bytes_to_key_from_uint32
+}//end function TSODLULS_add_bytes_to_key_from_uint32()
 
 
 
@@ -534,15 +531,14 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   }
   i_size_needed *= 8;
   if(p_sort_element->i_allocated_size == 0){
-    p_sort_element->s_key = calloc(i_size_needed, sizeof(unsigned char));
+    p_sort_element->s_key = calloc(i_size_needed, sizeof(uint8_t));
     if(p_sort_element ==  NULL){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
     p_sort_element->i_allocated_size = i_size_needed;
-    p_sort_element->i_key_size = i_size_needed;
   }
   else if(p_sort_element->i_allocated_size - p_sort_element->i_key_size < i_size_needed){
-    i_size_for_realloc = 2 * p_sort_element->i_allocated_size * sizeof(unsigned char);
+    i_size_for_realloc = 2 * p_sort_element->i_allocated_size * sizeof(uint8_t);
     if(i_size_for_realloc <= p_sort_element->i_allocated_size){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
@@ -550,7 +546,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     if(p_for_realloc == NULL){
       return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
     }
-    p_sort_element->s_key = (unsigned char*) p_for_realloc;
+    p_sort_element->s_key = (uint8_t*) p_for_realloc;
     p_sort_element->i_allocated_size *= 2;
   }
 
@@ -558,28 +554,28 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     && i_number_of_contrelex_padding_bytes == -1//4 bits are sufficient
   ){
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i64 >> 56);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i64 >> 56);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 48) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 48) % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 40) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 40) % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 32) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 32) % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 24) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 24) % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 16) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 16) % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 8) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 8) % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i64 % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i64 % 256);
     p_sort_element->s_key[p_sort_element->i_key_size++] = 240;
   }
   else{
@@ -589,7 +585,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i64 >> 56);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i64 >> 56);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -603,7 +599,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 48) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 48) % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -617,7 +613,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 40) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 40) % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -631,7 +627,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 32) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 32) % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -645,7 +641,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 24) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 24) % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -659,7 +655,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 16) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 16) % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -673,7 +669,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)((i64 >> 8) % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 8) % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -687,7 +683,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     for(int8_t i = 0; i < i_number_of_contrelex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 0;
     }
-    p_sort_element->s_key[p_sort_element->i_key_size++] = (unsigned char)(i64 % 256);
+    p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i64 % 256);
     for(int8_t i = 0; i < i_number_of_lex_padding_bytes; ++i){
       p_sort_element->s_key[p_sort_element->i_key_size++] = 255;
     }
@@ -696,4 +692,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     }
   }
   return 0;
-}//end TSODLULS_add_bytes_to_key_from_uint64
+}//end function TSODLULS_add_bytes_to_key_from_uint64()
+
+
+
