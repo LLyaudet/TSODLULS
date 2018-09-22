@@ -64,7 +64,7 @@ typedef struct TSODLULS_sort_element {
  * Conversion of finite orders to unsigned integer types
  * Change a float into an uint32
  * Nan (not a number) are separated into positive and negative nan.
- * The ordering is as follow : -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
+ * The ordering is as follow: -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
  * Use a custom function if you want to detect (-)nan floats and order them differently.
  */
 uint32_t TSODLULS_get_uint_from_float(float f_float);
@@ -81,9 +81,9 @@ float TSODLULS_get_float_from_uint(uint32_t i32);
 
 /**
  * Conversion of finite orders to unsigned integer types
- * Change a float into an uint64
+ * Change a double into an uint64
  * Nan (not a number) are separated into positive and negative nan.
- * The ordering is as follow : -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
+ * The ordering is as follow: -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
  * Use a custom function if you want to detect (-)nan floats and order them differently.
  */
 uint64_t TSODLULS_get_uint_from_double(double f_double);
@@ -92,7 +92,7 @@ uint64_t TSODLULS_get_uint_from_double(double f_double);
 
 /**
  * Conversion of finite orders to unsigned integer types and back
- * Change an uint32 to the float encoded by it (see TSODLULS_get_uint_from_double)
+ * Change an uint64 to the double encoded by it (see TSODLULS_get_uint_from_double)
  */
 double TSODLULS_get_double_from_uint(uint64_t i64);
 
@@ -228,7 +228,17 @@ int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elem
 
 /**
  * Sorting functions for nextified strings
- * A sorting algorithm for nextified strings based on radix sort with octets digits and counting sort as a subroutine.
+ * The current state of the art stable sorting function for nextified strings.
+ * Its implementation may change without warning.
+ */
+int TSODLULS_sort_stable(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
+
+
+
+/**
+ * Sorting functions for nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
  */
 int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
 

@@ -20,29 +20,35 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 Explanations for this test:
 All 2^32 32 bits integers are converted to float and back to check that conversion is one to one.
 i_max couples of 32 bits integers are randomly chosen,
-and it is tested that comparison between them yields the same result than comparison between the corresponding floats.
+and it is tested that comparison between them yields the same result
+as comparison between the corresponding floats.
 
 i_max 64 bits integers are randomly chosen,
 and are converted to double and back to check that conversion is one to one.
 i_max couples of 64 bits integers are randomly chosen,
-and it is tested that comparison between them yields the same result than comparison between the corresponding doubles.
+and it is tested that comparison between them yields the same result
+as comparison between the corresponding doubles.
 
 All 2^8 8 bits integers are converted to signed 8 bits integers and back to check that conversion is one to one.
 All 2^16 couples of 8 bits integers are generated,
-and it is tested that comparison between them yields the same result than comparison between the corresponding signed integers.
+and it is tested that comparison between them yields the same result
+as comparison between the corresponding signed integers.
 
 All 2^16 16 bits integers are converted to signed 16 bits integers and back to check that conversion is one to one.
 All 2^32 couples of 16 bits integers are generated,
-and it is tested that comparison between them yields the same result than comparison between the corresponding signed integers.
+and it is tested that comparison between them yields the same result
+as comparison between the corresponding signed integers.
 
 All 2^32 32 bits integers are converted to signed 32 bits integers and back to check that conversion is one to one.
 i_max couples of 32 bits integers are randomly chosen,
-and it is tested that comparison between them yields the same result than comparison between the corresponding signed integers.
+and it is tested that comparison between them yields the same result
+as comparison between the corresponding signed integers.
 
 i_max 64 bits integers are randomly chosen,
 and are converted to signed integers and back to check that conversion is one to one.
 i_max couples of 64 bits integers are randomly chosen,
-and it is tested that comparison between them yields the same result than comparison between the corresponding signed integers.
+and it is tested that comparison between them yields the same result
+as comparison between the corresponding signed integers.
 */
 
 #include "../test_functions.c"
@@ -120,6 +126,9 @@ int main(int argc, char *argv[]){
       f_float = TSODLULS_get_float_from_uint(ui_32);
       f_float_2 = TSODLULS_get_float_from_uint(ui_32_2);
 
+      //nan floats are never !=, <=, or >=
+      //hence we check that the order on the unsigned integers is a linear extension
+      //of the partial order on floats
       if(
            (ui_32 == ui_32_2 && f_float != f_float_2)
         || (ui_32 > ui_32_2 && f_float <= f_float_2)
@@ -193,6 +202,9 @@ int main(int argc, char *argv[]){
       ui_64_2 = (((uint64_t) ui_32) << 32) + ((uint64_t) ui_32_2);
       f_double_2 = TSODLULS_get_double_from_uint(ui_64_2);
 
+      //nan doubles are never !=, <=, or >=
+      //hence we check that the order on the unsigned integers is a linear extension
+      //of the partial order on doubles
       if(
            (ui_64 == ui_64_2 && f_double != f_double_2)
         || (ui_64 > ui_64_2 && f_double <= f_double_2)

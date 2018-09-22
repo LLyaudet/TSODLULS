@@ -27,7 +27,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
  * Conversion of finite orders to unsigned integer types
  * Change a float into an uint32
  * Nan (not a number) are separated into positive and negative nan.
- * The ordering is as follow : -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
+ * The ordering is as follow: -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
  * Use a custom function if you want to detect (-)nan floats and order them differently.
  */
 uint32_t TSODLULS_get_uint_from_float(float f_float){
@@ -75,9 +75,9 @@ float TSODLULS_get_float_from_uint(uint32_t i32){
 
 /**
  * Conversion of finite orders to unsigned integer types
- * Change a float into an uint64
+ * Change a double into an uint64
  * Nan (not a number) are separated into positive and negative nan.
- * The ordering is as follow : -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
+ * The ordering is as follow: -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
  * Use a custom function if you want to detect (-)nan floats and order them differently.
  */
 uint64_t TSODLULS_get_uint_from_double(double f_double){

@@ -57,7 +57,7 @@ void TSODLULS_free_key(t_TSODLULS_sort_element* p_element){
  * Initialize an array of TSODLULS elements
  */
 int TSODLULS_init_array_of_elements(t_TSODLULS_sort_element** p_arr_elements, size_t i_number_of_elements){
-  *p_arr_elements =  calloc(i_number_of_elements, sizeof(t_TSODLULS_sort_element));
+  *p_arr_elements = calloc(i_number_of_elements, sizeof(t_TSODLULS_sort_element));
   if(*p_arr_elements == NULL){
     return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
   }

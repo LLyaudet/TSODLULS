@@ -49,7 +49,19 @@ int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elem
 
 /**
  * Sorting functions for nextified strings
- * A stable sorting algorithm for nextified strings with octets digits
+ * The current state of the art stable sorting function for nextified strings.
+ * Its implementation may change without warning.
+ */
+int TSODLULS_sort_stable(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
+  return TSODLULS_sort_radix8_count(arr_elements, i_number_of_elements);
+}//end function TSODLULS_sort_stable()
+
+
+
+/**
+ * Sorting functions for nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
  */
 int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
   int i_number_of_distinct_bytes = 0;
@@ -146,7 +158,8 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
       for(int i = 0; i < 256; ++i){
         if(arr_counts[i] > 1//nothing to do for one element, result is in original array
           //for nextified strings this test can be done on only one element
-          && arr_elements[current_instance.i_offset_first + arr_offsets[i] - 1].i_key_size > current_instance.i_depth + 1
+          && arr_elements[current_instance.i_offset_first + arr_offsets[i] - 1].i_key_size
+               > current_instance.i_depth + 1
         ){
           //we allocate more space for the new instance if necessary
           if(i_current_instance == i_max_number_of_instances - 1){
@@ -166,8 +179,10 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
             arr_instances = (t_TSODLULS_radix_instance*)p_for_realloc;
             i_max_number_of_instances *= 2;
           }
-          arr_instances[i_current_instance].i_offset_first = current_instance.i_offset_first + arr_offsets[i] - arr_counts[i];
-          arr_instances[i_current_instance].i_offset_last = current_instance.i_offset_first + arr_offsets[i] - 1;
+          arr_instances[i_current_instance].i_offset_first = current_instance.i_offset_first
+                                                           + arr_offsets[i] - arr_counts[i];
+          arr_instances[i_current_instance].i_offset_last = current_instance.i_offset_first
+                                                          + arr_offsets[i] - 1;
           arr_instances[i_current_instance].i_depth = current_instance.i_depth + 1;
           arr_instances[i_current_instance].b_copy = 0;
           ++i_current_instance;
@@ -183,9 +198,10 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
       }
       //instances creation
       for(int i = 0; i < 256; ++i){
-        if(arr_counts[i] > 1//nothing to do for one element, result is in original array
+        if(arr_counts[i] > 1
           //for nextified strings this test can be done on only one element
-          && arr_elements_copy[current_instance.i_offset_first + arr_offsets[i] - 1].i_key_size > current_instance.i_depth + 1
+          && arr_elements_copy[current_instance.i_offset_first + arr_offsets[i] - 1].i_key_size
+               > current_instance.i_depth + 1
         ){
           //we allocate more space for the new instance if necessary
           if(i_current_instance == i_max_number_of_instances - 1){
@@ -205,8 +221,10 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
             arr_instances = (t_TSODLULS_radix_instance*)p_for_realloc;
             i_max_number_of_instances *= 2;
           }
-          arr_instances[i_current_instance].i_offset_first = current_instance.i_offset_first + arr_offsets[i] - arr_counts[i];
-          arr_instances[i_current_instance].i_offset_last = current_instance.i_offset_first + arr_offsets[i] - 1;
+          arr_instances[i_current_instance].i_offset_first = current_instance.i_offset_first
+                                                           + arr_offsets[i] - arr_counts[i];
+          arr_instances[i_current_instance].i_offset_last = current_instance.i_offset_first
+                                                          + arr_offsets[i] - 1;
           arr_instances[i_current_instance].i_depth = current_instance.i_depth + 1;
           arr_instances[i_current_instance].b_copy = 1;
           ++i_current_instance;

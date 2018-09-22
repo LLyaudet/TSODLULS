@@ -143,13 +143,15 @@ uint16_t get_random_uint16(){
 
 
 uint32_t get_random_uint32(){
-  return ((uint32_t)rand()) + ((((uint32_t)rand()) % 2) << 31);//we assume glibc rand with rand max on 31 bits
+  //we assume glibc rand with rand max on 31 bits
+  return ((uint32_t)rand()) + ((((uint32_t)rand()) % 2) << 31);
 }
 
 
 
 uint64_t get_random_uint64(){
-  return ((uint64_t)rand()) + (((uint64_t)rand()) << 31) + ((((uint64_t)rand()) % 4) << 62);//we assume glibc rand with rand max on 31 bits
+  //we assume glibc rand with rand max on 31 bits
+  return ((uint64_t)rand()) + (((uint64_t)rand()) << 31) + ((((uint64_t)rand()) % 4) << 62);
 }
 
 

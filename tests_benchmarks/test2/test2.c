@@ -19,7 +19,8 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 /*
 Explanations for this test:
 - 1024 random uint64 are generated and for the following sets,
-  it is tested that glibc quicksort (direct and on TSODLULS cells) and TSODLULS sort yields the same result for sorting.
+  it is tested that glibc quicksort (direct and on TSODLULS cells)
+  and TSODLULS sort yield the same result for sorting.
 -- they are converted to 1024 random uint8
 -- they are converted to 1024 random uint16
 -- they are converted to 1024 random uint32
@@ -488,7 +489,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint8(&(arr_cells[i]), TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint8(
+          &(arr_cells[i]),
+          TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -512,7 +518,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint8(&(arr_cells[i]), TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint8(
+          &(arr_cells[i]),
+          TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -575,7 +586,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint16(&(arr_cells[i]), TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint16(
+          &(arr_cells[i]),
+          TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -599,7 +615,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint16(&(arr_cells[i]), TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint16(
+          &(arr_cells[i]),
+          TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -662,7 +683,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint32(&(arr_cells[i]), TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint32(
+          &(arr_cells[i]),
+          TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -686,7 +712,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint32(&(arr_cells[i]), TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint32(
+          &(arr_cells[i]),
+          TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -749,7 +780,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint64(&(arr_cells[i]), TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint64(
+          &(arr_cells[i]),
+          TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -773,7 +809,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint64(&(arr_cells[i]), TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint64(
+          &(arr_cells[i]),
+          TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -836,7 +877,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint32(&(arr_cells[i]), TSODLULS_get_uint_from_float(arr_f_float_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint32(
+          &(arr_cells[i]),
+          TSODLULS_get_uint_from_float(arr_f_float_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -852,7 +898,9 @@ int main(int argc, char *argv[]){
       //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
       //any comparison with nan or -nan float numbers will say that they are different
       //You have to compare using the bijection with uint32
-      if(TSODLULS_get_uint_from_float(arr_f_float_result2[i]) != TSODLULS_get_uint_from_float(arr_f_float_result1[i])){
+      if(TSODLULS_get_uint_from_float(arr_f_float_result2[i])
+           != TSODLULS_get_uint_from_float(arr_f_float_result1[i])
+      ){
         printf("qsort direct and in_cell gave different results (float)\n");
         i_result = -1;
         break;
@@ -864,7 +912,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint32(&(arr_cells[i]), TSODLULS_get_uint_from_float(arr_f_float_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint32(
+          &(arr_cells[i]),
+          TSODLULS_get_uint_from_float(arr_f_float_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -879,7 +932,9 @@ int main(int argc, char *argv[]){
       //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
       //any comparison with nan or -nan float numbers will say that they are different
       //You have to compare using the bijection with uint32
-      if(TSODLULS_get_uint_from_float(arr_f_float_result2[i]) != TSODLULS_get_uint_from_float(arr_f_float_result1[i])){
+      if(TSODLULS_get_uint_from_float(arr_f_float_result2[i])
+           != TSODLULS_get_uint_from_float(arr_f_float_result1[i])
+      ){
         printf("qsort and TSODLULS sort gave different results (float)\n");
         i_result = -1;
         break;
@@ -930,7 +985,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint64(&(arr_cells[i]), TSODLULS_get_uint_from_double(arr_f_double_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint64(
+          &(arr_cells[i]),
+          TSODLULS_get_uint_from_double(arr_f_double_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -945,7 +1005,9 @@ int main(int argc, char *argv[]){
       //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
       //any comparison with nan or -nan double numbers will say that they are different
       //You have to compare using the bijection with uint64
-      if(TSODLULS_get_uint_from_double(arr_f_double_result2[i]) != TSODLULS_get_uint_from_double(arr_f_double_result1[i])){
+      if(TSODLULS_get_uint_from_double(arr_f_double_result2[i])
+           != TSODLULS_get_uint_from_double(arr_f_double_result1[i])
+      ){
         printf("qsort direct and in_cell gave different results (double)\n");
         i_result = -1;
         break;
@@ -957,7 +1019,12 @@ int main(int argc, char *argv[]){
 
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
-      i_result = TSODLULS_add_bytes_to_key_from_uint64(&(arr_cells[i]), TSODLULS_get_uint_from_double(arr_f_double_seed[i]), 0, 0);
+      i_result = TSODLULS_add_bytes_to_key_from_uint64(
+          &(arr_cells[i]),
+          TSODLULS_get_uint_from_double(arr_f_double_seed[i]),
+          0,
+          0
+      );
       if(i_result != 0){
         break;
       }
@@ -972,7 +1039,9 @@ int main(int argc, char *argv[]){
       //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
       //any comparison with nan or -nan double numbers will say that they are different
       //You have to compare using the bijection with uint64
-      if(TSODLULS_get_uint_from_double(arr_f_double_result2[i]) != TSODLULS_get_uint_from_double(arr_f_double_result1[i])){
+      if(TSODLULS_get_uint_from_double(arr_f_double_result2[i])
+           != TSODLULS_get_uint_from_double(arr_f_double_result1[i])
+      ){
         printf("qsort and TSODLULS sort gave different results (double)\n");
         i_result = -1;
         break;

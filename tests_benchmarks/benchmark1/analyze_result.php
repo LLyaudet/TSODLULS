@@ -83,36 +83,42 @@ foreach($arrTests as $sTest => $arrColumns){
     echo "-TSODLULS sort was never faster than qsort direct.\n";
   }
   else{
-    echo "-TSODLULS sort was faster than qsort direct for the first time at $iFirstTimeTSODLULSSORTFasterThanQSORTDirect elements.\n";
+    echo "-TSODLULS sort was faster than qsort direct for the first time at",
+         " $iFirstTimeTSODLULSSORTFasterThanQSORTDirect elements.\n";
     if($iLastTimeQSORTDirectFasterThanTSODLULSSORT === null){
       echo "-qsort direct was never faster than TSODLULS sort.\n";
     }
     else{
-      echo "-qsort direct was faster than TSODLULS sort for the last time at $iLastTimeQSORTDirectFasterThanTSODLULSSORT elements.\n";
+      echo "-qsort direct was faster than TSODLULS sort for the last time at",
+           " $iLastTimeQSORTDirectFasterThanTSODLULSSORT elements.\n";
     }
   }
   if($iFirstTimeTSODLULSSORTFasterThanQSORTInCell === null){
     echo "-TSODLULS sort was never faster than qsort in cell.\n";
   }
   else{
-    echo "-TSODLULS sort was faster than qsort in cell for the first time at $iFirstTimeTSODLULSSORTFasterThanQSORTInCell elements.\n";
+    echo "-TSODLULS sort was faster than qsort in cell for the first time at",
+         " $iFirstTimeTSODLULSSORTFasterThanQSORTInCell elements.\n";
     if($iLastTimeQSORTInCellFasterThanTSODLULSSORT === null){
       echo "-qsort in cell was never faster than TSODLULS sort.\n";
     }
     else{
-      echo "-qsort in cell was faster than TSODLULS sort for the last time at $iLastTimeQSORTInCellFasterThanTSODLULSSORT elements.\n";
+      echo "-qsort in cell was faster than TSODLULS sort for the last time at",
+           " $iLastTimeQSORTInCellFasterThanTSODLULSSORT elements.\n";
     }
   }
   if($iFirstTimeQSORTInCellFasterThanQSORTDirect === null){
     echo "-qsort in cell was never faster than qsort direct.\n";
   }
   else{
-    echo "-qsort in cell was faster than qsort direct for the first time at $iFirstTimeQSORTInCellFasterThanQSORTDirect elements.\n";
+    echo "-qsort in cell was faster than qsort direct for the first time at",
+         " $iFirstTimeQSORTInCellFasterThanQSORTDirect elements.\n";
     if($iLastTimeQSORTDirectFasterThanQSORTInCell === null){
       echo "-qsort direct was never faster than qsort in cell.\n";
     }
     else{
-      echo "-qsort direct was faster than qsort in cell for the last time at $iLastTimeQSORTDirectFasterThanQSORTInCell elements.\n";
+      echo "-qsort direct was faster than qsort in cell for the last time at",
+           " $iLastTimeQSORTDirectFasterThanQSORTInCell elements.\n";
     }
   }
 }//end foreach($arrTests as $sTest => $arrColumns)

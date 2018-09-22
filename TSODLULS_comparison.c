@@ -127,11 +127,13 @@ int TSODLULS_compare_float_direct(const void *a, const void *b){
   const float *c = (const float *) a;
   const float *d = (const float *) b;
   //return (*c > *d) - (*c < *d);
-  //there is a bug in float comparison! (or maybe it is a feature than (-)nan are never more, equal or less than other numbers)
+  //there is a bug in float comparison!
+  //(or maybe it is a feature than (-)nan are never more than, equal to, or less than other numbers)
   //uncomment previous line and try test2 with the random seed 1534188456 for example
-  //at least on my laptop with core i5 it gets an -nan that is sorted after positive numbers and before negative numbers
+  //at least on my laptop with core i5, it gets an -nan
+  //that is sorted after positive numbers and before negative numbers
   //so that the array is not correctly sorted even if you only look at the float that are different from nan or -nan.
-  //I don't know if the bug is in gcc or in the i5 processor
+  //I don't know if the bug is in gcc or in the i5 processor, or if it is a feature in IEEE spec.
   union ieee754_float temp_c;
   union ieee754_float temp_d;
   temp_c.f = *c;
@@ -140,9 +142,11 @@ int TSODLULS_compare_float_direct(const void *a, const void *b){
   if(temp_c.ieee.negative == 1){
     if(temp_d.ieee.negative == 1){
       if(temp_c.ieee.exponent != temp_d.ieee.exponent){
-        return (temp_d.ieee.exponent > temp_c.ieee.exponent) - (temp_d.ieee.exponent < temp_c.ieee.exponent);//inverse formula because of negativity
+        //inverse formula because of negativity
+        return (temp_d.ieee.exponent > temp_c.ieee.exponent) - (temp_d.ieee.exponent < temp_c.ieee.exponent);
       }
-      return (temp_d.ieee.mantissa > temp_c.ieee.mantissa) - (temp_d.ieee.mantissa < temp_c.ieee.mantissa);//inverse formula because of negativity
+      //inverse formula because of negativity
+      return (temp_d.ieee.mantissa > temp_c.ieee.mantissa) - (temp_d.ieee.mantissa < temp_c.ieee.mantissa);
     }
     return -1;
   }
@@ -167,7 +171,8 @@ int TSODLULS_compare_double_direct(const void *a, const void *b){
   const double *c = (const double *) a;
   const double *d = (const double *) b;
   //return (*c > *d) - (*c < *d);
-  //there is a bug in double comparison! (or maybe it is a feature than (-)nan are never more, equal or less than other numbers)
+  //there is a bug in double comparison!
+  //(or maybe it is a feature than (-)nan are never more than, equal to, or less than other numbers)
   //uncomment previous line and try test2 with the random seed 1534274833 for example
   union ieee754_double temp_c;
   union ieee754_double temp_d;
@@ -177,12 +182,15 @@ int TSODLULS_compare_double_direct(const void *a, const void *b){
   if(temp_c.ieee.negative == 1){
     if(temp_d.ieee.negative == 1){
       if(temp_c.ieee.exponent != temp_d.ieee.exponent){
-        return (temp_d.ieee.exponent > temp_c.ieee.exponent) - (temp_d.ieee.exponent < temp_c.ieee.exponent);//inverse formula because of negativity
+        //inverse formula because of negativity
+        return (temp_d.ieee.exponent > temp_c.ieee.exponent) - (temp_d.ieee.exponent < temp_c.ieee.exponent);
       }
       if(temp_c.ieee.mantissa0 != temp_d.ieee.mantissa0){
-        return (temp_d.ieee.mantissa0 > temp_c.ieee.mantissa0) - (temp_d.ieee.mantissa0 < temp_c.ieee.mantissa0);//inverse formula because of negativity
+        //inverse formula because of negativity
+        return (temp_d.ieee.mantissa0 > temp_c.ieee.mantissa0) - (temp_d.ieee.mantissa0 < temp_c.ieee.mantissa0);
       }
-      return (temp_d.ieee.mantissa1 > temp_c.ieee.mantissa1) - (temp_d.ieee.mantissa1 < temp_c.ieee.mantissa1);//inverse formula because of negativity
+      //inverse formula because of negativity
+      return (temp_d.ieee.mantissa1 > temp_c.ieee.mantissa1) - (temp_d.ieee.mantissa1 < temp_c.ieee.mantissa1);
     }
     return -1;
   }
@@ -225,7 +233,7 @@ int TSODLULS_compare_uint16_in_cell(const void *a, const void *b){
   uint16_t ui16_d;
   ui16_c = *((uint16_t*)c->s_key);
   ui16_d = *((uint16_t*)d->s_key);
-  #if	__BYTE_ORDER == __LITTLE_ENDIAN
+  #if __BYTE_ORDER == __LITTLE_ENDIAN
     ui16_c = bswap_16(ui16_c);
     ui16_d = bswap_16(ui16_d);
   #endif
@@ -245,7 +253,7 @@ int TSODLULS_compare_uint32_in_cell(const void *a, const void *b){
   uint32_t ui32_d;
   ui32_c = *((uint32_t*)c->s_key);
   ui32_d = *((uint32_t*)d->s_key);
-  #if	__BYTE_ORDER == __LITTLE_ENDIAN
+  #if __BYTE_ORDER == __LITTLE_ENDIAN
     ui32_c = bswap_32(ui32_c);
     ui32_d = bswap_32(ui32_d);
   #endif
@@ -265,7 +273,7 @@ int TSODLULS_compare_uint64_in_cell(const void *a, const void *b){
   uint64_t ui64_d;
   ui64_c = *((uint64_t*)c->s_key);
   ui64_d = *((uint64_t*)d->s_key);
-  #if	__BYTE_ORDER == __LITTLE_ENDIAN
+  #if __BYTE_ORDER == __LITTLE_ENDIAN
     ui64_c = bswap_64(ui64_c);
     ui64_d = bswap_64(ui64_d);
   #endif
