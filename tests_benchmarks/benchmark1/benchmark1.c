@@ -197,7 +197,16 @@ int main(int argc, char *argv[]){
       clock_gettime(CLOCK_MONOTONIC, &start);
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint8(&(arr_cells[i]), arr_ui_8_seed[i], 0, 0);
+        i_result = TSODLULS_add_bytes_to_key_from_uint8(
+            &(arr_cells[i]),
+            arr_ui_8_seed[i],
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        );
         if(i_result != 0){
           break;
         }
@@ -226,7 +235,16 @@ int main(int argc, char *argv[]){
       clock_gettime(CLOCK_MONOTONIC, &start);
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint8(&(arr_cells[i]), arr_ui_8_seed[i], 0, 0);
+        i_result = TSODLULS_add_bytes_to_key_from_uint8(
+            &(arr_cells[i]),
+            arr_ui_8_seed[i],
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+        );
         if(i_result != 0){
           break;
         }
@@ -299,7 +317,16 @@ int main(int argc, char *argv[]){
       clock_gettime(CLOCK_MONOTONIC, &start);
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint16(&(arr_cells[i]), arr_ui_16_seed[i], 0, 0);
+        i_result = TSODLULS_add_bytes_to_key_from_uint16(
+            &(arr_cells[i]),
+            arr_ui_16_seed[i],
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+        );
         if(i_result != 0){
           break;
         }
@@ -328,7 +355,16 @@ int main(int argc, char *argv[]){
       clock_gettime(CLOCK_MONOTONIC, &start);
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint16(&(arr_cells[i]), arr_ui_16_seed[i], 0, 0);
+        i_result = TSODLULS_add_bytes_to_key_from_uint16(
+            &(arr_cells[i]),
+            arr_ui_16_seed[i],
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+        );
         if(i_result != 0){
           break;
         }
@@ -401,7 +437,16 @@ int main(int argc, char *argv[]){
       clock_gettime(CLOCK_MONOTONIC, &start);
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint32(&(arr_cells[i]), arr_ui_32_seed[i], 0, 0);
+        i_result = TSODLULS_add_bytes_to_key_from_uint32(
+            &(arr_cells[i]),
+            arr_ui_32_seed[i],
+            0,
+            0,
+            0,
+            0,
+            4,
+            0
+        );
         if(i_result != 0){
           break;
         }
@@ -430,7 +475,16 @@ int main(int argc, char *argv[]){
       clock_gettime(CLOCK_MONOTONIC, &start);
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint32(&(arr_cells[i]), arr_ui_32_seed[i], 0, 0);
+        i_result = TSODLULS_add_bytes_to_key_from_uint32(
+            &(arr_cells[i]),
+            arr_ui_32_seed[i],
+            0,
+            0,
+            0,
+            0,
+            4,
+            0
+        );
         if(i_result != 0){
           break;
         }
@@ -503,7 +557,16 @@ int main(int argc, char *argv[]){
       clock_gettime(CLOCK_MONOTONIC, &start);
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint64(&(arr_cells[i]), arr_ui_64_seed[i], 0, 0);
+        i_result = TSODLULS_add_bytes_to_key_from_uint64(
+            &(arr_cells[i]),
+            arr_ui_64_seed[i],
+            0,
+            0,
+            0,
+            0,
+            8,
+            0
+        );
         if(i_result != 0){
           break;
         }
@@ -532,7 +595,16 @@ int main(int argc, char *argv[]){
       clock_gettime(CLOCK_MONOTONIC, &start);
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint64(&(arr_cells[i]), arr_ui_64_seed[i], 0, 0);
+        i_result = TSODLULS_add_bytes_to_key_from_uint64(
+            &(arr_cells[i]),
+            arr_ui_64_seed[i],
+            0,
+            0,
+            0,
+            0,
+            8,
+            0
+        );
         if(i_result != 0){
           break;
         }
@@ -610,6 +682,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]),
             0,
+            0,
+            0,
+            0,
+            1,
             0
         );
         if(i_result != 0){
@@ -644,6 +720,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]),
             0,
+            0,
+            0,
+            0,
+            1,
             0
         );
         if(i_result != 0){
@@ -722,6 +802,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]),
             0,
+            0,
+            0,
+            0,
+            2,
             0
         );
         if(i_result != 0){
@@ -756,6 +840,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]),
             0,
+            0,
+            0,
+            0,
+            2,
             0
         );
         if(i_result != 0){
@@ -834,6 +922,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]),
             0,
+            0,
+            0,
+            0,
+            4,
             0
         );
         if(i_result != 0){
@@ -868,6 +960,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]),
             0,
+            0,
+            0,
+            0,
+            4,
             0
         );
         if(i_result != 0){
@@ -946,6 +1042,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]),
             0,
+            0,
+            0,
+            0,
+            8,
             0
         );
         if(i_result != 0){
@@ -980,6 +1080,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]),
             0,
+            0,
+            0,
+            0,
+            8,
             0
         );
         if(i_result != 0){
@@ -1058,6 +1162,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint_from_float(arr_f_float_seed[i]),
             0,
+            0,
+            0,
+            0,
+            4,
             0
         );
         if(i_result != 0){
@@ -1098,6 +1206,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint_from_float(arr_f_float_seed[i]),
             0,
+            0,
+            0,
+            0,
+            4,
             0
         );
         if(i_result != 0){
@@ -1181,6 +1293,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint_from_double(arr_f_double_seed[i]),
             0,
+            0,
+            0,
+            0,
+            8,
             0
         );
         if(i_result != 0){
@@ -1220,6 +1336,10 @@ int main(int argc, char *argv[]){
             &(arr_cells[i]),
             TSODLULS_get_uint_from_double(arr_f_double_seed[i]),
             0,
+            0,
+            0,
+            0,
+            8,
             0
         );
         if(i_result != 0){

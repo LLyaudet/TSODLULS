@@ -31,8 +31,8 @@ build: build-static build-dynamic
 #Static library
 build-static: ./bin/libTSODLULS_$(VERSION).a
 
-./bin/libTSODLULS_$(VERSION).a: ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o
-	ar -rcs ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o
+./bin/libTSODLULS_$(VERSION).a: ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
+	ar -rcs ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
 #	ar -rc ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o
 #	ranlib ./bin/libTSODLULS_$(VERSION).a
 
@@ -48,12 +48,14 @@ build-static: ./bin/libTSODLULS_$(VERSION).a
 ./bin/TSODLULS_misc.o: ./TSODLULS.h ./TSODLULS_misc.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_misc.c -o ./bin/TSODLULS_misc.o
 
+./bin/TSODLULS_padding.o: ./TSODLULS.h ./TSODLULS_padding.c
+	$(CC) $(CFLAGS) -c ./TSODLULS_padding.c -o ./bin/TSODLULS_padding.o
 
 #Dynamic library
 build-dynamic: ./bin/libTSODLULS_$(VERSION).so
 
-./bin/libTSODLULS_$(VERSION).so: ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o
-	$(CC) -shared -o ./bin/libTSODLULS_$(VERSION).so ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o
+./bin/libTSODLULS_$(VERSION).so: ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
+	$(CC) -shared -o ./bin/libTSODLULS_$(VERSION).so ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
 
 ./bin/TSODLULS_finite_orders_dyn.o: ./TSODLULS.h ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_finite_orders.c -o ./bin/TSODLULS_finite_orders_dyn.o
@@ -67,6 +69,8 @@ build-dynamic: ./bin/libTSODLULS_$(VERSION).so
 ./bin/TSODLULS_misc_dyn.o: ./TSODLULS.h ./TSODLULS_misc.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_misc.c -o ./bin/TSODLULS_misc_dyn.o
 
+./bin/TSODLULS_padding_dyn.o: ./TSODLULS.h ./TSODLULS_padding.c
+	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_padding.c -o ./bin/TSODLULS_padding_dyn.o
 
 #-----------------------------------------------------------
 #Build tests

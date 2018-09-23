@@ -56,7 +56,10 @@ void TSODLULS_free_key(t_TSODLULS_sort_element* p_element){
  * Miscellaneous functions
  * Initialize an array of TSODLULS elements
  */
-int TSODLULS_init_array_of_elements(t_TSODLULS_sort_element** p_arr_elements, size_t i_number_of_elements){
+int TSODLULS_init_array_of_elements(
+  t_TSODLULS_sort_element** p_arr_elements,
+  size_t i_number_of_elements
+){
   *p_arr_elements = calloc(i_number_of_elements, sizeof(t_TSODLULS_sort_element));
   if(*p_arr_elements == NULL){
     return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
@@ -73,11 +76,63 @@ int TSODLULS_init_array_of_elements(t_TSODLULS_sort_element** p_arr_elements, si
  * Miscellaneous functions
  * Free the keys of all TSODLULS elements in an array
  */
-void TSODLULS_free_keys_in_array_of_elements(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
+void TSODLULS_free_keys_in_array_of_elements(
+  t_TSODLULS_sort_element* arr_elements,
+  size_t i_number_of_elements
+){
   for(size_t i = 0; i < i_number_of_elements; ++i){
     TSODLULS_free_key(&(arr_elements[i]));
   }
 }//end function TSODLULS_free_keys_in_array_of_elements()
+
+
+
+/**
+ * Miscellaneous functions
+ * (Re)Allocate space for the key of a TSODLULS element
+ */
+int TSODLULS_element_allocate_space_for_key(
+  t_TSODLULS_sort_element* p_sort_element,
+  size_t i_size_needed
+){
+  size_t i_number_of_elements_for_realloc = 0;
+  void* p_for_realloc = NULL;
+
+  if(p_sort_element->i_allocated_size == 0){
+    p_sort_element->s_key = calloc(i_size_needed, sizeof(uint8_t));
+    if(p_sort_element ==  NULL){
+      return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
+    }
+    p_sort_element->i_allocated_size = i_size_needed;
+    return 0;
+  }
+  if(p_sort_element->i_allocated_size - p_sort_element->i_key_size >= i_size_needed){
+    return 0;
+  }
+
+  i_number_of_elements_for_realloc = p_sort_element->i_allocated_size;
+  do{
+    i_number_of_elements_for_realloc = i_number_of_elements_for_realloc << 1;
+    if(i_number_of_elements_for_realloc <= p_sort_element->i_allocated_size){
+      return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
+    }
+  }
+  while(i_number_of_elements_for_realloc - p_sort_element->i_key_size < i_size_needed);
+
+  if(i_number_of_elements_for_realloc * sizeof(uint8_t) <= i_number_of_elements_for_realloc){
+    return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
+  }
+
+  p_for_realloc = realloc(
+      p_sort_element->s_key,
+      i_number_of_elements_for_realloc * sizeof(uint8_t)
+  );
+  if(p_for_realloc == NULL){
+    return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
+  }
+  p_sort_element->s_key = (uint8_t*) p_for_realloc;
+  p_sort_element->i_allocated_size = i_number_of_elements_for_realloc;
+}//end function TSODLULS_element_allocate_space_for_key()
 
 
 

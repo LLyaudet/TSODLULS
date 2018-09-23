@@ -32,13 +32,24 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------------
 //Constants
 //------------------------------------------------------------------------------------
-//Limitations
+#define I_HALF_BYTE -1//sometimes 4 bits are sufficient for padding
 
 //Error codes
 //Positive error codes are defined in this library for algorithmical, profile parsing and technical errors
+//-general errors
 #define I_ERROR__COULD_NOT_OPEN_FILE 1
 #define I_ERROR__COULD_NOT_ALLOCATE_MEMORY 2
 #define I_ERROR__COULD_NOT_WRITE_CHARACTER 3
+//-padding parameters errors
+#define I_ERROR__BOTH_LEX_AND_CONTRELEX_PADDING_BYTES_BEFORE_MUST_BE_HALF_BYTES 100
+#define I_ERROR__BOTH_LEX_AND_CONTRELEX_PADDING_BYTES_AFTER_MUST_BE_HALF_BYTES 101
+#define I_ERROR__NUMBER_OF_LEX_PADDING_BYTES_BEFORE_IS_INVALID 102
+#define I_ERROR__NUMBER_OF_CONTRELEX_PADDING_BYTES_BEFORE_IS_INVALID 103
+#define I_ERROR__NUMBER_OF_LEX_PADDING_BYTES_AFTER_IS_INVALID 104
+#define I_ERROR__NUMBER_OF_CONTRELEX_PADDING_BYTES_AFTER_IS_INVALID 105
+#define I_ERROR__NUMBER_OF_CONTIGUOUS_DATA_BYTES_MUST_BE_AT_LEAST_1 106
+#define I_ERROR__CURRENT_OFFSET_MUST_BE_AT_LEAST_0 107
+#define I_ERROR__CURRENT_OFFSET_MUST_BE_LESS_THAN_THE_NUMBER_OF_CONTIGUOUS_DATA_BYTES 108
 //Negative error codes are user defined
 
 
@@ -169,8 +180,12 @@ int64_t TSODLULS_get_int64_from_uint64(uint64_t i64);
 int TSODLULS_add_bytes_to_key_from_uint8(
   t_TSODLULS_sort_element* p_sort_element,
   uint8_t i8,
-  int8_t i_number_of_lex_padding_bytes,
-  int8_t i_number_of_contrelex_padding_bytes
+  int8_t i_number_of_lex_padding_bytes_before,
+  int8_t i_number_of_contrelex_padding_bytes_before,
+  int8_t i_number_of_lex_padding_bytes_after,
+  int8_t i_number_of_contrelex_padding_bytes_after,
+  int8_t i_number_of_contiguous_data_bytes,
+  int8_t i_current_offset
 );
 
 
@@ -182,8 +197,12 @@ int TSODLULS_add_bytes_to_key_from_uint8(
 int TSODLULS_add_bytes_to_key_from_uint16(
   t_TSODLULS_sort_element* p_sort_element,
   uint16_t i16,
-  int8_t i_number_of_lex_padding_bytes,
-  int8_t i_number_of_contrelex_padding_bytes
+  int8_t i_number_of_lex_padding_bytes_before,
+  int8_t i_number_of_contrelex_padding_bytes_before,
+  int8_t i_number_of_lex_padding_bytes_after,
+  int8_t i_number_of_contrelex_padding_bytes_after,
+  int8_t i_number_of_contiguous_data_bytes,
+  int8_t i_current_offset
 );
 
 
@@ -195,8 +214,12 @@ int TSODLULS_add_bytes_to_key_from_uint16(
 int TSODLULS_add_bytes_to_key_from_uint32(
   t_TSODLULS_sort_element* p_sort_element,
   uint32_t i32,
-  int8_t i_number_of_lex_padding_bytes,
-  int8_t i_number_of_contrelex_padding_bytes
+  int8_t i_number_of_lex_padding_bytes_before,
+  int8_t i_number_of_contrelex_padding_bytes_before,
+  int8_t i_number_of_lex_padding_bytes_after,
+  int8_t i_number_of_contrelex_padding_bytes_after,
+  int8_t i_number_of_contiguous_data_bytes,
+  int8_t i_current_offset
 );
 
 
@@ -208,8 +231,12 @@ int TSODLULS_add_bytes_to_key_from_uint32(
 int TSODLULS_add_bytes_to_key_from_uint64(
   t_TSODLULS_sort_element* p_sort_element,
   uint64_t i64,
-  int8_t i_number_of_lex_padding_bytes,
-  int8_t i_number_of_contrelex_padding_bytes
+  int8_t i_number_of_lex_padding_bytes_before,
+  int8_t i_number_of_contrelex_padding_bytes_before,
+  int8_t i_number_of_lex_padding_bytes_after,
+  int8_t i_number_of_contrelex_padding_bytes_after,
+  int8_t i_number_of_contiguous_data_bytes,
+  int8_t i_current_offset
 );
 
 
@@ -398,6 +425,64 @@ int TSODLULS_init_array_of_elements(t_TSODLULS_sort_element** p_arr_elements, si
  * Free the keys of all TSODLULS elements in an array
  */
 void TSODLULS_free_keys_in_array_of_elements(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
+
+
+
+/**
+ * Miscellaneous functions
+ * (Re)Allocate space for the key of a TSODLULS element
+ */
+int TSODLULS_element_allocate_space_for_key(
+  t_TSODLULS_sort_element* p_sort_element,
+  size_t i_size_needed
+);
+
+
+
+//------------------------------------------------------------------------------------
+//Padding
+//------------------------------------------------------------------------------------
+/**
+ * Padding functions
+ * Check padding parameters and return an error code if needed
+ */
+int TSODLULS_check_padding_parameters(
+  int8_t i_number_of_lex_padding_bytes_before,
+  int8_t i_number_of_contrelex_padding_bytes_before,
+  int8_t i_number_of_lex_padding_bytes_after,
+  int8_t i_number_of_contrelex_padding_bytes_after,
+  int8_t i_number_of_contiguous_data_bytes,
+  int8_t i_current_offset
+);
+
+
+
+/**
+ * Padding functions
+ * Compute size needed for the data bytes with padding
+ */
+size_t TSODLULS_compute_size_needed(
+  size_t i_number_of_data_bytes,
+  int8_t i_number_of_lex_padding_bytes_before,
+  int8_t i_number_of_contrelex_padding_bytes_before,
+  int8_t i_number_of_lex_padding_bytes_after,
+  int8_t i_number_of_contrelex_padding_bytes_after,
+  int8_t i_number_of_contiguous_data_bytes,
+  int8_t i_current_offset
+);
+
+
+
+/**
+ * Padding functions
+ * Padd
+ */
+void TSODLULS_padd(
+  t_TSODLULS_sort_element* p_sort_element,
+  int8_t i_number_of_lex_padding_bytes,
+  int8_t i_number_of_contrelex_padding_bytes,
+  int8_t i_current_offset
+);
 
 
 
