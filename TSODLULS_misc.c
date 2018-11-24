@@ -27,6 +27,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 /**
  * Miscellaneous functions
  * Initialize a TSODLULS element
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 void TSODLULS_init_element(t_TSODLULS_sort_element* p_element){
   p_element->p_object = NULL;
@@ -40,6 +41,7 @@ void TSODLULS_init_element(t_TSODLULS_sort_element* p_element){
 /**
  * Miscellaneous functions
  * Free the key of a TSODLULS element (if necessary) and reinitializes the corresponding fields
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 void TSODLULS_free_key(t_TSODLULS_sort_element* p_element){
   if(p_element->s_key != NULL){
@@ -55,17 +57,19 @@ void TSODLULS_free_key(t_TSODLULS_sort_element* p_element){
 /**
  * Miscellaneous functions
  * Initialize an array of TSODLULS elements
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 int TSODLULS_init_array_of_elements(
   t_TSODLULS_sort_element** p_arr_elements,
   size_t i_number_of_elements
 ){
+  t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
   *p_arr_elements = calloc(i_number_of_elements, sizeof(t_TSODLULS_sort_element));
   if(*p_arr_elements == NULL){
     return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
   }
   for(size_t i = 0; i < i_number_of_elements; ++i){
-    TSODLULS_init_element(&((*p_arr_elements)[i]));
+    TSODLULS_init_element__macraff(&((*p_arr_elements)[i]));
   }
   return 0;
 }//end function TSODLULS_init_array_of_elements()
@@ -75,13 +79,15 @@ int TSODLULS_init_array_of_elements(
 /**
  * Miscellaneous functions
  * Free the keys of all TSODLULS elements in an array
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 void TSODLULS_free_keys_in_array_of_elements(
   t_TSODLULS_sort_element* arr_elements,
   size_t i_number_of_elements
 ){
+  t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
   for(size_t i = 0; i < i_number_of_elements; ++i){
-    TSODLULS_free_key(&(arr_elements[i]));
+    TSODLULS_free_key__macraff(&(arr_elements[i]));
   }
 }//end function TSODLULS_free_keys_in_array_of_elements()
 
@@ -90,6 +96,7 @@ void TSODLULS_free_keys_in_array_of_elements(
 /**
  * Miscellaneous functions
  * (Re)Allocate space for the key of a TSODLULS element
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 int TSODLULS_element_allocate_space_for_key(
   t_TSODLULS_sort_element* p_sort_element,
@@ -132,6 +139,7 @@ int TSODLULS_element_allocate_space_for_key(
   }
   p_sort_element->s_key = (uint8_t*) p_for_realloc;
   p_sort_element->i_allocated_size = i_number_of_elements_for_realloc;
+  return 0;
 }//end function TSODLULS_element_allocate_space_for_key()
 
 

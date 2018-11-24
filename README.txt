@@ -29,3 +29,356 @@ This library provides functions to:
 
 To understand the theory behind this library you can read our article:
 "A class of orders with linear? time sorting algorithm"
+
+A very short abstract of our article is "Everything is lexicographic.".
+It means that, probably for all orders from real world examples,
+you can efficiently convert the objects to be sorted into strings that need to be sorted
+with lexicographic order.
+(In fact, we even prove that lexicographic order is not needed
+ and that "Next" partial order is sufficient.)
+Lexicographic order or "Next" partial order can be efficiently sorted in
+linear time using a variant of radix sort
+(if you assume RAM model of computation with constant size and time
+for pointers/sizes and arithmetic on pointers/sizes).
+Each element/object is sorted according to a key
+(that key may be complex, not necessarily a primitive data type).
+The lexicographic key has size that is linear in the size of the original key.
+The sorting algorithm is linear time with respect to the sum of the sizes of the key,
+not necessarily with respect to the number of elements to sort.
+When the sum of the sizes of the key (the size of the instance) is great enough,
+radix sort is faster than qsort.
+
+
+----------------------------------------------------------------------------
+Lexicographicalizing or "nextifying"
+----------------------------------------------------------------------------
+
+A simple case of lexicographicalization is for finite orders (see TSODLULS_finite_orders.h/c).
+Some finite orders are already lexicographicalized when you look at the bits in the processor/RAM.
+It is the case for unsigned integers with big-endianness.
+If your processor is little-endian, you need to swap the bytes and that's it.
+For other finite orders, you convert them first to unsigned integers
+ in a way that respects the original order.
+As an example, signed integers on 8 bits are converted to unsigned integers on 8 bits so that
+-128 becomes 0, -127 becomes 1, ..., -1 becomes 127, 0 becomes 128,
+ 1 becomes 129, ..., 126 becomes 254, 127 becomes 255.
+You can do the same thing for signed integers on 16/32/64 bits.
+You can also do the same thing between float and 32-bits unsigned integers,
+ and between double and 64-bits unsigned integers,
+but it is more complicated (you may look at the source code in TSODLULS_finite_orders.c).
+
+For orders that are more complex than finite orders, you need to manage a string and add bytes
+to that string according to the lexicographicalization process (see our article, please).
+This may require padding (see TSODLULS_padding.c).
+
+Adding bytes to the lexicographic key from primitive data types (finite orders) can be done
+using the functions TSODLULS_add_bytes_to_key_from_uint... in TSODLULS_finite_orders.c.
+For this you must give padding parameters.
+These parameters will depend of the order you want to sort by.
+
+
+----------------------------------------------------------------------------
+Sorting
+----------------------------------------------------------------------------
+
+Sorting algorithms suited for "nextified" keys are available in TSODLULS_sorting.c
+We plan to add new "best-in-class" algorithms there, for general/stable sorting.
+
+
+----------------------------------------------------------------------------
+Short and long orders
+----------------------------------------------------------------------------
+
+Because the keys are strings, we can distinguish between "short" orders,
+where the keys are at most 64 bits long, and "long" orders where the keys
+may be longer than 64 bits.
+It is somewhat arbitrary to put the limit at 64 bits but it corresponds to
+current hardware characteristics.
+Because of this distinction, the cells of the array to be sorted may be of two types:
+short cells with a pointer to the object to be sorted and a 64-bit unsigned integer key,
+long cells with a pointer to the object to be sorted and a pointer to a string key
+(a counter for the real size of the key and a counter for the allocated size of the key).
+Initialization and allocation of the cells are helped by the functions in
+TSODLULS_misc.c
+
+
+----------------------------------------------------------------------------
+Comparison functions
+----------------------------------------------------------------------------
+
+With the classical "comparison function" paradigm, you need comparison black box
+functions to sort objects. Some comparison functions are available in
+TSDLULS_comparison.c. They are needed for tests and benchmarks and also because
+we aim at generating most efficient code. It means that using comparison model in
+some cases will be needed.
+
+
+----------------------------------------------------------------------------
+Code style
+----------------------------------------------------------------------------
+
+This library contains code in C and also helper scripts in PHP.
+We use the following code style:
+- loose Systems Hungarian notation for variables (see wikipedia):
+  -- i before an integer
+  -- c before a character
+  -- s before a string (pointer to char)
+  -- f before a floating point number (float, double, etc.)
+  -- arr before an array
+  -- p before a pointer
+- snake case in C code for variables and functions:
+  - i_number_of_elements
+  - c_current_byte
+  - s_name (this is a pointer for an array)
+  - f_weigth
+  - arr_i_elements for an array of integers (this is also a pointer for an array)
+  - p_i_number_of_elements (it may be the parameter of a function that returns
+      an error code and initializes the number of elements)
+- camel case in PHP code for variable and functions:
+  - iNumberOfElements
+  - cCurrentByte
+  - sName
+  - fWeigth
+  - arrIElements for an array of integers
+- when needed we use "strict" Systems Hungarian notation,
+  this is useful in tests and benchmarks where we have all primitive data types in one place.
+  Instead of creating variable names, we just abreviate the data types:
+  - ui_8 or ui8 for some unsigned integer on 8 bits
+  - i_32_2 or i32_2 for some signed integer on 32 bits and name i_32 or i32 was already taken...
+- We use two spaces indent without tabs.
+- We try to avoid long lines using frequent line returns:
+  -- with single indent when continuing a line of "declarative" or condition code
+     (function signature and condition in an "if")
+  -- with double indent when continuing a line of "imperative" code (function call, expression).
+- We see "blocks" as triangles (when they are too big to fit in one line):
+
+  ------->
+         /
+        /
+       /
+      /
+     /
+    /
+   /
+  /
+
+  The first arrow (ok it's poor ascii art ;P) is horizontal from left to right,
+  and the second arrow is diagonal from upright to downleft (it slices through the code).
+
+  Examples of blocks:
+  -- function signature
+    void foo(             <--------- header of the block (horizontal arrow)
+      type1 param1,       <--------- content of the block (sliced through by the diagonal arrow)
+      type2 param2,       <--------- content of the block (sliced through by the diagonal arrow)
+    );                    <--------- end of the block (end of the diagonal arrow)
+  -- function call
+    foo(                  <--------- header of the block (horizontal arrow)
+        param1,           <--------- content of the block (sliced through by the diagonal arrow)
+        param2,           <--------- content of the block (sliced through by the diagonal arrow)
+    );                    <--------- end of the block (end of the diagonal arrow)
+  -- if condition
+    if(condition1         <--------- header of the block (horizontal arrow)
+      && condition2       <--------- content of the block (sliced through by the diagonal arrow)
+      && condition3       <--------- content of the block (sliced through by the diagonal arrow)
+    ){                    <--------- end of the block (end of the diagonal arrow), this is also the header of the next block
+  -- function body or if body
+    ){                    <--------- header of the block (horizontal arrow), this is also the end of the previous block
+      doSomething1;       <--------- content of the block (sliced through by the diagonal arrow)
+      doSomething2;       <--------- content of the block (sliced through by the diagonal arrow)
+      return something;   <--------- content of the block (sliced through by the diagonal arrow)
+    }                     <--------- end of the block (end of the diagonal arrow)
+
+    or else body
+
+    else{                 <--------- header of the block (horizontal arrow)
+      doSomething1;       <--------- content of the block (sliced through by the diagonal arrow)
+      doSomething2;       <--------- content of the block (sliced through by the diagonal arrow)
+      return something;   <--------- content of the block (sliced through by the diagonal arrow)
+    }                     <--------- end of the block (end of the diagonal arrow)
+
+  As you can see, each header of a block ends with a '(' or a '{'.
+  Thus these characters are at the end of one line, not at the beginning.
+  The end of one block (function signature, if condition)
+  may be merged with the beginning of the next block.
+  Since one block may fit in one line, one line may contain a full block
+  plus the header line of another block.
+
+  Examples of merged blocks:
+  void foo(type1 param1){ <--- merging
+    doSomething1;
+    doSomething2;
+    return something;
+  }
+
+  void foo(
+    type1 param1,
+    type2 param2
+  ){  <----- merging
+    doSomething1;
+    doSomething2;
+    return something;
+  }
+
+  if(condition1){ <--- merging
+    doSomething1;
+  }
+
+  if(condition1
+    || condition2
+  ){ <--- merging
+    doSomething1;
+  }
+  We do not merge "} else {".
+
+- We see conditions in "if" as boolean circuits rotated counter clockwise by an angle of 90°.
+                     ___________
+                    |  AND = && |
+                     -----------
+                     /         \
+           _________/           \_________
+          | OR = || |           |condition1|
+           ---------             ----------
+              / \
+   __________/   \_________
+  |condition3|  |condition2|
+   ----------    ----------
+
+  Rotating as we do it:
+  if(condition1
+    && (condition2
+       || condition3)
+  ){
+
+  Rotating would be clearer with extra space:
+  if(  condition1
+    && (
+          condition2
+       ||
+          condition3
+       )
+  ){
+  Note that we naturally tend to use 3 spaces indent for this because || and && are two characters wide.
+  Note also that the "circuit" may use unbounded fan-in gates, like:
+       (
+          condition1
+       ||
+          condition2
+       ||
+          condition3
+       ...
+       ||
+          conditionN
+       )
+  for a single OR-gate with fan-in N.
+
+- Either a function has no error case and it may return a "real" result,
+or a function has some error cases and its return type is an int containing
+an error code. The int is 0 if no error occurred and some constant explained
+in TSODLULS.h otherwise. When we still need that the function returns something
+more than its error code, we use parameters of the function with pointers.
+
+
+----------------------------------------------------------------------------
+Library map
+----------------------------------------------------------------------------
+There is one header file TSODLULS.h containing all the external constants
+(Error codes, etc.), structures and the function signatures of the library.
+For those that do not like scrolling in one file,
+separate header files containing the signatures of the functions in one C file
+of the library are available:
+ - TSODLULS_comparison.h
+ - TSODLULS_finite_orders.h
+ - TSODLULS_misc.h
+ - TSODLULS_padding.h
+ - TSODLULS_sorting.h
+These headers files are here for reference but must not be used (use TSODLULS.h).
+The code of the functions is available in the following files:
+ - TSODLULS_comparison.c comparison function for various primitive datatypes and cells of this library
+ - TSODLULS_finite_orders.c converting primitive datatypes into unsigned integers while preserving order
+ - TSODLULS_misc.c helper functions for using arrays of TSODLULS cells
+ - TSODLULS_padding.c padding the lexicographic keys
+ - TSODLULS_sorting.c the sorting algorithms
+Some of the functions are also available as macro in the following files:
+ - //not needed yet TSODLULS_comparison__macro.h
+ - TSODLULS_finite_orders__macro.h
+ - TSODLULS_misc__macro.h
+ - TSODLULS_padding__macro.h
+ - //not needed yet TSODLULS_sorting__macro.h
+All these files are included in the file TSODLULS__macro.h.
+This file explains conventions and guides for using TSODLSULS macros.
+The comment before a function tells whether it is available as a macro.
+
+There is a Makefile that you can run with "make", in order to:
+- build the library both statically and dynamically
+- install the dynamic library in /usr/lib/
+- build and run tests
+- build and run benchmarks (beware it will use around 1G of RAM)
+- clean the folder of compilation and test results
+
+Folder bin contains some of the results of compilation.
+It just contains a .gitignore by default.
+
+COPYING contains the license GPL3.
+COPYING.LESSER contains the license LGPL3.
+
+Folder tests_benchmarks contains the file test_functions.c
+(mainly for generating random variables), and a folder for each
+test/benchmark.
+In each test/benchmark, there is a .c file containing the related code
+and that describes the purpose of the test/benchmark.
+Some tests or benchmarks may use helper scripts in PHP (for analyzing the results, etc.).
+
+
+----------------------------------------------------------------------------
+Environments
+----------------------------------------------------------------------------
+This library has been tested on Debian 9.4
+with gcc version 6.3.0 20170516 (Debian 6.3.0-18+deb9u1)
+and glibc.
+We use file endian.h in glibc that is not available everywhere.
+If you can email me for helping make this library more portable, please do.
+
+
+----------------------------------------------------------------------------
+Hello world
+----------------------------------------------------------------------------
+Using the library for sorting 32-bits signed integers can be done as follow:
+ - assume you have an array of 32-bits signed integers
+    int32_t* arr_i32;
+   with a number of elements
+    size_t i_number_of_elements;
+ - fill it with your data
+ - then you need a loop for converting the 32-bits signed integers into an array of cells
+ containing a pointer to the original signed integer and an unsigned integer.
+    t_TSODLULS_sort_element* arr_cells = NULL;
+    i_result = TSODLULS_init_array_of_elements(&arr_cells, i_number_of_elements);
+    if(i_result != 0){
+      return i_result;//error occurred
+    }
+    for(size_t i = 0; i < i_number_of_elements; ++i){
+      i_result = TSODLULS_add_bytes_to_key_from_uint32(
+          &(arr_cells[i]),
+          TSODLULS_get_uint32_from_int32(arr_i32[i]),
+          0,//no padding
+          0,//no padding
+          0,//no padding
+          0,//no padding
+          4,//4 contiguous bytes
+          0//no offset
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i32[i]);
+    }
+    if(i_result != 0){
+      return i_result;//error occurred
+    }
+ - then you can sort:
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+ - and fill the result:
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i32_result[i] = *((int32_t*)(arr_cells[i].p_object));
+    }
+ - More examples are available in tests and benchmarks.
+

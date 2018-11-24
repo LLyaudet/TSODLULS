@@ -32,6 +32,12 @@ Explanations for this test:
 -- they are converted to 1024 random floats
 -- they are converted to 1024 random doubles
 
+The tests are performed with 5 settings:
+- qsort direct
+- qsort on TSODLULS cells
+- qsort on TSODLULS cells and macraffs
+- TSODLULS sort on TSODLULS cells
+- TSODLULS sort on TSODLULS cells and macraffs
 */
 
 #include "../test_functions.c"
@@ -83,6 +89,46 @@ int main(int argc, char *argv[]){
   double* arr_f_double_result1 = NULL;
   double* arr_f_double_result2 = NULL;
   t_TSODLULS_sort_element* arr_cells = NULL;
+
+  uint8_t ui8;
+  uint16_t ui16;
+  uint32_t ui32;
+  uint32_t ui32_2;
+  uint64_t ui64;
+  uint64_t ui64_2;
+
+  //copy-pasted from TSODLULS__macro.h
+  union ieee754_float TSODLULS_macraff_ieee754_float;
+  union ieee754_double TSODLULS_macraff_ieee754_double;
+  uint8_t TSODLULS_macraff_ui8;
+  uint16_t TSODLULS_macraff_ui16;
+  uint32_t TSODLULS_macraff_ui32;
+  uint64_t TSODLULS_macraff_ui64;
+  int8_t TSODLULS_macraff_i8;
+  int8_t TSODLULS_macraff_i8_2;
+  int8_t TSODLULS_macraff_i8_3;
+  int8_t TSODLULS_macraff_i8_4;
+  int8_t TSODLULS_macraff_i8_5;
+  int8_t TSODLULS_macraff_i8_6;
+  int8_t TSODLULS_macraff_i8_7;
+  int8_t TSODLULS_macraff_i8_8;
+  int8_t TSODLULS_macraff_i8_9;
+  int8_t TSODLULS_macraff_i8_10;
+  int8_t TSODLULS_macraff_i8_11;
+  int8_t TSODLULS_macraff_i8_12;
+  int16_t TSODLULS_macraff_i16;
+  int32_t TSODLULS_macraff_i32;
+  int64_t TSODLULS_macraff_i64;
+  int TSODLULS_macraff_i;
+  size_t TSODLULS_macraff_isize;
+  size_t TSODLULS_macraff_isize_2;
+  size_t TSODLULS_macraff_isize_3;
+  size_t TSODLULS_macraff_isize_4;
+  t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
+  t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element_2;
+  //t_TSODLULS_sort_element* TSODLULS_macraff_arr_elements;
+  //t_TSODLULS_sort_element** TSODLULS_macraff_p_arr_elements;
+  void* TSODLULS_macraff_p_void;
 
   do{
     printf("RAND_MAX is %d\n", RAND_MAX);
@@ -172,6 +218,40 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_add_bytes_to_key_from_uint8__macraff(
+          i_result,
+          &(arr_cells[i]),
+          arr_ui_8_seed[i],
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_ui_8_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint8_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
+      if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
+        printf("qsort direct and in_cell (macraffs) gave different results (uint8)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint8(
           &(arr_cells[i]),
@@ -196,6 +276,40 @@ int main(int argc, char *argv[]){
       arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
       if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
         printf("qsort and TSODLULS sort gave different results (uint8)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_add_bytes_to_key_from_uint8__macraff(
+          i_result,
+          &(arr_cells[i]),
+          arr_ui_8_seed[i],
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_ui_8_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
+      if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
+        printf("qsort and TSODLULS sort (macraff) gave different results (uint8)\n");
         i_result = -1;
         break;
       }
@@ -277,6 +391,40 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_add_bytes_to_key_from_uint16__macraff(
+          i_result,
+          &(arr_cells[i]),
+          arr_ui_16_seed[i],
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_ui_16_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint16_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
+      if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
+        printf("qsort direct and in_cell (macraffs) gave different results (uint16)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint16(
           &(arr_cells[i]),
@@ -301,6 +449,40 @@ int main(int argc, char *argv[]){
       arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
       if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
         printf("qsort and TSODLULS sort gave different results (uint16)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_add_bytes_to_key_from_uint16__macraff(
+          i_result,
+          &(arr_cells[i]),
+          arr_ui_16_seed[i],
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_ui_16_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
+      if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
+        printf("qsort and TSODLULS sort (macraffs) gave different results (uint16)\n");
         i_result = -1;
         break;
       }
@@ -382,6 +564,40 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_add_bytes_to_key_from_uint32__macraff(
+          i_result,
+          &(arr_cells[i]),
+          arr_ui_32_seed[i],
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_ui_32_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
+      if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
+        printf("qsort direct and in_cell (macraffs) gave different results (uint32)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint32(
           &(arr_cells[i]),
@@ -406,6 +622,40 @@ int main(int argc, char *argv[]){
       arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
       if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
         printf("qsort and TSODLULS sort gave different results (uint32)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_add_bytes_to_key_from_uint32__macraff(
+          i_result,
+          &(arr_cells[i]),
+          arr_ui_32_seed[i],
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_ui_32_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
+      if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
+        printf("qsort and TSODLULS sort (macraffs) gave different results (uint32)\n");
         i_result = -1;
         break;
       }
@@ -487,6 +737,40 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_add_bytes_to_key_from_uint64__macraff(
+          i_result,
+          &(arr_cells[i]),
+          arr_ui_64_seed[i],
+          0,
+          0,
+          0,
+          0,
+          8,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_ui_64_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
+      if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
+        printf("qsort direct and in_cell (macraffs) gave different results (uint64)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint64(
           &(arr_cells[i]),
@@ -511,6 +795,40 @@ int main(int argc, char *argv[]){
       arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
       if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
         printf("qsort and TSODLULS sort gave different results (uint64)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_add_bytes_to_key_from_uint64__macraff(
+          i_result,
+          &(arr_cells[i]),
+          arr_ui_64_seed[i],
+          0,
+          0,
+          0,
+          0,
+          8,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_ui_64_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
+      if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
+        printf("qsort and TSODLULS sort (macraffs) gave different results (uint64)\n");
         i_result = -1;
         break;
       }
@@ -593,6 +911,41 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint8_from_int8__macraff(ui8, arr_i_8_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint8__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui8,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i_8_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint8_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
+      if(arr_i_8_result2[i] != arr_i_8_result1[i]){
+        printf("qsort direct and in_cell (macraffs) gave different results (int8)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint8(
           &(arr_cells[i]),
@@ -617,6 +970,41 @@ int main(int argc, char *argv[]){
       arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
       if(arr_i_8_result2[i] != arr_i_8_result1[i]){
         printf("qsort and TSODLULS sort gave different results (int8)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint8_from_int8__macraff(ui8, arr_i_8_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint8__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui8,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i_8_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
+      if(arr_i_8_result2[i] != arr_i_8_result1[i]){
+        printf("qsort and TSODLULS sort (macraffs) gave different results (int8)\n");
         i_result = -1;
         break;
       }
@@ -698,6 +1086,41 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint16_from_int16__macraff(ui16, arr_i_16_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint16__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui16,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i_16_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint16_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
+      if(arr_i_16_result2[i] != arr_i_16_result1[i]){
+        printf("qsort direct and in_cell (macraffs) gave different results (int16)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint16(
           &(arr_cells[i]),
@@ -722,6 +1145,41 @@ int main(int argc, char *argv[]){
       arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
       if(arr_i_16_result2[i] != arr_i_16_result1[i]){
         printf("qsort and TSODLULS sort gave different results (int16)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint16_from_int16__macraff(ui16, arr_i_16_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint16__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui16,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i_16_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
+      if(arr_i_16_result2[i] != arr_i_16_result1[i]){
+        printf("qsort and TSODLULS sort (macraffs) gave different results (int16)\n");
         i_result = -1;
         break;
       }
@@ -803,6 +1261,41 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint32_from_int32__macraff(ui32, arr_i_32_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint32__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui32,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i_32_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
+      if(arr_i_32_result2[i] != arr_i_32_result1[i]){
+        printf("qsort direct and in_cell (macraffs) gave different results (int32)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint32(
           &(arr_cells[i]),
@@ -827,6 +1320,41 @@ int main(int argc, char *argv[]){
       arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
       if(arr_i_32_result2[i] != arr_i_32_result1[i]){
         printf("qsort and TSODLULS sort gave different results (int32)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint32_from_int32__macraff(ui32, arr_i_32_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint32__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui32,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i_32_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
+      if(arr_i_32_result2[i] != arr_i_32_result1[i]){
+        printf("qsort and TSODLULS sort (macraff) gave different results (int32)\n");
         i_result = -1;
         break;
       }
@@ -908,6 +1436,41 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint64_from_int64__macraff(ui64, arr_i_64_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint64__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui64,
+          0,
+          0,
+          0,
+          0,
+          8,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i_64_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
+      if(arr_i_64_result2[i] != arr_i_64_result1[i]){
+        printf("qsort direct and in_cell (macraffs) gave different results (int64)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint64(
           &(arr_cells[i]),
@@ -932,6 +1495,41 @@ int main(int argc, char *argv[]){
       arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
       if(arr_i_64_result2[i] != arr_i_64_result1[i]){
         printf("qsort and TSODLULS sort gave different results (int64)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint64_from_int64__macraff(ui64, arr_i_64_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint64__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui64,
+          0,
+          0,
+          0,
+          0,
+          8,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_i_64_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
+      if(arr_i_64_result2[i] != arr_i_64_result1[i]){
+        printf("qsort and TSODLULS sort (macraffs) gave different results (int64)\n");
         i_result = -1;
         break;
       }
@@ -1019,6 +1617,46 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint32__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui32,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_f_float_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_f_float_result2[i] = *((float*)(arr_cells[i].p_object));
+      //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
+      //any comparison with nan or -nan float numbers will say that they are different
+      //You have to compare using the bijection with uint32
+      TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_result1[i])
+      TSODLULS_get_uint_from_float__macraff(ui32_2, arr_f_float_result2[i])
+      if(ui32_2 != ui32){
+        printf("qsort direct and in_cell (macraffs) gave different results (float)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint32(
           &(arr_cells[i]),
@@ -1048,6 +1686,46 @@ int main(int argc, char *argv[]){
            != TSODLULS_get_uint_from_float(arr_f_float_result1[i])
       ){
         printf("qsort and TSODLULS sort gave different results (float)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint32__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui32,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_f_float_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_f_float_result2[i] = *((float*)(arr_cells[i].p_object));
+      //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
+      //any comparison with nan or -nan float numbers will say that they are different
+      //You have to compare using the bijection with uint32
+      TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_result1[i])
+      TSODLULS_get_uint_from_float__macraff(ui32_2, arr_f_float_result2[i])
+      if(ui32_2 != ui32){
+        printf("qsort and TSODLULS sort (macraffs) gave different results (float)\n");
         i_result = -1;
         break;
       }
@@ -1134,6 +1812,46 @@ int main(int argc, char *argv[]){
     }
 
     for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint64__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui64,
+          0,
+          0,
+          0,
+          0,
+          8,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_f_double_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_f_double_result2[i] = *((double*)(arr_cells[i].p_object));
+      //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
+      //any comparison with nan or -nan double numbers will say that they are different
+      //You have to compare using the bijection with uint64
+      TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_result1[i])
+      TSODLULS_get_uint_from_double__macraff(ui64_2, arr_f_double_result2[i])
+      if(ui64_2 != ui64){
+        printf("qsort direct and in_cell (macraffs) gave different results (double)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_free_key(&(arr_cells[i]));
       i_result = TSODLULS_add_bytes_to_key_from_uint64(
           &(arr_cells[i]),
@@ -1163,6 +1881,46 @@ int main(int argc, char *argv[]){
            != TSODLULS_get_uint_from_double(arr_f_double_result1[i])
       ){
         printf("qsort and TSODLULS sort gave different results (double)\n");
+        i_result = -1;
+        break;
+      }
+    }
+    if(i_result != 0){
+      break;
+    }
+
+    for(i = 0; i < i_number_of_elements; ++i){
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
+      TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_seed[i])
+      TSODLULS_add_bytes_to_key_from_uint64__macraff(
+          i_result,
+          &(arr_cells[i]),
+          ui64,
+          0,
+          0,
+          0,
+          0,
+          8,
+          0
+      );
+      if(i_result != 0){
+        break;
+      }
+      arr_cells[i].p_object = &(arr_f_double_seed[i]);
+    }
+    if(i_result != 0){
+      break;
+    }
+    TSODLULS_sort(arr_cells, i_number_of_elements);
+    for(i = 0; i < i_number_of_elements; ++i){
+      arr_f_double_result2[i] = *((double*)(arr_cells[i].p_object));
+      //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
+      //any comparison with nan or -nan double numbers will say that they are different
+      //You have to compare using the bijection with uint64
+      TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_result1[i])
+      TSODLULS_get_uint_from_double__macraff(ui64_2, arr_f_double_result2[i])
+      if(ui64_2 != ui64){
+        printf("qsort and TSODLULS sort (macraffs) gave different results (double)\n");
         i_result = -1;
         break;
       }
@@ -1216,7 +1974,7 @@ int main(int argc, char *argv[]){
   if(arr_f_double_result2 != NULL){ free(arr_f_double_result2); }
   if(arr_cells != NULL){
     for(i = 0; i < i_number_of_elements; ++i){
-      TSODLULS_free_key(&(arr_cells[i]));
+      TSODLULS_free_key__macraff(&(arr_cells[i]));
     }
     free(arr_cells);
   }

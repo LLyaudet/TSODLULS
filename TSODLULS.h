@@ -77,6 +77,7 @@ typedef struct TSODLULS_sort_element {
  * Nan (not a number) are separated into positive and negative nan.
  * The ordering is as follow: -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
  * Use a custom function if you want to detect (-)nan floats and order them differently.
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint32_t TSODLULS_get_uint_from_float(float f_float);
 
@@ -85,6 +86,7 @@ uint32_t TSODLULS_get_uint_from_float(float f_float);
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint32 to the float encoded by it (see TSODLULS_get_uint_from_float)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 float TSODLULS_get_float_from_uint(uint32_t i32);
 
@@ -96,6 +98,7 @@ float TSODLULS_get_float_from_uint(uint32_t i32);
  * Nan (not a number) are separated into positive and negative nan.
  * The ordering is as follow: -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
  * Use a custom function if you want to detect (-)nan floats and order them differently.
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint64_t TSODLULS_get_uint_from_double(double f_double);
 
@@ -104,6 +107,7 @@ uint64_t TSODLULS_get_uint_from_double(double f_double);
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint64 to the double encoded by it (see TSODLULS_get_uint_from_double)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 double TSODLULS_get_double_from_uint(uint64_t i64);
 
@@ -112,6 +116,7 @@ double TSODLULS_get_double_from_uint(uint64_t i64);
 /**
  * Conversion of finite orders to unsigned integer types
  * Change an int8 into an uint8 so that order is preserved
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint8_t TSODLULS_get_uint8_from_int8(int8_t i8);
 
@@ -120,6 +125,7 @@ uint8_t TSODLULS_get_uint8_from_int8(int8_t i8);
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint8 to the int encoded by it (see TSODLULS_get_uint8_from_int8)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int8_t TSODLULS_get_int8_from_uint8(uint8_t i8);
 
@@ -128,6 +134,7 @@ int8_t TSODLULS_get_int8_from_uint8(uint8_t i8);
 /**
  * Conversion of finite orders to unsigned integer types
  * Change an int16 into an uint16 so that order is preserved
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint16_t TSODLULS_get_uint16_from_int16(int16_t i16);
 
@@ -136,6 +143,7 @@ uint16_t TSODLULS_get_uint16_from_int16(int16_t i16);
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint16 to the int encoded by it (see TSODLULS_get_uint16_from_int16)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int16_t TSODLULS_get_int16_from_uint16(uint16_t i16);
 
@@ -144,6 +152,7 @@ int16_t TSODLULS_get_int16_from_uint16(uint16_t i16);
 /**
  * Conversion of finite orders to unsigned integer types
  * Change an int32 into an uint32 so that order is preserved
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint32_t TSODLULS_get_uint32_from_int32(int32_t i32);
 
@@ -152,6 +161,7 @@ uint32_t TSODLULS_get_uint32_from_int32(int32_t i32);
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint32 to the int encoded by it (see TSODLULS_get_uint32_from_int32)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int32_t TSODLULS_get_int32_from_uint32(uint32_t i32);
 
@@ -160,6 +170,7 @@ int32_t TSODLULS_get_int32_from_uint32(uint32_t i32);
 /**
  * Conversion of finite orders to unsigned integer types
  * Change an int64 into an uint64 so that order is preserved
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint64_t TSODLULS_get_uint64_from_int64(int64_t i64);
 
@@ -168,6 +179,7 @@ uint64_t TSODLULS_get_uint64_from_int64(int64_t i64);
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint64 to the int encoded by it (see TSODLULS_get_uint64_from_int64)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int64_t TSODLULS_get_int64_from_uint64(uint64_t i64);
 
@@ -176,6 +188,7 @@ int64_t TSODLULS_get_int64_from_uint64(uint64_t i64);
 /**
  * Adding TSO-encoding to the current key
  * From uint8
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int TSODLULS_add_bytes_to_key_from_uint8(
   t_TSODLULS_sort_element* p_sort_element,
@@ -193,6 +206,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
 /**
  * Adding TSO-encoding to the current key
  * From uint16
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int TSODLULS_add_bytes_to_key_from_uint16(
   t_TSODLULS_sort_element* p_sort_element,
@@ -210,6 +224,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
 /**
  * Adding TSO-encoding to the current key
  * From uint32
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int TSODLULS_add_bytes_to_key_from_uint32(
   t_TSODLULS_sort_element* p_sort_element,
@@ -227,6 +242,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
 /**
  * Adding TSO-encoding to the current key
  * From uint64
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int TSODLULS_add_bytes_to_key_from_uint64(
   t_TSODLULS_sort_element* p_sort_element,
@@ -399,6 +415,7 @@ int TSODLULS_compare_nextified_key_in_cell(const void *a, const void *b);
 /**
  * Miscellaneous functions
  * Initialize a TSODLULS element
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 void TSODLULS_init_element(t_TSODLULS_sort_element* p_element);
 
@@ -407,6 +424,7 @@ void TSODLULS_init_element(t_TSODLULS_sort_element* p_element);
 /**
  * Miscellaneous functions
  * Free the key of a TSODLULS element (if necessary) and reinitializes the corresponding fields
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 void TSODLULS_free_key(t_TSODLULS_sort_element* p_element);
 
@@ -415,6 +433,7 @@ void TSODLULS_free_key(t_TSODLULS_sort_element* p_element);
 /**
  * Miscellaneous functions
  * Initialize an array of TSODLULS elements
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 int TSODLULS_init_array_of_elements(t_TSODLULS_sort_element** p_arr_elements, size_t i_number_of_elements);
 
@@ -423,6 +442,7 @@ int TSODLULS_init_array_of_elements(t_TSODLULS_sort_element** p_arr_elements, si
 /**
  * Miscellaneous functions
  * Free the keys of all TSODLULS elements in an array
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 void TSODLULS_free_keys_in_array_of_elements(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
 
@@ -431,6 +451,7 @@ void TSODLULS_free_keys_in_array_of_elements(t_TSODLULS_sort_element* arr_elemen
 /**
  * Miscellaneous functions
  * (Re)Allocate space for the key of a TSODLULS element
+ * Available as a macraff (see TSODLULS_misc__macro.h).
  */
 int TSODLULS_element_allocate_space_for_key(
   t_TSODLULS_sort_element* p_sort_element,
@@ -445,6 +466,7 @@ int TSODLULS_element_allocate_space_for_key(
 /**
  * Padding functions
  * Check padding parameters and return an error code if needed
+ * Available as a macraff (see TSODLULS_padding__macro.h).
  */
 int TSODLULS_check_padding_parameters(
   int8_t i_number_of_lex_padding_bytes_before,
@@ -460,6 +482,7 @@ int TSODLULS_check_padding_parameters(
 /**
  * Padding functions
  * Compute size needed for the data bytes with padding
+ * Available as a macraff (see TSODLULS_padding__macro.h).
  */
 size_t TSODLULS_compute_size_needed(
   size_t i_number_of_data_bytes,
@@ -476,6 +499,7 @@ size_t TSODLULS_compute_size_needed(
 /**
  * Padding functions
  * Padd
+ * Available as a macraff (see TSODLULS_padding__macro.h).
  */
 void TSODLULS_padd(
   t_TSODLULS_sort_element* p_sort_element,
@@ -485,5 +509,6 @@ void TSODLULS_padd(
 );
 
 
+#include "TSODLULS__macro.h"
 
 #endif

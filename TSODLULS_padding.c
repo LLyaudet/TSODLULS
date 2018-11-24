@@ -26,6 +26,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 /**
  * Padding functions
  * Check padding parameters and return an error code if needed
+ * Available as a macraff (see TSODLULS_padding__macro.h).
  */
 int TSODLULS_check_padding_parameters(
   int8_t i_number_of_lex_padding_bytes_before,
@@ -53,10 +54,10 @@ int TSODLULS_check_padding_parameters(
     }
   }
   if(i_number_of_lex_padding_bytes_after == I_HALF_BYTE
-    || i_number_of_lex_padding_bytes_after == I_HALF_BYTE
+    || i_number_of_contrelex_padding_bytes_after == I_HALF_BYTE
   ){
     if(i_number_of_lex_padding_bytes_after != I_HALF_BYTE
-      || i_number_of_lex_padding_bytes_after != I_HALF_BYTE
+      || i_number_of_contrelex_padding_bytes_after != I_HALF_BYTE
     ){
       return I_ERROR__BOTH_LEX_AND_CONTRELEX_PADDING_BYTES_AFTER_MUST_BE_HALF_BYTES;
     }
@@ -87,6 +88,7 @@ int TSODLULS_check_padding_parameters(
 /**
  * Padding functions
  * Compute size needed for the data bytes with padding
+ * Available as a macraff (see TSODLULS_padding__macro.h).
  */
 size_t TSODLULS_compute_size_needed(
   size_t i_number_of_data_bytes,
@@ -133,6 +135,7 @@ size_t TSODLULS_compute_size_needed(
 /**
  * Padding functions
  * Padd
+ * Available as a macraff (see TSODLULS_padding__macro.h).
  */
 void TSODLULS_padd(
   t_TSODLULS_sort_element* p_sort_element,

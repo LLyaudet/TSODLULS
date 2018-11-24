@@ -29,6 +29,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
  * Nan (not a number) are separated into positive and negative nan.
  * The ordering is as follow: -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
  * Use a custom function if you want to detect (-)nan floats and order them differently.
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint32_t TSODLULS_get_uint_from_float(float f_float){
   union ieee754_float temp;
@@ -55,6 +56,7 @@ uint32_t TSODLULS_get_uint_from_float(float f_float){
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint32 to the float encoded by it (see TSODLULS_get_uint_from_float)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 float TSODLULS_get_float_from_uint(uint32_t i32){
   union ieee754_float temp;
@@ -79,6 +81,7 @@ float TSODLULS_get_float_from_uint(uint32_t i32){
  * Nan (not a number) are separated into positive and negative nan.
  * The ordering is as follow: -nan, -inf, negative numbers, -0, +0, positive numbers, inf, nan.
  * Use a custom function if you want to detect (-)nan floats and order them differently.
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint64_t TSODLULS_get_uint_from_double(double f_double){
   union ieee754_double temp;
@@ -107,6 +110,7 @@ uint64_t TSODLULS_get_uint_from_double(double f_double){
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint64 to the double encoded by it (see TSODLULS_get_uint_from_double)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 double TSODLULS_get_double_from_uint(uint64_t i64){
   union ieee754_double temp;
@@ -129,6 +133,7 @@ double TSODLULS_get_double_from_uint(uint64_t i64){
 /**
  * Conversion of finite orders to unsigned integer types
  * Change an int8 into an uint8 so that order is preserved
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint8_t TSODLULS_get_uint8_from_int8(int8_t i8){
   if(i8 >= 0){
@@ -142,6 +147,7 @@ uint8_t TSODLULS_get_uint8_from_int8(int8_t i8){
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint8 to the int encoded by it (see TSODLULS_get_uint8_from_int8)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int8_t TSODLULS_get_int8_from_uint8(uint8_t i8){
   if(i8 >= (((uint8_t)1) << 7)){
@@ -155,6 +161,7 @@ int8_t TSODLULS_get_int8_from_uint8(uint8_t i8){
 /**
  * Conversion of finite orders to unsigned integer types
  * Change an int16 into an uint16 so that order is preserved
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint16_t TSODLULS_get_uint16_from_int16(int16_t i16){
   if(i16 >= 0){
@@ -168,6 +175,7 @@ uint16_t TSODLULS_get_uint16_from_int16(int16_t i16){
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint16 to the int encoded by it (see TSODLULS_get_uint16_from_int16)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int16_t TSODLULS_get_int16_from_uint16(uint16_t i16){
   if(i16 >= (((uint16_t)1) << 15)){
@@ -181,6 +189,7 @@ int16_t TSODLULS_get_int16_from_uint16(uint16_t i16){
 /**
  * Conversion of finite orders to unsigned integer types
  * Change an int32 into an uint32 so that order is preserved
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint32_t TSODLULS_get_uint32_from_int32(int32_t i32){
   if(i32 >= 0){
@@ -194,6 +203,7 @@ uint32_t TSODLULS_get_uint32_from_int32(int32_t i32){
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint32 to the int encoded by it (see TSODLULS_get_uint32_from_int32)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int32_t TSODLULS_get_int32_from_uint32(uint32_t i32){
   if(i32 >= (((uint32_t)1) << 31)){
@@ -207,6 +217,7 @@ int32_t TSODLULS_get_int32_from_uint32(uint32_t i32){
 /**
  * Conversion of finite orders to unsigned integer types
  * Change an int64 into an uint64 so that order is preserved
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 uint64_t TSODLULS_get_uint64_from_int64(int64_t i64){
   if(i64 >= 0){
@@ -220,6 +231,7 @@ uint64_t TSODLULS_get_uint64_from_int64(int64_t i64){
 /**
  * Conversion of finite orders to unsigned integer types and back
  * Change an uint64 to the int encoded by it (see TSODLULS_get_uint64_from_int64)
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int64_t TSODLULS_get_int64_from_uint64(uint64_t i64){
   if(i64 >= (((uint64_t)1) << 63)){
@@ -233,6 +245,7 @@ int64_t TSODLULS_get_int64_from_uint64(uint64_t i64){
 /**
  * Adding TSO-encoding to the current key
  * From uint8
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int TSODLULS_add_bytes_to_key_from_uint8(
   t_TSODLULS_sort_element* p_sort_element,
@@ -247,7 +260,30 @@ int TSODLULS_add_bytes_to_key_from_uint8(
   size_t i_size_needed = 1;
   int i_result = 0;
 
+  int8_t TSODLULS_macraff_i8;
+  int8_t TSODLULS_macraff_i8_2;
+  int8_t TSODLULS_macraff_i8_3;
+  int8_t TSODLULS_macraff_i8_4;
+  int8_t TSODLULS_macraff_i8_5;
+  int8_t TSODLULS_macraff_i8_6;
+  size_t TSODLULS_macraff_isize;
+  size_t TSODLULS_macraff_isize_2;
+  size_t TSODLULS_macraff_isize_3;
+  t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
+  void* TSODLULS_macraff_p_void;
+
+  /*
   i_result = TSODLULS_check_padding_parameters(
+      i_number_of_lex_padding_bytes_before,
+      i_number_of_contrelex_padding_bytes_before,
+      i_number_of_lex_padding_bytes_after,
+      i_number_of_contrelex_padding_bytes_after,
+      i_number_of_contiguous_data_bytes,
+      i_current_offset
+  );
+  */
+  TSODLULS_check_padding_parameters__macraff(
+      i_result,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
       i_number_of_lex_padding_bytes_after,
@@ -259,6 +295,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
     return i_result;
   }
 
+  /*
   i_size_needed = TSODLULS_compute_size_needed(
       1,
       i_number_of_lex_padding_bytes_before,
@@ -268,8 +305,26 @@ int TSODLULS_add_bytes_to_key_from_uint8(
       i_number_of_contiguous_data_bytes,
       i_current_offset
   );
+  */
+  TSODLULS_compute_size_needed__macraff(
+      i_size_needed,
+      1,
+      i_number_of_lex_padding_bytes_before,
+      i_number_of_contrelex_padding_bytes_before,
+      i_number_of_lex_padding_bytes_after,
+      i_number_of_contrelex_padding_bytes_after,
+      i_number_of_contiguous_data_bytes,
+      i_current_offset
+  );
 
+  /*
   i_result = TSODLULS_element_allocate_space_for_key(
+      p_sort_element,
+      i_size_needed
+  );
+  */
+  TSODLULS_element_allocate_space_for_key__macraff(
+      i_result,
       p_sort_element,
       i_size_needed
   );
@@ -277,7 +332,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
     return i_result;
   }
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -287,7 +342,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)i8;
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
@@ -301,6 +356,7 @@ int TSODLULS_add_bytes_to_key_from_uint8(
 /**
  * Adding TSO-encoding to the current key
  * From uint16
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int TSODLULS_add_bytes_to_key_from_uint16(
   t_TSODLULS_sort_element* p_sort_element,
@@ -315,7 +371,30 @@ int TSODLULS_add_bytes_to_key_from_uint16(
   size_t i_size_needed = 2;
   int i_result = 0;
 
+  int8_t TSODLULS_macraff_i8;
+  int8_t TSODLULS_macraff_i8_2;
+  int8_t TSODLULS_macraff_i8_3;
+  int8_t TSODLULS_macraff_i8_4;
+  int8_t TSODLULS_macraff_i8_5;
+  int8_t TSODLULS_macraff_i8_6;
+  size_t TSODLULS_macraff_isize;
+  size_t TSODLULS_macraff_isize_2;
+  size_t TSODLULS_macraff_isize_3;
+  t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
+  void* TSODLULS_macraff_p_void;
+
+  /*
   i_result = TSODLULS_check_padding_parameters(
+      i_number_of_lex_padding_bytes_before,
+      i_number_of_contrelex_padding_bytes_before,
+      i_number_of_lex_padding_bytes_after,
+      i_number_of_contrelex_padding_bytes_after,
+      i_number_of_contiguous_data_bytes,
+      i_current_offset
+  );
+  */
+  TSODLULS_check_padding_parameters__macraff(
+      i_result,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
       i_number_of_lex_padding_bytes_after,
@@ -327,6 +406,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
     return i_result;
   }
 
+  /*
   i_size_needed = TSODLULS_compute_size_needed(
       2,
       i_number_of_lex_padding_bytes_before,
@@ -336,8 +416,26 @@ int TSODLULS_add_bytes_to_key_from_uint16(
       i_number_of_contiguous_data_bytes,
       i_current_offset
   );
+  */
+  TSODLULS_compute_size_needed__macraff(
+      i_size_needed,
+      2,
+      i_number_of_lex_padding_bytes_before,
+      i_number_of_contrelex_padding_bytes_before,
+      i_number_of_lex_padding_bytes_after,
+      i_number_of_contrelex_padding_bytes_after,
+      i_number_of_contiguous_data_bytes,
+      i_current_offset
+  );
 
+  /*
   i_result = TSODLULS_element_allocate_space_for_key(
+      p_sort_element,
+      i_size_needed
+  );
+  */
+  TSODLULS_element_allocate_space_for_key__macraff(
+      i_result,
       p_sort_element,
       i_size_needed
   );
@@ -345,7 +443,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
     return i_result;
   }
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -355,14 +453,14 @@ int TSODLULS_add_bytes_to_key_from_uint16(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i16 >> 8);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -372,7 +470,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i16 % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
@@ -386,6 +484,7 @@ int TSODLULS_add_bytes_to_key_from_uint16(
 /**
  * Adding TSO-encoding to the current key
  * From uint32
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int TSODLULS_add_bytes_to_key_from_uint32(
   t_TSODLULS_sort_element* p_sort_element,
@@ -400,7 +499,30 @@ int TSODLULS_add_bytes_to_key_from_uint32(
   size_t i_size_needed = 4;
   int i_result = 0;
 
+  int8_t TSODLULS_macraff_i8;
+  int8_t TSODLULS_macraff_i8_2;
+  int8_t TSODLULS_macraff_i8_3;
+  int8_t TSODLULS_macraff_i8_4;
+  int8_t TSODLULS_macraff_i8_5;
+  int8_t TSODLULS_macraff_i8_6;
+  size_t TSODLULS_macraff_isize;
+  size_t TSODLULS_macraff_isize_2;
+  size_t TSODLULS_macraff_isize_3;
+  t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
+  void* TSODLULS_macraff_p_void;
+
+  /*
   i_result = TSODLULS_check_padding_parameters(
+      i_number_of_lex_padding_bytes_before,
+      i_number_of_contrelex_padding_bytes_before,
+      i_number_of_lex_padding_bytes_after,
+      i_number_of_contrelex_padding_bytes_after,
+      i_number_of_contiguous_data_bytes,
+      i_current_offset
+  );
+  */
+  TSODLULS_check_padding_parameters__macraff(
+      i_result,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
       i_number_of_lex_padding_bytes_after,
@@ -412,6 +534,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     return i_result;
   }
 
+  /*
   i_size_needed = TSODLULS_compute_size_needed(
       4,
       i_number_of_lex_padding_bytes_before,
@@ -421,8 +544,26 @@ int TSODLULS_add_bytes_to_key_from_uint32(
       i_number_of_contiguous_data_bytes,
       i_current_offset
   );
+  */
+  TSODLULS_compute_size_needed__macraff(
+      i_size_needed,
+      4,
+      i_number_of_lex_padding_bytes_before,
+      i_number_of_contrelex_padding_bytes_before,
+      i_number_of_lex_padding_bytes_after,
+      i_number_of_contrelex_padding_bytes_after,
+      i_number_of_contiguous_data_bytes,
+      i_current_offset
+  );
 
+  /*
   i_result = TSODLULS_element_allocate_space_for_key(
+      p_sort_element,
+      i_size_needed
+  );
+  */
+  TSODLULS_element_allocate_space_for_key__macraff(
+      i_result,
       p_sort_element,
       i_size_needed
   );
@@ -430,7 +571,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
     return i_result;
   }
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -440,14 +581,14 @@ int TSODLULS_add_bytes_to_key_from_uint32(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i32 >> 24);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -457,14 +598,14 @@ int TSODLULS_add_bytes_to_key_from_uint32(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i32 >> 16) % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -474,14 +615,14 @@ int TSODLULS_add_bytes_to_key_from_uint32(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i32 >> 8) % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -491,7 +632,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i32 % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
@@ -505,6 +646,7 @@ int TSODLULS_add_bytes_to_key_from_uint32(
 /**
  * Adding TSO-encoding to the current key
  * From uint64
+ * Available as a macraff (see TSODLULS_finite_orders__macro.h).
  */
 int TSODLULS_add_bytes_to_key_from_uint64(
   t_TSODLULS_sort_element* p_sort_element,
@@ -519,7 +661,30 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   size_t i_size_needed = 8;
   int i_result = 0;
 
+  int8_t TSODLULS_macraff_i8;
+  int8_t TSODLULS_macraff_i8_2;
+  int8_t TSODLULS_macraff_i8_3;
+  int8_t TSODLULS_macraff_i8_4;
+  int8_t TSODLULS_macraff_i8_5;
+  int8_t TSODLULS_macraff_i8_6;
+  size_t TSODLULS_macraff_isize;
+  size_t TSODLULS_macraff_isize_2;
+  size_t TSODLULS_macraff_isize_3;
+  t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
+  void* TSODLULS_macraff_p_void;
+
+  /*
   i_result = TSODLULS_check_padding_parameters(
+      i_number_of_lex_padding_bytes_before,
+      i_number_of_contrelex_padding_bytes_before,
+      i_number_of_lex_padding_bytes_after,
+      i_number_of_contrelex_padding_bytes_after,
+      i_number_of_contiguous_data_bytes,
+      i_current_offset
+  );
+  */
+  TSODLULS_check_padding_parameters__macraff(
+      i_result,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
       i_number_of_lex_padding_bytes_after,
@@ -531,6 +696,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     return i_result;
   }
 
+  /*
   i_size_needed = TSODLULS_compute_size_needed(
       8,
       i_number_of_lex_padding_bytes_before,
@@ -540,8 +706,26 @@ int TSODLULS_add_bytes_to_key_from_uint64(
       i_number_of_contiguous_data_bytes,
       i_current_offset
   );
+  */
+  TSODLULS_compute_size_needed__macraff(
+      i_size_needed,
+      8,
+      i_number_of_lex_padding_bytes_before,
+      i_number_of_contrelex_padding_bytes_before,
+      i_number_of_lex_padding_bytes_after,
+      i_number_of_contrelex_padding_bytes_after,
+      i_number_of_contiguous_data_bytes,
+      i_current_offset
+  );
 
+  /*
   i_result = TSODLULS_element_allocate_space_for_key(
+      p_sort_element,
+      i_size_needed
+  );
+  */
+  TSODLULS_element_allocate_space_for_key__macraff(
+      i_result,
       p_sort_element,
       i_size_needed
   );
@@ -549,7 +733,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
     return i_result;
   }
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -559,14 +743,14 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i64 >> 56);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -576,14 +760,14 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 48) % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -593,14 +777,14 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 40) % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -610,14 +794,14 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 32) % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -627,14 +811,14 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 24) % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -644,14 +828,14 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 16) % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -661,14 +845,14 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)((i64 >> 8) % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
       i_current_offset
   );
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_before,
       i_number_of_contrelex_padding_bytes_before,
@@ -678,7 +862,7 @@ int TSODLULS_add_bytes_to_key_from_uint64(
   p_sort_element->s_key[p_sort_element->i_key_size++] = (uint8_t)(i64 % 256);
   i_current_offset = (i_current_offset + 1) % i_number_of_contiguous_data_bytes;
 
-  TSODLULS_padd(
+  TSODLULS_padd__macraff(
       p_sort_element,
       i_number_of_lex_padding_bytes_after,
       i_number_of_contrelex_padding_bytes_after,
