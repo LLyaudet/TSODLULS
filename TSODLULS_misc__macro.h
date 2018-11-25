@@ -23,6 +23,8 @@ The macraffs in this file use the following auxiliary variables:
   t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
   t_TSODLULS_sort_element* TSODLULS_macraff_arr_elements;
   t_TSODLULS_sort_element** TSODLULS_macraff_p_arr_elements;
+  t_TSODLULS_sort_element__short* TSODLULS_macraff_p_sort_element__short;
+  t_TSODLULS_sort_element__short** TSODLULS_macraff_p_arr_elements__short;
   size_t TSODLULS_macraff_isize;
   size_t TSODLULS_macraff_isize_2;
   void* TSODLULS_macraff_p_void;
@@ -187,3 +189,45 @@ do{\
 
 
 
+/**
+ * Miscellaneous functions
+ * Initialize a TSODLULS element for short orders
+ * This macraff requires the following auxiliary variable:
+ *   t_TSODLULS_sort_element__short* TSODLULS_macraff_p_sort_element__short;
+ */
+#define TSODLULS_init_element__short__macraff(p_element) \
+do{\
+  TSODLULS_macraff_p_sort_element__short = (p_element);\
+  TSODLULS_macraff_p_sort_element__short->p_object = NULL;\
+  TSODLULS_macraff_p_sort_element__short->i_key = 0;\
+}while(0);
+
+
+
+/**
+ * Miscellaneous functions
+ * Initialize an array of TSODLULS elements
+ * This macraff requires the following auxiliary variables:
+ *   t_TSODLULS_sort_element__short* TSODLULS_macraff_p_sort_element__short;
+ *   t_TSODLULS_sort_element__short** TSODLULS_macraff_p_arr_elements__short;
+ *   size_t TSODLULS_macraff_isize;
+ *   size_t TSODLULS_macraff_isize_2;
+ */
+#define TSODLULS_init_array_of_elements__short__macraff(\
+  i_aff,\
+  p_arr_elements,\
+  i_number_of_elements\
+) \
+do{\
+  TSODLULS_macraff_p_arr_elements__short = (p_arr_elements);\
+  TSODLULS_macraff_isize = (i_number_of_elements);\
+  *TSODLULS_macraff_p_arr_elements__short = calloc(TSODLULS_macraff_isize, sizeof(t_TSODLULS_sort_element__short));\
+  if(*TSODLULS_macraff_p_arr_elements__short == NULL){\
+    (i_aff) = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;\
+    break;\
+  }\
+  for(TSODLULS_macraff_isize_2 = 0; TSODLULS_macraff_isize_2 < TSODLULS_macraff_isize; ++TSODLULS_macraff_isize_2){\
+    TSODLULS_init_element__short__macraff(&((*TSODLULS_macraff_p_arr_elements__short)[TSODLULS_macraff_isize_2]));\
+  }\
+  (i_aff) = 0;\
+}while(0);

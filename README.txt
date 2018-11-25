@@ -81,7 +81,8 @@ These parameters will depend of the order you want to sort by.
 Sorting
 ----------------------------------------------------------------------------
 
-Sorting algorithms suited for "nextified" keys are available in TSODLULS_sorting.c
+Sorting algorithms suited for "nextified" keys are available in TSODLULS_sorting_long_orders.c
+and in TSODLULS_sorting_short_orders.c.
 We plan to add new "best-in-class" algorithms there, for general/stable sorting.
 
 
@@ -290,22 +291,24 @@ of the library are available:
  - TSODLULS_finite_orders.h
  - TSODLULS_misc.h
  - TSODLULS_padding.h
- - TSODLULS_sorting.h
+ - TSODLULS_sorting_long_orders.h
+ - TSODLULS_sorting_short orders.h
 These headers files are here for reference but must not be used (use TSODLULS.h).
 The code of the functions is available in the following files:
  - TSODLULS_comparison.c comparison function for various primitive datatypes and cells of this library
  - TSODLULS_finite_orders.c converting primitive datatypes into unsigned integers while preserving order
  - TSODLULS_misc.c helper functions for using arrays of TSODLULS cells
  - TSODLULS_padding.c padding the lexicographic keys
- - TSODLULS_sorting.c the sorting algorithms
+ - TSODLULS_sorting_long_orders.c the sorting algorithms for long orders
+ - TSODLULS_sorting_short_orders.c the sorting algorithms for short orders
 Some of the functions are also available as macro in the following files:
  - //not needed yet TSODLULS_comparison__macro.h
  - TSODLULS_finite_orders__macro.h
  - TSODLULS_misc__macro.h
  - TSODLULS_padding__macro.h
- - //not needed yet TSODLULS_sorting__macro.h
+ - //not needed yet TSODLULS_sorting_long_orders__macro.h and TSODLULS_sorting_short_orders__macro.h
 All these files are included in the file TSODLULS__macro.h.
-This file explains conventions and guides for using TSODLSULS macros.
+The file TSODLULS__macro.h explains conventions and guides for using TSODLSULS macros.
 The comment before a function tells whether it is available as a macro.
 
 There is a Makefile that you can run with "make", in order to:

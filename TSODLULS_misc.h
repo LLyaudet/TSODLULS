@@ -68,3 +68,24 @@ int TSODLULS_element_allocate_space_for_key(
 
 
 
+/**
+ * Miscellaneous functions
+ * Initialize a TSODLULS element for short orders
+ * Available as a macraff (see TSODLULS_misc__macro.h).
+ */
+void TSODLULS_init_element__short(t_TSODLULS_sort_element__short* p_element);
+
+
+
+/**
+ * Miscellaneous functions
+ * Initialize an array of TSODLULS elements for short orders
+ * Available as a macraff (see TSODLULS_misc__macro.h).
+ */
+int TSODLULS_init_array_of_elements__short(
+  t_TSODLULS_sort_element__short** p_arr_elements,
+  size_t i_number_of_elements
+);
+
+
+

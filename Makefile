@@ -31,16 +31,19 @@ build: build-static build-dynamic
 #Static library
 build-static: ./bin/libTSODLULS_$(VERSION).a
 
-./bin/libTSODLULS_$(VERSION).a: ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
-	ar -rcs ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
+./bin/libTSODLULS_$(VERSION).a: ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting_long_orders.o ./bin/TSODLULS_sorting_short_orders.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
+	ar -rcs ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting_long_orders.o ./bin/TSODLULS_sorting_short_orders.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
 #	ar -rc ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o
 #	ranlib ./bin/libTSODLULS_$(VERSION).a
 
 ./bin/TSODLULS_finite_orders.o: ./TSODLULS.h ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_finite_orders.c -o ./bin/TSODLULS_finite_orders.o
 
-./bin/TSODLULS_sorting.o: ./TSODLULS.h ./TSODLULS_sorting.c
-	$(CC) $(CFLAGS) -c ./TSODLULS_sorting.c -o ./bin/TSODLULS_sorting.o
+./bin/TSODLULS_sorting_long_orders.o: ./TSODLULS.h ./TSODLULS_sorting_long_orders.c
+	$(CC) $(CFLAGS) -c ./TSODLULS_sorting_long_orders.c -o ./bin/TSODLULS_sorting_long_orders.o
+
+./bin/TSODLULS_sorting_short_orders.o: ./TSODLULS.h ./TSODLULS_sorting_short_orders.c
+	$(CC) $(CFLAGS) -c ./TSODLULS_sorting_short_orders.c -o ./bin/TSODLULS_sorting_short_orders.o
 
 ./bin/TSODLULS_comparison.o: ./TSODLULS.h ./TSODLULS_comparison.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_comparison.c -o ./bin/TSODLULS_comparison.o
@@ -54,14 +57,17 @@ build-static: ./bin/libTSODLULS_$(VERSION).a
 #Dynamic library
 build-dynamic: ./bin/libTSODLULS_$(VERSION).so
 
-./bin/libTSODLULS_$(VERSION).so: ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
-	$(CC) -shared -o ./bin/libTSODLULS_$(VERSION).so ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
+./bin/libTSODLULS_$(VERSION).so: ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_long_orders_dyn.o ./bin/TSODLULS_sorting_short_orders_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
+	$(CC) -shared -o ./bin/libTSODLULS_$(VERSION).so ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_long_orders_dyn.o ./bin/TSODLULS_sorting_short_orders_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
 
 ./bin/TSODLULS_finite_orders_dyn.o: ./TSODLULS.h ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_finite_orders.c -o ./bin/TSODLULS_finite_orders_dyn.o
 
-./bin/TSODLULS_sorting_dyn.o: ./TSODLULS.h ./TSODLULS_sorting.c
-	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting.c -o ./bin/TSODLULS_sorting_dyn.o
+./bin/TSODLULS_sorting_long_orders_dyn.o: ./TSODLULS.h ./TSODLULS_sorting_long_orders.c
+	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting_long_orders.c -o ./bin/TSODLULS_sorting_long_orders_dyn.o
+
+./bin/TSODLULS_sorting_short_orders_dyn.o: ./TSODLULS.h ./TSODLULS_sorting_short_orders.c
+	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting_short_orders.c -o ./bin/TSODLULS_sorting_short_orders_dyn.o
 
 ./bin/TSODLULS_comparison_dyn.o: ./TSODLULS.h ./TSODLULS_comparison.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_comparison.c -o ./bin/TSODLULS_comparison_dyn.o

@@ -50,14 +50,23 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 #define I_ERROR__NUMBER_OF_CONTIGUOUS_DATA_BYTES_MUST_BE_AT_LEAST_1 106
 #define I_ERROR__CURRENT_OFFSET_MUST_BE_AT_LEAST_0 107
 #define I_ERROR__CURRENT_OFFSET_MUST_BE_LESS_THAN_THE_NUMBER_OF_CONTIGUOUS_DATA_BYTES 108
+//-sorting parameters errors
+#define I_ERROR__MAX_LENGTH_SHOULD_BE_POSITIVE 200
+#define I_ERROR__MAX_LENGTH_SHOULD_BE_AT_MOST_8 201
 //Negative error codes are user defined
 
 
 //------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------
 //Structures
 //------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------------
+//External structures
+//------------------------------------------------------------------------------------
 /**
- * The structure to be sorted by ULS
+ * The structure to be sorted by ULS for long orders
  */
 typedef struct TSODLULS_sort_element {
   void* p_object;
@@ -65,6 +74,28 @@ typedef struct TSODLULS_sort_element {
   size_t i_allocated_size;
   uint8_t* s_key;
 } t_TSODLULS_sort_element;
+
+
+
+/**
+ * The structure to be sorted by ULS for short orders
+ */
+typedef struct TSODLULS_sort_element__short {
+  void* p_object;
+  uint64_t i_key;
+} t_TSODLULS_sort_element__short;
+
+
+
+//------------------------------------------------------------------------------------
+//Internal structures for the sorting algorithms
+//------------------------------------------------------------------------------------
+typedef struct TSODLULS_radix_instance {
+  size_t i_offset_first;
+  size_t i_offset_last;
+  size_t i_depth;
+  unsigned int b_copy;
+} t_TSODLULS_radix_instance;
 
 
 
@@ -258,10 +289,10 @@ int TSODLULS_add_bytes_to_key_from_uint64(
 
 
 //------------------------------------------------------------------------------------
-//Sorting
+//Sorting long orders
 //------------------------------------------------------------------------------------
 /**
- * Sorting functions for nextified strings
+ * Sorting functions for long nextified strings
  * The current state of the art sorting function for nextified strings.
  * Its implementation may change without warning.
  */
@@ -270,7 +301,7 @@ int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elem
 
 
 /**
- * Sorting functions for nextified strings
+ * Sorting functions for long nextified strings
  * The current state of the art stable sorting function for nextified strings.
  * Its implementation may change without warning.
  */
@@ -279,11 +310,53 @@ int TSODLULS_sort_stable(t_TSODLULS_sort_element* arr_elements, size_t i_number_
 
 
 /**
- * Sorting functions for nextified strings
+ * Sorting functions for long nextified strings
  * A stable sorting algorithm for nextified strings based on radix sort with octets digits
  * and counting sort as a subroutine.
  */
 int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
+
+
+
+//------------------------------------------------------------------------------------
+//Sorting short orders
+//------------------------------------------------------------------------------------
+/**
+ * Sorting functions for short nextified strings
+ * The current state of the art sorting function for nextified strings.
+ * Its implementation may change without warning.
+ */
+int TSODLULS_sort__short(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+);
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * The current state of the art stable sorting function for nextified strings.
+ * Its implementation may change without warning.
+ */
+int TSODLULS_sort_stable__short(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+);
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
+ */
+int TSODLULS_sort_radix8_count__short(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+);
 
 
 
@@ -409,6 +482,14 @@ int TSODLULS_compare_nextified_key_in_cell(const void *a, const void *b);
 
 
 
+/**
+ * Comparison function
+ * nextified key in TSODLULS cell for short orders
+ */
+int TSODLULS_compare_nextified_key_in_cell__short(const void *a, const void *b);
+
+
+
 //------------------------------------------------------------------------------------
 //Miscellaneous
 //------------------------------------------------------------------------------------
@@ -456,6 +537,27 @@ void TSODLULS_free_keys_in_array_of_elements(t_TSODLULS_sort_element* arr_elemen
 int TSODLULS_element_allocate_space_for_key(
   t_TSODLULS_sort_element* p_sort_element,
   size_t i_size_needed
+);
+
+
+
+/**
+ * Miscellaneous functions
+ * Initialize a TSODLULS element for short orders
+ * Available as a macraff (see TSODLULS_misc__macro.h).
+ */
+void TSODLULS_init_element__short(t_TSODLULS_sort_element__short* p_element);
+
+
+
+/**
+ * Miscellaneous functions
+ * Initialize an array of TSODLULS elements for short orders
+ * Available as a macraff (see TSODLULS_misc__macro.h).
+ */
+int TSODLULS_init_array_of_elements__short(
+  t_TSODLULS_sort_element__short** p_arr_elements,
+  size_t i_number_of_elements
 );
 
 

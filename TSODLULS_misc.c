@@ -144,3 +144,37 @@ int TSODLULS_element_allocate_space_for_key(
 
 
 
+/**
+ * Miscellaneous functions
+ * Initialize a TSODLULS element for short orders
+ * Available as a macraff (see TSODLULS_misc__macro.h).
+ */
+void TSODLULS_init_element__short(t_TSODLULS_sort_element__short* p_element){
+  p_element->p_object = NULL;
+  p_element->i_key = 0;
+}//end function TSODLULS_init_element__short()
+
+
+
+/**
+ * Miscellaneous functions
+ * Initialize an array of TSODLULS elements for short orders
+ * Available as a macraff (see TSODLULS_misc__macro.h).
+ */
+int TSODLULS_init_array_of_elements__short(
+  t_TSODLULS_sort_element__short** p_arr_elements,
+  size_t i_number_of_elements
+){
+  t_TSODLULS_sort_element__short* TSODLULS_macraff_p_sort_element__short;
+  *p_arr_elements = calloc(i_number_of_elements, sizeof(t_TSODLULS_sort_element__short));
+  if(*p_arr_elements == NULL){
+    return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
+  }
+  for(size_t i = 0; i < i_number_of_elements; ++i){
+    TSODLULS_init_element__short__macraff(&((*p_arr_elements)[i]));
+  }
+  return 0;
+}//end function TSODLULS_init_array_of_elements()
+
+
+

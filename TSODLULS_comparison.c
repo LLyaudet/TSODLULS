@@ -307,3 +307,15 @@ int TSODLULS_compare_nextified_key_in_cell(const void *a, const void *b){
 
 
 
+/**
+ * Comparison function
+ * nextified key in TSODLULS cell for short orders
+ */
+int TSODLULS_compare_nextified_key_in_cell__short(const void *a, const void *b){
+  const t_TSODLULS_sort_element__short *c = (const t_TSODLULS_sort_element__short *) a;
+  const t_TSODLULS_sort_element__short *d = (const t_TSODLULS_sort_element__short *) b;
+  return (c->i_key > d->i_key) - (c->i_key < d->i_key);
+}//end function TSODLULS_compare_nextified_key_in_cell__short()
+
+
+

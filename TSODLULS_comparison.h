@@ -139,3 +139,11 @@ int TSODLULS_compare_nextified_key_in_cell(const void *a, const void *b);
 
 
 
+/**
+ * Comparison function
+ * nextified key in TSODLULS cell for short orders
+ */
+int TSODLULS_compare_nextified_key_in_cell__short(const void *a, const void *b);
+
+
+

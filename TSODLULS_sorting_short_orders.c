@@ -22,53 +22,54 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 //------------------------------------------------------------------------------------
-//Internal structures for the sorting algorithms
-//------------------------------------------------------------------------------------
-typedef struct TSODLULS_radix_instance {
-  size_t i_offset_first;
-  size_t i_offset_last;
-  size_t i_depth;
-  unsigned int b_copy;
-} t_TSODLULS_radix_instance;
-
-
-
-//------------------------------------------------------------------------------------
 //External functions
 //------------------------------------------------------------------------------------
 /**
- * Sorting functions for nextified strings
+ * Sorting functions for short nextified strings
  * The current state of the art sorting function for nextified strings.
  * Its implementation may change without warning.
  */
-int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
-  return TSODLULS_sort_radix8_count(arr_elements, i_number_of_elements);
+int TSODLULS_sort__short(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+){
+  return TSODLULS_sort_radix8_count__short(arr_elements, i_number_of_elements, i_max_length);
 }//end function TSODLULS_sort()
 
 
 
 /**
- * Sorting functions for nextified strings
+ * Sorting functions for short nextified strings
  * The current state of the art stable sorting function for nextified strings.
  * Its implementation may change without warning.
  */
-int TSODLULS_sort_stable(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
-  return TSODLULS_sort_radix8_count(arr_elements, i_number_of_elements);
+int TSODLULS_sort_stable__short(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+){
+  return TSODLULS_sort_radix8_count__short(arr_elements, i_number_of_elements, i_max_length);
 }//end function TSODLULS_sort_stable()
 
 
 
 /**
- * Sorting functions for nextified strings
+ * Sorting functions for short nextified strings
  * A stable sorting algorithm for nextified strings based on radix sort with octets digits
  * and counting sort as a subroutine.
  */
-int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
+int TSODLULS_sort_radix8_count__short(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+){
   int i_number_of_distinct_bytes = 0;
   size_t arr_counts[256];
   size_t arr_offsets[256];
   uint8_t i_current_octet = 0;
-  t_TSODLULS_sort_element* arr_elements_copy = NULL;
+  uint64_t i_current_key = 0;
+  t_TSODLULS_sort_element__short* arr_elements_copy = NULL;
   t_TSODLULS_radix_instance current_instance;
   t_TSODLULS_radix_instance* arr_instances = NULL;
   size_t i_max_number_of_instances = 0;
@@ -80,12 +81,20 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
     return 0;//nothing to sort
   }
 
+  if(i_max_length <= 0){
+    return I_ERROR__MAX_LENGTH_SHOULD_BE_POSITIVE;
+  }
+
+  if(i_max_length > 8){
+    return I_ERROR__MAX_LENGTH_SHOULD_BE_AT_MOST_8;
+  }
+
   current_instance.i_offset_first = 0;
   current_instance.i_offset_last = i_number_of_elements - 1;
   current_instance.i_depth = 0;
   current_instance.b_copy = 0;
 
-  arr_elements_copy = calloc(i_number_of_elements, sizeof(t_TSODLULS_sort_element));
+  arr_elements_copy = calloc(i_number_of_elements, sizeof(t_TSODLULS_sort_element__short));
   if(arr_elements_copy == NULL){
     return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
   }
@@ -106,13 +115,19 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
     //we count the bytes with a certain value
     if(current_instance.b_copy){
       for(size_t i = current_instance.i_offset_first; i <= current_instance.i_offset_last; ++i){
-        i_current_octet = arr_elements_copy[i].s_key[current_instance.i_depth];
+        i_current_key = arr_elements_copy[i].i_key;
+        //if(current_instance.i_depth < 7){
+          i_current_key = i_current_key >> ((7 - current_instance.i_depth) * 8);
+        //}
+        i_current_octet = ((uint8_t) (i_current_key % 256));
         ++arr_counts[i_current_octet];
       }
     }
     else{
       for(size_t i = current_instance.i_offset_first; i <= current_instance.i_offset_last; ++i){
-        i_current_octet = arr_elements[i].s_key[current_instance.i_depth];
+        i_current_key = arr_elements[i].i_key;
+        i_current_key = i_current_key >> ((7 - current_instance.i_depth) * 8);
+        i_current_octet = ((uint8_t) (i_current_key % 256));
         ++arr_counts[i_current_octet];
       }
     }
@@ -131,12 +146,12 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
     if(i_number_of_distinct_bytes == 1){
       ++current_instance.i_depth;
       //if we are done sorting this instance and all deeper subinstances
-      if(arr_elements[current_instance.i_offset_first].i_key_size <= current_instance.i_depth){
+      if(i_max_length <= current_instance.i_depth){
         if(current_instance.b_copy){
           memcpy(
             &(arr_elements[current_instance.i_offset_first]),
             &(arr_elements_copy[current_instance.i_offset_first]),
-            (current_instance.i_offset_last - current_instance.i_offset_first + 1) * sizeof(t_TSODLULS_sort_element)
+            (current_instance.i_offset_last - current_instance.i_offset_first + 1) * sizeof(t_TSODLULS_sort_element__short)
           );
         }
         if(i_current_instance == 0){
@@ -150,7 +165,9 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
     if(current_instance.b_copy){
       //sorting
       for(size_t i = current_instance.i_offset_first; i <= current_instance.i_offset_last; ++i){
-        i_current_octet = arr_elements_copy[i].s_key[current_instance.i_depth];
+        i_current_key = arr_elements_copy[i].i_key;
+        i_current_key = i_current_key >> ((7 - current_instance.i_depth) * 8);
+        i_current_octet = ((uint8_t) (i_current_key % 256));
         arr_elements[current_instance.i_offset_first + arr_offsets[i_current_octet]] = arr_elements_copy[i];
         ++arr_offsets[i_current_octet];
       }
@@ -158,8 +175,7 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
       for(int i = 0; i < 256; ++i){
         if(arr_counts[i] > 1//nothing to do for one element, result is in original array
           //for nextified strings this test can be done on only one element
-          && arr_elements[current_instance.i_offset_first + arr_offsets[i] - 1].i_key_size
-               > current_instance.i_depth + 1
+          && i_max_length > current_instance.i_depth + 1
         ){
           //we allocate more space for the new instance if necessary
           if(i_current_instance == i_max_number_of_instances - 1){
@@ -192,7 +208,9 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
     else{
       //sorting
       for(size_t i = current_instance.i_offset_first; i <= current_instance.i_offset_last; ++i){
-        i_current_octet = arr_elements[i].s_key[current_instance.i_depth];
+        i_current_key = arr_elements[i].i_key;
+        i_current_key = i_current_key >> ((7 - current_instance.i_depth) * 8);
+        i_current_octet = ((uint8_t) (i_current_key % 256));
         arr_elements_copy[current_instance.i_offset_first + arr_offsets[i_current_octet]] = arr_elements[i];
         ++arr_offsets[i_current_octet];
       }
@@ -200,8 +218,7 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
       for(int i = 0; i < 256; ++i){
         if(arr_counts[i] > 1
           //for nextified strings this test can be done on only one element
-          && arr_elements_copy[current_instance.i_offset_first + arr_offsets[i] - 1].i_key_size
-               > current_instance.i_depth + 1
+          && i_max_length > current_instance.i_depth + 1
         ){
           //we allocate more space for the new instance if necessary
           if(i_current_instance == i_max_number_of_instances - 1){
@@ -233,7 +250,7 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
           memcpy(
             &(arr_elements[current_instance.i_offset_first + arr_offsets[i] - arr_counts[i]]),
             &(arr_elements_copy[current_instance.i_offset_first + arr_offsets[i] - arr_counts[i]]),
-            arr_counts[i] * sizeof(t_TSODLULS_sort_element)
+            arr_counts[i] * sizeof(t_TSODLULS_sort_element__short)
           );
         }
       }//end for(int i = 0; i < 256; ++i)

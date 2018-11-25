@@ -58,7 +58,8 @@ If the return type is void but auxiliary variables need to be declared,
 #include "TSODLULS_finite_orders__macro.h"
 #include "TSODLULS_misc__macro.h"
 #include "TSODLULS_padding__macro.h"
-//#include "TSODLULS_sorting__macro.h"
+//#include "TSODLULS_sorting_long_orders__macro.h"
+//#include "TSODLULS_sorting_short_orders__macro.h"
 
 /*
 The macraffs in this library use the following auxiliary variables:
@@ -92,5 +93,7 @@ The macraffs in this library use the following auxiliary variables:
   t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element_2;
   t_TSODLULS_sort_element* TSODLULS_macraff_arr_elements;
   t_TSODLULS_sort_element** TSODLULS_macraff_p_arr_elements;
+  t_TSODLULS_sort_element__short* TSODLULS_macraff_p_sort_element__short;
+  t_TSODLULS_sort_element__short** TSODLULS_macraff_p_arr_elements__short;
   void* TSODLULS_macraff_p_void;
 */
