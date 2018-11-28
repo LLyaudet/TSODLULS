@@ -45,8 +45,7 @@ void TSODLULS_init_element(t_TSODLULS_sort_element* p_element){
  */
 void TSODLULS_free_key(t_TSODLULS_sort_element* p_element){
   if(p_element->s_key != NULL){
-    free(p_element->s_key);
-    p_element->s_key = NULL;
+    TSODLULS_free(p_element->s_key);
     p_element->i_key_size = 0;
     p_element->i_allocated_size = 0;
   }

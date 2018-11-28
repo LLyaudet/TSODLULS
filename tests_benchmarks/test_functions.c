@@ -20,6 +20,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h>
 #include <time.h>
 #include "../TSODLULS.h"
+#include "test_macros.c"
 
 int mydiff(char* s_filename1, char* s_filename2){
   FILE* file1 = NULL;

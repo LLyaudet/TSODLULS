@@ -97,3 +97,8 @@ The macraffs in this library use the following auxiliary variables:
   t_TSODLULS_sort_element__short** TSODLULS_macraff_p_arr_elements__short;
   void* TSODLULS_macraff_p_void;
 */
+
+#define TSODLULS_free(pointer) \
+  free(pointer);\
+  (pointer) = NULL;
+

@@ -44,6 +44,14 @@ The benchmark is performed with 7 settings:
 
 Each sort is measured with the preparation time if needed.
 n starts at value 1 and is multiplied by two until it reaches n_max.
+
+This benchmark shares a lot of code with test 2.
+When both files reached more than 2500 lines of code,
+we decided to factor the code using macros in file ../test_macros.c.
+These macros start with "TSODLULS_code_fragment".
+The good news is that both files shrinked a lot.
+The bad news is that you need to look at the macros in ../test_macros.c 
+in order to really understand how to use the library.
 */
 
 #include "../test_functions.c"
@@ -54,8 +62,8 @@ int main(int argc, char *argv[]){
 
   int i_result = 0;
   unsigned int i_seed = time(0);
-  //i_seed = 1534188456;//bug with floats
-  //i_seed = 1534274833;//bug with doubles
+  //i_seed = 1534188456;//bug with floats (the bug was corrected)
+  //i_seed = 1534274833;//bug with doubles (the bug was corrected)
   srand(i_seed);
   printf("Seed: %u\n", i_seed);
 
@@ -69,34 +77,24 @@ int main(int argc, char *argv[]){
   uint64_t* arr_seeds64 = NULL;
   uint8_t* arr_ui_8_seed = NULL;
   uint8_t* arr_ui_8_result1 = NULL;
-  uint8_t* arr_ui_8_result2 = NULL;
   uint16_t* arr_ui_16_seed = NULL;
   uint16_t* arr_ui_16_result1 = NULL;
-  uint16_t* arr_ui_16_result2 = NULL;
   uint32_t* arr_ui_32_seed = NULL;
   uint32_t* arr_ui_32_result1 = NULL;
-  uint32_t* arr_ui_32_result2 = NULL;
   uint64_t* arr_ui_64_seed = NULL;
   uint64_t* arr_ui_64_result1 = NULL;
-  uint64_t* arr_ui_64_result2 = NULL;
   int8_t* arr_i_8_seed = NULL;
   int8_t* arr_i_8_result1 = NULL;
-  int8_t* arr_i_8_result2 = NULL;
   int16_t* arr_i_16_seed = NULL;
   int16_t* arr_i_16_result1 = NULL;
-  int16_t* arr_i_16_result2 = NULL;
   int32_t* arr_i_32_seed = NULL;
   int32_t* arr_i_32_result1 = NULL;
-  int32_t* arr_i_32_result2 = NULL;
   int64_t* arr_i_64_seed = NULL;
   int64_t* arr_i_64_result1 = NULL;
-  int64_t* arr_i_64_result2 = NULL;
   float* arr_f_float_seed = NULL;
   float* arr_f_float_result1 = NULL;
-  float* arr_f_float_result2 = NULL;
   double* arr_f_double_seed = NULL;
   double* arr_f_double_result1 = NULL;
-  double* arr_f_double_result2 = NULL;
   t_TSODLULS_sort_element* arr_cells = NULL;
   t_TSODLULS_sort_element__short* arr_cells__short = NULL;
 
@@ -136,8 +134,8 @@ int main(int argc, char *argv[]){
   size_t TSODLULS_macraff_isize_4;
   t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
   t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element_2;
-  //t_TSODLULS_sort_element* TSODLULS_macraff_arr_elements;
-  //t_TSODLULS_sort_element** TSODLULS_macraff_p_arr_elements;
+  t_TSODLULS_sort_element* TSODLULS_macraff_arr_elements;
+  t_TSODLULS_sort_element** TSODLULS_macraff_p_arr_elements;
   t_TSODLULS_sort_element__short* TSODLULS_macraff_p_sort_element__short;
   t_TSODLULS_sort_element__short** TSODLULS_macraff_p_arr_elements__short;
   void* TSODLULS_macraff_p_void;
@@ -249,11 +247,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      i_result = TSODLULS_init_array_of_elements(&arr_cells, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-
       //generating the seeds
       for(i = 0; i < i_number_of_elements; ++i){
         arr_seeds64[i] = get_random_uint64();
@@ -273,12 +266,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_ui_8_result2 = calloc(i_number_of_elements, sizeof(uint8_t));
-      if(arr_ui_8_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_ui_8_seed[i] = (uint8_t)arr_seeds64[i];
       }
@@ -288,255 +275,53 @@ int main(int argc, char *argv[]){
           arr_ui_8_seed,
           i_number_of_elements * sizeof(uint8_t)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_ui_8_result1, i_number_of_elements, sizeof(uint8_t), (&TSODLULS_compare_uint8_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint8(
-            &(arr_cells[i]),
-            arr_ui_8_seed[i],
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint8();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint8_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
-          printf("qsort direct and in_cell gave different results (uint8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint8();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_add_bytes_to_key_from_uint8__macraff(
-            i_result,
-            &(arr_cells[i]),
-            arr_ui_8_seed[i],
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint8_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint8_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
-          printf("qsort direct and in_cell (macraffs) gave different results (uint8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint8_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_cells__short[i].i_key = (uint64_t)arr_ui_8_seed[i];
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 56;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_ui_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_uint8_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
-          printf("qsort direct and in_cell (short orders, macraff) gave different results (uint8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_uint8_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint8(
-            &(arr_cells[i]),
-            arr_ui_8_seed[i],
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint8();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
-          printf("qsort and TSODLULS sort gave different results (uint8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint8();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_add_bytes_to_key_from_uint8__macraff(
-            i_result,
-            &(arr_cells[i]),
-            arr_ui_8_seed[i],
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint8_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (uint8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint8_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_cells__short[i].i_key = (uint64_t)arr_ui_8_seed[i];
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 56;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_ui_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_uint8_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 1);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_8_result2[i] = *((uint8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_8_result2[i] != arr_ui_8_result1[i]){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (uint8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_uint8_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_ui_8_seed);
-      arr_ui_8_seed = NULL;
-      free(arr_ui_8_result1);
-      arr_ui_8_result1 = NULL;
-      free(arr_ui_8_result2);
-      arr_ui_8_result2 = NULL;
+      TSODLULS_free(arr_ui_8_seed);
+      TSODLULS_free(arr_ui_8_result1);
 
 
       //sorting uint 16
@@ -552,12 +337,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_ui_16_result2 = calloc(i_number_of_elements, sizeof(uint16_t));
-      if(arr_ui_16_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_ui_16_seed[i] = (uint16_t)arr_seeds64[i];
       }
@@ -567,255 +346,53 @@ int main(int argc, char *argv[]){
           arr_ui_16_seed,
           i_number_of_elements * sizeof(uint16_t)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_ui_16_result1, i_number_of_elements, sizeof(uint16_t), (&TSODLULS_compare_uint16_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint16(
-            &(arr_cells[i]),
-            arr_ui_16_seed[i],
-            0,
-            0,
-            0,
-            0,
-            2,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint16();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint16_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
-          printf("qsort direct and in_cell gave different results (uint16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint16();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_add_bytes_to_key_from_uint16__macraff(
-            i_result,
-            &(arr_cells[i]),
-            arr_ui_16_seed[i],
-            0,
-            0,
-            0,
-            0,
-            2,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint16_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint16_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
-          printf("qsort direct and in_cell (macraffs) gave different results (uint16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint16_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_cells__short[i].i_key = (uint64_t)arr_ui_16_seed[i];
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 48;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_ui_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_uint16_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (uint16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_uint16_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint16(
-            &(arr_cells[i]),
-            arr_ui_16_seed[i],
-            0,
-            0,
-            0,
-            0,
-            2,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint16();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
-          printf("qsort and TSODLULS sort gave different results (uint16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint16();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_add_bytes_to_key_from_uint16__macraff(
-            i_result,
-            &(arr_cells[i]),
-            arr_ui_16_seed[i],
-            0,
-            0,
-            0,
-            0,
-            2,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint16_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (uint16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint16_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_cells__short[i].i_key = (uint64_t)arr_ui_16_seed[i];
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 48;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_ui_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_uint16_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 2);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_16_result2[i] = *((uint16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_16_result2[i] != arr_ui_16_result1[i]){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (uint16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_uint16_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_ui_16_seed);
-      arr_ui_16_seed = NULL;
-      free(arr_ui_16_result1);
-      arr_ui_16_result1 = NULL;
-      free(arr_ui_16_result2);
-      arr_ui_16_result2 = NULL;
+      TSODLULS_free(arr_ui_16_seed);
+      TSODLULS_free(arr_ui_16_result1);
 
 
       //sorting uint 32
@@ -831,12 +408,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_ui_32_result2 = calloc(i_number_of_elements, sizeof(uint32_t));
-      if(arr_ui_32_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_ui_32_seed[i] = (uint32_t)arr_seeds64[i];
       }
@@ -846,255 +417,53 @@ int main(int argc, char *argv[]){
           arr_ui_32_seed,
           i_number_of_elements * sizeof(uint32_t)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_ui_32_result1, i_number_of_elements, sizeof(uint32_t), (&TSODLULS_compare_uint32_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint32(
-            &(arr_cells[i]),
-            arr_ui_32_seed[i],
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint32();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
-          printf("qsort direct and in_cell gave different results (uint32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint32();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_add_bytes_to_key_from_uint32__macraff(
-            i_result,
-            &(arr_cells[i]),
-            arr_ui_32_seed[i],
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint32_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
-          printf("qsort direct and in_cell (macraffs) gave different results (uint32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint32_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_cells__short[i].i_key = (uint64_t)arr_ui_32_seed[i];
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_ui_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_uint32_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (uint32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_uint32_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint32(
-            &(arr_cells[i]),
-            arr_ui_32_seed[i],
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint32();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
-          printf("qsort and TSODLULS sort gave different results (uint32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint32();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_add_bytes_to_key_from_uint32__macraff(
-            i_result,
-            &(arr_cells[i]),
-            arr_ui_32_seed[i],
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint32_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (uint32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint32_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_cells__short[i].i_key = (uint64_t)arr_ui_32_seed[i];
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_ui_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_uint32_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 4);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_32_result2[i] = *((uint32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_32_result2[i] != arr_ui_32_result1[i]){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (uint32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_uint32_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_ui_32_seed);
-      arr_ui_32_seed = NULL;
-      free(arr_ui_32_result1);
-      arr_ui_32_result1 = NULL;
-      free(arr_ui_32_result2);
-      arr_ui_32_result2 = NULL;
+      TSODLULS_free(arr_ui_32_seed);
+      TSODLULS_free(arr_ui_32_result1);
 
 
       //sorting uint 64
@@ -1110,12 +479,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_ui_64_result2 = calloc(i_number_of_elements, sizeof(uint64_t));
-      if(arr_ui_64_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_ui_64_seed[i] = (uint64_t)arr_seeds64[i];
       }
@@ -1125,253 +488,53 @@ int main(int argc, char *argv[]){
           arr_ui_64_seed,
           i_number_of_elements * sizeof(uint64_t)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_ui_64_result1, i_number_of_elements, sizeof(uint64_t), (&TSODLULS_compare_uint64_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint64(
-            &(arr_cells[i]),
-            arr_ui_64_seed[i],
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint64();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
-          printf("qsort direct and in_cell gave different results (uint64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint64();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_add_bytes_to_key_from_uint64__macraff(
-            i_result,
-            &(arr_cells[i]),
-            arr_ui_64_seed[i],
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint64_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
-          printf("qsort direct and in_cell (macraffs) gave different results (uint64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint64_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_cells__short[i].i_key = arr_ui_64_seed[i];
-        arr_cells__short[i].p_object = &(arr_ui_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_uint64_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (uint64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_uint64_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint64(
-            &(arr_cells[i]),
-            arr_ui_64_seed[i],
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint64();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
-          printf("qsort and TSODLULS sort gave different results (uint64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint64();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_add_bytes_to_key_from_uint64__macraff(
-            i_result,
-            &(arr_cells[i]),
-            arr_ui_64_seed[i],
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_ui_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_uint64_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (uint64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_uint64_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_cells__short[i].i_key = arr_ui_64_seed[i];
-        arr_cells__short[i].p_object = &(arr_ui_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_uint64_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 8);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_ui_64_result2[i] = *((uint64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_ui_64_result2[i] != arr_ui_64_result1[i]){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (uint64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_uint64_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_ui_64_seed);
-      arr_ui_64_seed = NULL;
-      free(arr_ui_64_result1);
-      arr_ui_64_result1 = NULL;
-      free(arr_ui_64_result2);
-      arr_ui_64_result2 = NULL;
+      TSODLULS_free(arr_ui_64_seed);
+      TSODLULS_free(arr_ui_64_result1);
 
 
 
@@ -1388,12 +551,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_i_8_result2 = calloc(i_number_of_elements, sizeof(int8_t));
-      if(arr_i_8_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_i_8_seed[i] = TSODLULS_get_int8_from_uint8((uint8_t)arr_seeds64[i]);
       }
@@ -1403,259 +560,53 @@ int main(int argc, char *argv[]){
           arr_i_8_seed,
           i_number_of_elements * sizeof(int8_t)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_i_8_result1, i_number_of_elements, sizeof(int8_t), (&TSODLULS_compare_int8_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint8(
-            &(arr_cells[i]),
-            TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int8();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint8_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_8_result2[i] != arr_i_8_result1[i]){
-          printf("qsort direct and in_cell gave different results (int8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int8();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint8_from_int8__macraff(ui8, arr_i_8_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint8__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui8,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int8_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint8_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_8_result2[i] != arr_i_8_result1[i]){
-          printf("qsort direct and in_cell (macraffs) gave different results (int8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int8_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint8_from_int8__macraff(ui8, arr_i_8_seed[i])
-        arr_cells__short[i].i_key = (uint64_t)ui8;
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 56;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_i_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_int8_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_8_result2[i] != arr_i_8_result1[i]){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (int8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_int8_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint8(
-            &(arr_cells[i]),
-            TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int8();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_8_result2[i] != arr_i_8_result1[i]){
-          printf("qsort and TSODLULS sort gave different results (int8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int8();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint8_from_int8__macraff(ui8, arr_i_8_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint8__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui8,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int8_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_8_result2[i] != arr_i_8_result1[i]){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (int8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int8_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint8_from_int8__macraff(ui8, arr_i_8_seed[i])
-        arr_cells__short[i].i_key = (uint64_t)ui8;
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 56;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_i_8_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_int8_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 1);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_8_result2[i] = *((int8_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_8_result2[i] != arr_i_8_result1[i]){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (int8)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_int8_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_i_8_seed);
-      arr_i_8_seed = NULL;
-      free(arr_i_8_result1);
-      arr_i_8_result1 = NULL;
-      free(arr_i_8_result2);
-      arr_i_8_result2 = NULL;
+      TSODLULS_free(arr_i_8_seed);
+      TSODLULS_free(arr_i_8_result1);
 
 
       //sorting int 16
@@ -1671,12 +622,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_i_16_result2 = calloc(i_number_of_elements, sizeof(int16_t));
-      if(arr_i_16_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_i_16_seed[i] = TSODLULS_get_int16_from_uint16((uint16_t)arr_seeds64[i]);
       }
@@ -1686,259 +631,53 @@ int main(int argc, char *argv[]){
           arr_i_16_seed,
           i_number_of_elements * sizeof(int16_t)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_i_16_result1, i_number_of_elements, sizeof(int16_t), (&TSODLULS_compare_int16_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint16(
-            &(arr_cells[i]),
-            TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            2,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int16();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint16_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_16_result2[i] != arr_i_16_result1[i]){
-          printf("qsort direct and in_cell gave different results (int16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int16();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint16_from_int16__macraff(ui16, arr_i_16_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint16__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui16,
-            0,
-            0,
-            0,
-            0,
-            2,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int16_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint16_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_16_result2[i] != arr_i_16_result1[i]){
-          printf("qsort direct and in_cell (macraffs) gave different results (int16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int16_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint16_from_int16__macraff(ui16, arr_i_16_seed[i])
-        arr_cells__short[i].i_key = (uint64_t)ui16;
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 48;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_i_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_int16_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_16_result2[i] != arr_i_16_result1[i]){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (int16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_int16_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint16(
-            &(arr_cells[i]),
-            TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            2,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int16();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_16_result2[i] != arr_i_16_result1[i]){
-          printf("qsort and TSODLULS sort gave different results (int16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int16();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint16_from_int16__macraff(ui16, arr_i_16_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint16__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui16,
-            0,
-            0,
-            0,
-            0,
-            2,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int16_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_16_result2[i] != arr_i_16_result1[i]){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (int16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int16_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint16_from_int16__macraff(ui16, arr_i_16_seed[i])
-        arr_cells__short[i].i_key = (uint64_t)ui16;
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 48;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_i_16_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_int16_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 2);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_16_result2[i] = *((int16_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_16_result2[i] != arr_i_16_result1[i]){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (int16)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_int16_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_i_16_seed);
-      arr_i_16_seed = NULL;
-      free(arr_i_16_result1);
-      arr_i_16_result1 = NULL;
-      free(arr_i_16_result2);
-      arr_i_16_result2 = NULL;
+      TSODLULS_free(arr_i_16_seed);
+      TSODLULS_free(arr_i_16_result1);
 
 
       //sorting int 32
@@ -1954,12 +693,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_i_32_result2 = calloc(i_number_of_elements, sizeof(int32_t));
-      if(arr_i_32_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_i_32_seed[i] = TSODLULS_get_int32_from_uint32((uint32_t)arr_seeds64[i]);
       }
@@ -1969,259 +702,53 @@ int main(int argc, char *argv[]){
           arr_i_32_seed,
           i_number_of_elements * sizeof(int32_t)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_i_32_result1, i_number_of_elements, sizeof(int32_t), (&TSODLULS_compare_int32_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint32(
-            &(arr_cells[i]),
-            TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int32();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_32_result2[i] != arr_i_32_result1[i]){
-          printf("qsort direct and in_cell gave different results (int32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int32();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint32_from_int32__macraff(ui32, arr_i_32_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint32__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui32,
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int32_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_32_result2[i] != arr_i_32_result1[i]){
-          printf("qsort direct and in_cell (macraffs) gave different results (int32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int32_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint32_from_int32__macraff(ui32, arr_i_32_seed[i])
-        arr_cells__short[i].i_key = (uint64_t)ui32;
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_i_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_int32_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_32_result2[i] != arr_i_32_result1[i]){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (int32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_int32_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint32(
-            &(arr_cells[i]),
-            TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int32();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_32_result2[i] != arr_i_32_result1[i]){
-          printf("qsort and TSODLULS sort gave different results (int32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int32();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint32_from_int32__macraff(ui32, arr_i_32_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint32__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui32,
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int32_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_32_result2[i] != arr_i_32_result1[i]){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (int32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int32_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint32_from_int32__macraff(ui32, arr_i_32_seed[i])
-        arr_cells__short[i].i_key = (uint64_t)ui32;
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_i_32_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_int32_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 4);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_32_result2[i] = *((int32_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_32_result2[i] != arr_i_32_result1[i]){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (int32)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_int32_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_i_32_seed);
-      arr_i_32_seed = NULL;
-      free(arr_i_32_result1);
-      arr_i_32_result1 = NULL;
-      free(arr_i_32_result2);
-      arr_i_32_result2 = NULL;
+      TSODLULS_free(arr_i_32_seed);
+      TSODLULS_free(arr_i_32_result1);
 
 
       //sorting int 64
@@ -2237,12 +764,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_i_64_result2 = calloc(i_number_of_elements, sizeof(int64_t));
-      if(arr_i_64_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_i_64_seed[i] = TSODLULS_get_int64_from_uint64((uint64_t)arr_seeds64[i]);
       }
@@ -2252,257 +773,53 @@ int main(int argc, char *argv[]){
           arr_i_64_seed,
           i_number_of_elements * sizeof(int64_t)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_i_64_result1, i_number_of_elements, sizeof(int64_t), (&TSODLULS_compare_int64_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint64(
-            &(arr_cells[i]),
-            TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int64();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_64_result2[i] != arr_i_64_result1[i]){
-          printf("qsort direct and in_cell gave different results (int64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int64();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint64_from_int64__macraff(ui64, arr_i_64_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint64__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui64,
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int64_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_64_result2[i] != arr_i_64_result1[i]){
-          printf("qsort direct and in_cell (macraffs) gave different results (int64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int64_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint64_from_int64__macraff(ui64, arr_i_64_seed[i])
-        arr_cells__short[i].i_key = ui64;
-        arr_cells__short[i].p_object = &(arr_i_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_int64_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_64_result2[i] != arr_i_64_result1[i]){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (int64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_int64_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint64(
-            &(arr_cells[i]),
-            TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int64();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_64_result2[i] != arr_i_64_result1[i]){
-          printf("qsort and TSODLULS sort gave different results (int64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int64();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint64_from_int64__macraff(ui64, arr_i_64_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint64__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui64,
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_i_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_int64_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_64_result2[i] != arr_i_64_result1[i]){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (int64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_int64_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint64_from_int64__macraff(ui64, arr_i_64_seed[i])
-        arr_cells__short[i].i_key = ui64;
-        arr_cells__short[i].p_object = &(arr_i_64_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_int64_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 8);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_i_64_result2[i] = *((int64_t*)(arr_cells[i].p_object));
-        /*
-        if(arr_i_64_result2[i] != arr_i_64_result1[i]){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (int64)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_int64_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_i_64_seed);
-      arr_i_64_seed = NULL;
-      free(arr_i_64_result1);
-      arr_i_64_result1 = NULL;
-      free(arr_i_64_result2);
-      arr_i_64_result2 = NULL;
+      TSODLULS_free(arr_i_64_seed);
+      TSODLULS_free(arr_i_64_result1);
 
 
       //sorting float
@@ -2518,12 +835,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_f_float_result2 = calloc(i_number_of_elements, sizeof(float));
-      if(arr_f_float_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_f_float_seed[i] = TSODLULS_get_float_from_uint((uint32_t)arr_seeds64[i]);
       }
@@ -2533,291 +844,53 @@ int main(int argc, char *argv[]){
           arr_f_float_seed,
           i_number_of_elements * sizeof(float)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_f_float_result1, i_number_of_elements, sizeof(float), (&TSODLULS_compare_float_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint32(
-            &(arr_cells[i]),
-            TSODLULS_get_uint_from_float(arr_f_float_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_f_float_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_float();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_float_result2[i] = *((float*)(arr_cells[i].p_object));
-        //printf("%f %f\n", arr_f_float_result1[i], arr_f_float_result2[i]);
-        //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
-        //any comparison with nan or -nan float numbers will say that they are different
-        //You have to compare using the bijection with uint32
-        /*
-        if(TSODLULS_get_uint_from_float(arr_f_float_result2[i])
-             != TSODLULS_get_uint_from_float(arr_f_float_result1[i])
-        ){
-          printf("qsort direct and in_cell gave different results (float)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_float();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint32__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui32,
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_f_float_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_float_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint32_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_float_result2[i] = *((float*)(arr_cells[i].p_object));
-        //printf("%f %f\n", arr_f_float_result1[i], arr_f_float_result2[i]);
-        //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
-        //any comparison with nan or -nan float numbers will say that they are different
-        //You have to compare using the bijection with uint32
-        /*
-        if(TSODLULS_get_uint_from_float(arr_f_float_result2[i])
-             != TSODLULS_get_uint_from_float(arr_f_float_result1[i])
-        ){
-          printf("qsort direct and in_cell (macraffs) gave different results (float)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_float_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_seed[i])
-        arr_cells__short[i].i_key = (uint64_t)ui32;
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_f_float_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_float_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_float_result2[i] = *((float*)(arr_cells[i].p_object));
-        //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
-        //any comparison with nan or -nan float numbers will say that they are different
-        //You have to compare using the bijection with uint32
-        /*
-        TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_result1[i])
-        TSODLULS_get_uint_from_float__macraff(ui32_2, arr_f_float_result2[i])
-        if(ui32_2 != ui32){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (float)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_float_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint32(
-            &(arr_cells[i]),
-            TSODLULS_get_uint_from_float(arr_f_float_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_f_float_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_float();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_float_result2[i] = *((float*)(arr_cells[i].p_object));
-        //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
-        //any comparison with nan or -nan float numbers will say that they are different
-        //You have to compare using the bijection with uint32
-        /*
-        if(TSODLULS_get_uint_from_float(arr_f_float_result2[i])
-             != TSODLULS_get_uint_from_float(arr_f_float_result1[i])
-        ){
-          printf("qsort and TSODLULS sort gave different results (float)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_float();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint32__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui32,
-            0,
-            0,
-            0,
-            0,
-            4,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_f_float_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_float_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_float_result2[i] = *((float*)(arr_cells[i].p_object));
-        //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
-        //any comparison with nan or -nan float numbers will say that they are different
-        //You have to compare using the bijection with uint32
-        /*
-        if(TSODLULS_get_uint_from_float(arr_f_float_result2[i])
-             != TSODLULS_get_uint_from_float(arr_f_float_result1[i])
-        ){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (float)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_float_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_seed[i])
-        arr_cells__short[i].i_key = (uint64_t)ui32;
-        arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;//putting info on most significant bits
-        arr_cells__short[i].p_object = &(arr_f_float_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_float_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 4);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_float_result2[i] = *((float*)(arr_cells[i].p_object));
-        //if(arr_f_float_result2[i] != arr_f_float_result1[i]){
-        //any comparison with nan or -nan float numbers will say that they are different
-        //You have to compare using the bijection with uint32
-        /*
-        TSODLULS_get_uint_from_float__macraff(ui32, arr_f_float_result1[i])
-        TSODLULS_get_uint_from_float__macraff(ui32_2, arr_f_float_result2[i])
-        if(ui32_2 != ui32){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (float)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_float_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_f_float_seed);
-      arr_f_float_seed = NULL;
-      free(arr_f_float_result1);
-      arr_f_float_result1 = NULL;
-      free(arr_f_float_result2);
-      arr_f_float_result2 = NULL;
+      TSODLULS_free(arr_f_float_seed);
+      TSODLULS_free(arr_f_float_result1);
 
 
       //sorting doubles
@@ -2833,12 +906,6 @@ int main(int argc, char *argv[]){
         break;
       }
 
-      arr_f_double_result2 = calloc(i_number_of_elements, sizeof(double));
-      if(arr_f_double_result2 == NULL){
-        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
-        break;
-      }
-
       for(i = 0; i < i_number_of_elements; ++i){
         arr_f_double_seed[i] = TSODLULS_get_double_from_uint((uint64_t)arr_seeds64[i]);
       }
@@ -2848,330 +915,86 @@ int main(int argc, char *argv[]){
           arr_f_double_seed,
           i_number_of_elements * sizeof(double)
       );
-
       clock_gettime(CLOCK_MONOTONIC, &start);
       qsort(arr_f_double_result1, i_number_of_elements, sizeof(double), (&TSODLULS_compare_double_direct));
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint64(
-            &(arr_cells[i]),
-            TSODLULS_get_uint_from_double(arr_f_double_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_f_double_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_double();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_double_result2[i] = *((double*)(arr_cells[i].p_object));
-        //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
-        //any comparison with nan or -nan double numbers will say that they are different
-        //You have to compare using the bijection with uint64
-        /*
-        if(TSODLULS_get_uint_from_double(arr_f_double_result2[i])
-             != TSODLULS_get_uint_from_double(arr_f_double_result1[i])
-        ){
-          printf("qsort direct and in_cell gave different results (double)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_double();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint64__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui64,
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_f_double_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_double_with_macraffs();
       qsort(arr_cells, i_number_of_elements, sizeof(t_TSODLULS_sort_element), (&TSODLULS_compare_uint64_in_cell));
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_double_result2[i] = *((double*)(arr_cells[i].p_object));
-        //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
-        //any comparison with nan or -nan double numbers will say that they are different
-        //You have to compare using the bijection with uint64
-        /*
-        if(TSODLULS_get_uint_from_double(arr_f_double_result2[i])
-             != TSODLULS_get_uint_from_double(arr_f_double_result1[i])
-        ){
-          printf("qsort direct and in_cell (macraffs) gave different results (double)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_double_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_seed[i])
-        arr_cells__short[i].i_key = ui64;
-        arr_cells__short[i].p_object = &(arr_f_double_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_double_with_macraffs();
       qsort(
           arr_cells__short,
           i_number_of_elements,
           sizeof(t_TSODLULS_sort_element__short),
           (&TSODLULS_compare_nextified_key_in_cell__short)
       );
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_double_result2[i] = *((double*)(arr_cells[i].p_object));
-        //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
-        //any comparison with nan or -nan double numbers will say that they are different
-        //You have to compare using the bijection with uint64
-        /*
-        TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_result1[i])
-        TSODLULS_get_uint_from_double__macraff(ui64_2, arr_f_double_result2[i])
-        if(ui64_2 != ui64){
-          printf("qsort direct and in cell (short orders, macraff) gave different results (double)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_double_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key(&(arr_cells[i]));
-        i_result = TSODLULS_add_bytes_to_key_from_uint64(
-            &(arr_cells[i]),
-            TSODLULS_get_uint_from_double(arr_f_double_seed[i]),
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_f_double_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_double();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_double_result2[i] = *((double*)(arr_cells[i].p_object));
-        //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
-        //any comparison with nan or -nan double numbers will say that they are different
-        //You have to compare using the bijection with uint64
-        /*
-        if(TSODLULS_get_uint_from_double(arr_f_double_result2[i])
-             != TSODLULS_get_uint_from_double(arr_f_double_result1[i])
-        ){
-          printf("qsort and TSODLULS sort gave different results (double)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_double();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_free_key__macraff(&(arr_cells[i]));
-        TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_seed[i])
-        TSODLULS_add_bytes_to_key_from_uint64__macraff(
-            i_result,
-            &(arr_cells[i]),
-            ui64,
-            0,
-            0,
-            0,
-            0,
-            8,
-            0
-        );
-        if(i_result != 0){
-          break;
-        }
-        arr_cells[i].p_object = &(arr_f_double_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_long_cells_for_double_with_macraffs();
       TSODLULS_sort(arr_cells, i_number_of_elements);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_double_result2[i] = *((double*)(arr_cells[i].p_object));
-        //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
-        //any comparison with nan or -nan double numbers will say that they are different
-        //You have to compare using the bijection with uint64
-        /*
-        if(TSODLULS_get_uint_from_double(arr_f_double_result2[i])
-             != TSODLULS_get_uint_from_double(arr_f_double_result1[i])
-        ){
-          printf("qsort and TSODLULS sort (macraffs) gave different results (double)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_long_cells_for_double_with_macraffs();
+      TSODLULS_code_fragment_print_time();
 
       clock_gettime(CLOCK_MONOTONIC, &start);
-      TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);
-      if(i_result != 0){
-        break;
-      }
-      for(i = 0; i < i_number_of_elements; ++i){
-        TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_seed[i])
-        arr_cells__short[i].i_key = ui64;
-        arr_cells__short[i].p_object = &(arr_f_double_seed[i]);
-      }
-      if(i_result != 0){
-        break;
-      }
+      TSODLULS_code_fragment_init_short_cells_for_double_with_macraffs();
       TSODLULS_sort__short(arr_cells__short, i_number_of_elements, 8);
-      for(i = 0; i < i_number_of_elements; ++i){
-        arr_f_double_result2[i] = *((double*)(arr_cells[i].p_object));
-        //if(arr_f_double_result2[i] != arr_f_double_result1[i]){
-        //any comparison with nan or -nan double numbers will say that they are different
-        //You have to compare using the bijection with uint64
-        /*
-        TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_result1[i])
-        TSODLULS_get_uint_from_double__macraff(ui64_2, arr_f_double_result2[i])
-        if(ui64_2 != ui64){
-          printf("qsort and TSODLULS sort (short orders, macraff) gave different results (double)\n");
-          i_result = -1;
-          break;
-        }
-        */
-      }
-      if(i_result != 0){
-        break;
-      }
-      free(arr_cells__short);
-      arr_cells__short = NULL;
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      f_elapsed_time = finish.tv_sec - start.tv_sec;
-      f_elapsed_time += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-      printf("|%016f", f_elapsed_time);
+      TSODLULS_code_fragment_fill_result1_with_short_cells_for_double_no_macraff_needed();
+      TSODLULS_code_fragment_print_time();
 
-      free(arr_f_double_seed);
-      arr_f_double_seed = NULL;
-      free(arr_f_double_result1);
-      arr_f_double_result1 = NULL;
-      free(arr_f_double_result2);
-      arr_f_double_result2 = NULL;
+      TSODLULS_free(arr_f_double_seed);
+      TSODLULS_free(arr_f_double_result1);
 
     }
     while(0);
 
-    if(arr_seeds64 != NULL){ free(arr_seeds64); }
-    if(arr_ui_8_seed != NULL){ free(arr_ui_8_seed); }
-    if(arr_ui_8_result1 != NULL){ free(arr_ui_8_result1); }
-    if(arr_ui_8_result2 != NULL){ free(arr_ui_8_result2); }
-    if(arr_ui_16_seed != NULL){ free(arr_ui_16_seed); }
-    if(arr_ui_16_result1 != NULL){ free(arr_ui_16_result1); }
-    if(arr_ui_16_result2 != NULL){ free(arr_ui_16_result2); }
-    if(arr_ui_32_seed != NULL){ free(arr_ui_32_seed); }
-    if(arr_ui_32_result1 != NULL){ free(arr_ui_32_result1); }
-    if(arr_ui_32_result2 != NULL){ free(arr_ui_32_result2); }
-    if(arr_ui_64_seed != NULL){ free(arr_ui_64_seed); }
-    if(arr_ui_64_result1 != NULL){ free(arr_ui_64_result1); }
-    if(arr_ui_64_result2 != NULL){ free(arr_ui_64_result2); }
-    if(arr_i_8_seed != NULL){ free(arr_i_8_seed); }
-    if(arr_i_8_result1 != NULL){ free(arr_i_8_result1); }
-    if(arr_i_8_result2 != NULL){ free(arr_i_8_result2); }
-    if(arr_i_16_seed != NULL){ free(arr_i_16_seed); }
-    if(arr_i_16_result1 != NULL){ free(arr_i_16_result1); }
-    if(arr_i_16_result2 != NULL){ free(arr_i_16_result2); }
-    if(arr_i_32_seed != NULL){ free(arr_i_32_seed); }
-    if(arr_i_32_result1 != NULL){ free(arr_i_32_result1); }
-    if(arr_i_32_result2 != NULL){ free(arr_i_32_result2); }
-    if(arr_i_64_seed != NULL){ free(arr_i_64_seed); }
-    if(arr_i_64_result1 != NULL){ free(arr_i_64_result1); }
-    if(arr_i_64_result2 != NULL){ free(arr_i_64_result2); }
-    if(arr_f_float_seed != NULL){ free(arr_f_float_seed); }
-    if(arr_f_float_result1 != NULL){ free(arr_f_float_result1); }
-    if(arr_f_float_result2 != NULL){ free(arr_f_float_result2); }
-    if(arr_f_double_seed != NULL){ free(arr_f_double_seed); }
-    if(arr_f_double_result1 != NULL){ free(arr_f_double_result1); }
-    if(arr_f_double_result2 != NULL){ free(arr_f_double_result2); }
+    if(arr_seeds64 != NULL){ TSODLULS_free(arr_seeds64); }
+    if(arr_ui_8_seed != NULL){ TSODLULS_free(arr_ui_8_seed); }
+    if(arr_ui_8_result1 != NULL){ TSODLULS_free(arr_ui_8_result1); }
+    if(arr_ui_16_seed != NULL){ TSODLULS_free(arr_ui_16_seed); }
+    if(arr_ui_16_result1 != NULL){ TSODLULS_free(arr_ui_16_result1); }
+    if(arr_ui_32_seed != NULL){ TSODLULS_free(arr_ui_32_seed); }
+    if(arr_ui_32_result1 != NULL){ TSODLULS_free(arr_ui_32_result1); }
+    if(arr_ui_64_seed != NULL){ TSODLULS_free(arr_ui_64_seed); }
+    if(arr_ui_64_result1 != NULL){ TSODLULS_free(arr_ui_64_result1); }
+    if(arr_i_8_seed != NULL){ TSODLULS_free(arr_i_8_seed); }
+    if(arr_i_8_result1 != NULL){ TSODLULS_free(arr_i_8_result1); }
+    if(arr_i_16_seed != NULL){ TSODLULS_free(arr_i_16_seed); }
+    if(arr_i_16_result1 != NULL){ TSODLULS_free(arr_i_16_result1); }
+    if(arr_i_32_seed != NULL){ TSODLULS_free(arr_i_32_seed); }
+    if(arr_i_32_result1 != NULL){ TSODLULS_free(arr_i_32_result1); }
+    if(arr_i_64_seed != NULL){ TSODLULS_free(arr_i_64_seed); }
+    if(arr_i_64_result1 != NULL){ TSODLULS_free(arr_i_64_result1); }
+    if(arr_f_float_seed != NULL){ TSODLULS_free(arr_f_float_seed); }
+    if(arr_f_float_result1 != NULL){ TSODLULS_free(arr_f_float_result1); }
+    if(arr_f_double_seed != NULL){ TSODLULS_free(arr_f_double_seed); }
+    if(arr_f_double_result1 != NULL){ TSODLULS_free(arr_f_double_result1); }
     if(arr_cells != NULL){
       for(i = 0; i < i_number_of_elements; ++i){
         TSODLULS_free_key__macraff(&(arr_cells[i]));
       }
-      free(arr_cells);
+      TSODLULS_free(arr_cells);
     }
     if(arr_cells__short != NULL){
-      free(arr_cells__short);
+      TSODLULS_free(arr_cells__short);
     }
     i_number_of_elements = i_number_of_elements << 1;
 

@@ -94,7 +94,7 @@ build-test1: ./tests_benchmarks/test1/test1.exe ./tests_benchmarks/test1/test1_d
 ./tests_benchmarks/test1/test1_dyn.exe: ./bin/libTSODLULS_$(VERSION).so ./tests_benchmarks/test1/test1.o
 	$(CC) -L./bin/ -lTSODLULS_$(VERSION) ./tests_benchmarks/test1/test1.o -o ./tests_benchmarks/test1/test1_dyn.exe
 
-./tests_benchmarks/test1/test1.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test1/test1.c
+./tests_benchmarks/test1/test1.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/test1/test1.c
 	$(CC) $(CFLAGS) -c ./tests_benchmarks/test1/test1.c -o ./tests_benchmarks/test1/test1.o
 
 
@@ -108,7 +108,7 @@ build-test2: ./tests_benchmarks/test2/test2.exe ./tests_benchmarks/test2/test2_d
 ./tests_benchmarks/test2/test2_dyn.exe: ./bin/libTSODLULS_$(VERSION).so ./tests_benchmarks/test2/test2.o
 	$(CC) -L./bin/ -lTSODLULS_$(VERSION) ./tests_benchmarks/test2/test2.o -o ./tests_benchmarks/test2/test2_dyn.exe
 
-./tests_benchmarks/test2/test2.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test2/test2.c
+./tests_benchmarks/test2/test2.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/test2/test2.c
 	$(CC) $(CFLAGS) -c ./tests_benchmarks/test2/test2.c -o ./tests_benchmarks/test2/test2.o
 
 
@@ -155,7 +155,7 @@ build-benchmark1: ./tests_benchmarks/benchmark1/benchmark1.exe ./tests_benchmark
 ./tests_benchmarks/benchmark1/benchmark1_dyn.exe: ./bin/libTSODLULS_$(VERSION).so ./tests_benchmarks/benchmark1/benchmark1.o
 	$(CC) -L./bin/ -lTSODLULS_$(VERSION) ./tests_benchmarks/benchmark1/benchmark1.o -o ./tests_benchmarks/benchmark1/benchmark1_dyn.exe
 
-./tests_benchmarks/benchmark1/benchmark1.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/benchmark1/benchmark1.c
+./tests_benchmarks/benchmark1/benchmark1.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/benchmark1/benchmark1.c
 	$(CC) $(CFLAGS) -c ./tests_benchmarks/benchmark1/benchmark1.c -o ./tests_benchmarks/benchmark1/benchmark1.o
 
 

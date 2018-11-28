@@ -80,7 +80,7 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
 
   arr_instances = calloc(8, sizeof(t_TSODLULS_radix_instance));
   if(arr_instances == NULL){
-    free(arr_elements_copy);
+    TSODLULS_free(arr_elements_copy);
     return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
   }
   i_max_number_of_instances =  8;
@@ -154,14 +154,14 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
             i_size_for_realloc = i_max_number_of_instances * 2 * sizeof(t_TSODLULS_radix_instance);
             //if we cannot allocate more
             if(i_size_for_realloc <= i_max_number_of_instances * sizeof(t_TSODLULS_radix_instance)){
-              free(arr_elements_copy);
-              free(arr_instances);
+              TSODLULS_free(arr_elements_copy);
+              TSODLULS_free(arr_instances);
               return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
             }
             p_for_realloc = realloc(arr_instances, i_size_for_realloc);
             if(p_for_realloc == NULL){
-              free(arr_elements_copy);
-              free(arr_instances);
+              TSODLULS_free(arr_elements_copy);
+              TSODLULS_free(arr_instances);
               return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
             }
             arr_instances = (t_TSODLULS_radix_instance*)p_for_realloc;
@@ -196,14 +196,14 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
             i_size_for_realloc = i_max_number_of_instances * 2 * sizeof(t_TSODLULS_radix_instance);
             //if we cannot allocate more
             if(i_size_for_realloc <= i_max_number_of_instances * sizeof(t_TSODLULS_radix_instance)){
-              free(arr_elements_copy);
-              free(arr_instances);
+              TSODLULS_free(arr_elements_copy);
+              TSODLULS_free(arr_instances);
               return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
             }
             p_for_realloc = realloc(arr_instances, i_size_for_realloc);
             if(p_for_realloc == NULL){
-              free(arr_elements_copy);
-              free(arr_instances);
+              TSODLULS_free(arr_elements_copy);
+              TSODLULS_free(arr_instances);
               return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
             }
             arr_instances = (t_TSODLULS_radix_instance*)p_for_realloc;
@@ -234,8 +234,8 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
     current_instance = arr_instances[--i_current_instance];
   }//end while(true)
 
-  free(arr_elements_copy);
-  free(arr_instances);
+  TSODLULS_free(arr_elements_copy);
+  TSODLULS_free(arr_instances);
   return 0;
 }//end function TSODLULS_sort_radix8_count()
 

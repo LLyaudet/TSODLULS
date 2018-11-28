@@ -62,8 +62,7 @@ do{\
 do{\
   TSODLULS_macraff_p_sort_element = (p_element);\
   if(TSODLULS_macraff_p_sort_element->s_key != NULL){\
-    free(TSODLULS_macraff_p_sort_element->s_key);\
-    TSODLULS_macraff_p_sort_element->s_key = NULL;\
+    TSODLULS_free(TSODLULS_macraff_p_sort_element->s_key);\
     TSODLULS_macraff_p_sort_element->i_key_size = 0;\
     TSODLULS_macraff_p_sort_element->i_allocated_size = 0;\
   }\
