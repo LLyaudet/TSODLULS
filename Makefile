@@ -16,8 +16,21 @@
 #©Copyright 2018 Laurent Lyaudet
 
 CC=gcc
-CFLAGS=-Wall -O
-VERSION=0_1_0
+
+CFLAGS=-Wall -O3
+
+VERSION=0_2_0
+
+#The headers that are actually needed for the library
+HEADERS=./TSODLULS.h ./TSODLULS__macro.h ./TSODLULS_finite_orders__macro.h ./TSODLULS_misc__macro.h ./TSODLULS_padding__macro.h
+
+HEADERS-COMPETITOR=$(HEADERS) ./competitor_algorithms/TSODLULS__competitor.h
+
+OBJECTS-STATIC=./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting_long_orders.o ./bin/TSODLULS_sorting_short_orders.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
+
+OBJECTS-DYNAMIC=./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_long_orders_dyn.o ./bin/TSODLULS_sorting_short_orders_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
+
+OBJECTS-STATIC-COMPETITOR=./bin/TSODLULS_finite_orders__competitor.o ./bin/TSODLULS_sorting_long_orders__competitor.o ./bin/TSODLULS_sorting_short_orders__competitor.o ./bin/TSODLULS_comparison__competitor.o ./bin/TSODLULS_misc__competitor.o ./bin/TSODLULS_padding__competitor.o
 
 .PHONY: run-tests run-tests-dynamic clean run-benchmarks run-benchmarks-dynamic
 
@@ -25,58 +38,84 @@ VERSION=0_1_0
 #-----------------------------------------------------------
 #Build library
 #-----------------------------------------------------------
-build: build-static build-dynamic
+build: build-static build-dynamic build-static-with-competitor-algorithms
 
 
 #Static library
 build-static: ./bin/libTSODLULS_$(VERSION).a
 
-./bin/libTSODLULS_$(VERSION).a: ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting_long_orders.o ./bin/TSODLULS_sorting_short_orders.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
-	ar -rcs ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting_long_orders.o ./bin/TSODLULS_sorting_short_orders.o ./bin/TSODLULS_comparison.o ./bin/TSODLULS_misc.o ./bin/TSODLULS_padding.o
+./bin/libTSODLULS_$(VERSION).a: $(OBJECTS-STATIC)
+	ar -rcs ./bin/libTSODLULS_$(VERSION).a $(OBJECTS-STATIC)
 #	ar -rc ./bin/libTSODLULS_$(VERSION).a ./bin/TSODLULS_finite_orders.o
 #	ranlib ./bin/libTSODLULS_$(VERSION).a
 
-./bin/TSODLULS_finite_orders.o: ./TSODLULS.h ./TSODLULS_finite_orders.c
+./bin/TSODLULS_finite_orders.o: $(HEADERS) ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_finite_orders.c -o ./bin/TSODLULS_finite_orders.o
 
-./bin/TSODLULS_sorting_long_orders.o: ./TSODLULS.h ./TSODLULS_sorting_long_orders.c
+./bin/TSODLULS_sorting_long_orders.o: $(HEADERS) ./TSODLULS_sorting_long_orders.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_sorting_long_orders.c -o ./bin/TSODLULS_sorting_long_orders.o
 
-./bin/TSODLULS_sorting_short_orders.o: ./TSODLULS.h ./TSODLULS_sorting_short_orders.c
+./bin/TSODLULS_sorting_short_orders.o: $(HEADERS) ./TSODLULS_sorting_short_orders.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_sorting_short_orders.c -o ./bin/TSODLULS_sorting_short_orders.o
 
-./bin/TSODLULS_comparison.o: ./TSODLULS.h ./TSODLULS_comparison.c
+./bin/TSODLULS_comparison.o: $(HEADERS) ./TSODLULS_comparison.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_comparison.c -o ./bin/TSODLULS_comparison.o
 
-./bin/TSODLULS_misc.o: ./TSODLULS.h ./TSODLULS_misc.c
+./bin/TSODLULS_misc.o: $(HEADERS) ./TSODLULS_misc.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_misc.c -o ./bin/TSODLULS_misc.o
 
-./bin/TSODLULS_padding.o: ./TSODLULS.h ./TSODLULS_padding.c
+./bin/TSODLULS_padding.o: $(HEADERS) ./TSODLULS_padding.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_padding.c -o ./bin/TSODLULS_padding.o
 
 #Dynamic library
 build-dynamic: ./bin/libTSODLULS_$(VERSION).so
 
-./bin/libTSODLULS_$(VERSION).so: ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_long_orders_dyn.o ./bin/TSODLULS_sorting_short_orders_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
-	$(CC) -shared -o ./bin/libTSODLULS_$(VERSION).so ./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_long_orders_dyn.o ./bin/TSODLULS_sorting_short_orders_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
+./bin/libTSODLULS_$(VERSION).so: $(OBJECTS-DYNAMIC)
+	$(CC) -shared -o ./bin/libTSODLULS_$(VERSION).so $(OBJECTS-DYNAMIC)
 
-./bin/TSODLULS_finite_orders_dyn.o: ./TSODLULS.h ./TSODLULS_finite_orders.c
+./bin/TSODLULS_finite_orders_dyn.o: $(HEADERS) ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_finite_orders.c -o ./bin/TSODLULS_finite_orders_dyn.o
 
-./bin/TSODLULS_sorting_long_orders_dyn.o: ./TSODLULS.h ./TSODLULS_sorting_long_orders.c
+./bin/TSODLULS_sorting_long_orders_dyn.o: $(HEADERS) ./TSODLULS_sorting_long_orders.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting_long_orders.c -o ./bin/TSODLULS_sorting_long_orders_dyn.o
 
-./bin/TSODLULS_sorting_short_orders_dyn.o: ./TSODLULS.h ./TSODLULS_sorting_short_orders.c
+./bin/TSODLULS_sorting_short_orders_dyn.o: $(HEADERS) ./TSODLULS_sorting_short_orders.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting_short_orders.c -o ./bin/TSODLULS_sorting_short_orders_dyn.o
 
-./bin/TSODLULS_comparison_dyn.o: ./TSODLULS.h ./TSODLULS_comparison.c
+./bin/TSODLULS_comparison_dyn.o: $(HEADERS) ./TSODLULS_comparison.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_comparison.c -o ./bin/TSODLULS_comparison_dyn.o
 
-./bin/TSODLULS_misc_dyn.o: ./TSODLULS.h ./TSODLULS_misc.c
+./bin/TSODLULS_misc_dyn.o: $(HEADERS) ./TSODLULS_misc.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_misc.c -o ./bin/TSODLULS_misc_dyn.o
 
-./bin/TSODLULS_padding_dyn.o: ./TSODLULS.h ./TSODLULS_padding.c
+./bin/TSODLULS_padding_dyn.o: $(HEADERS) ./TSODLULS_padding.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_padding.c -o ./bin/TSODLULS_padding_dyn.o
+
+#Static library with competitor algorithms
+#This static library is used for custom tests and benchmarks for testing and comparing
+#competitor algorithms and their variants.
+build-static-with-competitor-algorithms: ./bin/libTSODLULS_with_competitor_algorithms_$(VERSION).a
+
+./bin/libTSODLULS_with_competitor_algorithms_$(VERSION).a: $(OBJECTS-STATIC) $(OBJECTS-STATIC-COMPETITOR)
+	ar -rcs ./bin/libTSODLULS_with_competitor_algorithms_$(VERSION).a $(OBJECTS-STATIC) $(OBJECTS-STATIC-COMPETITOR)
+
+./bin/TSODLULS_finite_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_finite_orders__competitor.c
+	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_finite_orders__competitor.c -o ./bin/TSODLULS_finite_orders__competitor.o
+
+./bin/TSODLULS_sorting_long_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_long_orders__competitor.c
+	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_sorting_long_orders__competitor.c -o ./bin/TSODLULS_sorting_long_orders__competitor.o
+
+./bin/TSODLULS_sorting_short_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_short_orders__competitor.c
+	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_sorting_short_orders__competitor.c -o ./bin/TSODLULS_sorting_short_orders__competitor.o
+
+./bin/TSODLULS_comparison__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_comparison__competitor.c
+	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_comparison__competitor.c -o ./bin/TSODLULS_comparison__competitor.o
+
+./bin/TSODLULS_misc__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_misc__competitor.c
+	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_misc__competitor.c -o ./bin/TSODLULS_misc__competitor.o
+
+./bin/TSODLULS_padding__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_padding__competitor.c
+	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_padding__competitor.c -o ./bin/TSODLULS_padding__competitor.o
 
 #-----------------------------------------------------------
 #Build tests
@@ -94,7 +133,7 @@ build-test1: ./tests_benchmarks/test1/test1.exe ./tests_benchmarks/test1/test1_d
 ./tests_benchmarks/test1/test1_dyn.exe: ./bin/libTSODLULS_$(VERSION).so ./tests_benchmarks/test1/test1.o
 	$(CC) -L./bin/ -lTSODLULS_$(VERSION) ./tests_benchmarks/test1/test1.o -o ./tests_benchmarks/test1/test1_dyn.exe
 
-./tests_benchmarks/test1/test1.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/test1/test1.c
+./tests_benchmarks/test1/test1.o: $(HEADERS) ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/test1/test1.c
 	$(CC) $(CFLAGS) -c ./tests_benchmarks/test1/test1.c -o ./tests_benchmarks/test1/test1.o
 
 
@@ -108,7 +147,7 @@ build-test2: ./tests_benchmarks/test2/test2.exe ./tests_benchmarks/test2/test2_d
 ./tests_benchmarks/test2/test2_dyn.exe: ./bin/libTSODLULS_$(VERSION).so ./tests_benchmarks/test2/test2.o
 	$(CC) -L./bin/ -lTSODLULS_$(VERSION) ./tests_benchmarks/test2/test2.o -o ./tests_benchmarks/test2/test2_dyn.exe
 
-./tests_benchmarks/test2/test2.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/test2/test2.c
+./tests_benchmarks/test2/test2.o: $(HEADERS) ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/test2/test2.c
 	$(CC) $(CFLAGS) -c ./tests_benchmarks/test2/test2.c -o ./tests_benchmarks/test2/test2.o
 
 
@@ -129,11 +168,11 @@ install: /usr/lib/libTSODLULS_$(VERSION).so
 #-----------------------------------------------------------
 test: build-tests run-tests
 
-run-tests:
+run-tests: build-tests
 	cd ./tests_benchmarks/test1/ && echo "\nTest1:" && ./test1.exe && cd ../..
 	cd ./tests_benchmarks/test2/ && echo "\nTest2:" && ./test2.exe && cd ../..
 
-run-tests-dynamic: install
+run-tests-dynamic: build-tests install
 	cd ./tests_benchmarks/test1/ && echo "\nTest1 dyn:" && ./test1_dyn.exe && cd ../..
 	cd ./tests_benchmarks/test2/ && echo "\nTest2 dyn:" && ./test2_dyn.exe && cd ../..
 
@@ -155,7 +194,7 @@ build-benchmark1: ./tests_benchmarks/benchmark1/benchmark1.exe ./tests_benchmark
 ./tests_benchmarks/benchmark1/benchmark1_dyn.exe: ./bin/libTSODLULS_$(VERSION).so ./tests_benchmarks/benchmark1/benchmark1.o
 	$(CC) -L./bin/ -lTSODLULS_$(VERSION) ./tests_benchmarks/benchmark1/benchmark1.o -o ./tests_benchmarks/benchmark1/benchmark1_dyn.exe
 
-./tests_benchmarks/benchmark1/benchmark1.o: ./TSODLULS.h ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/benchmark1/benchmark1.c
+./tests_benchmarks/benchmark1/benchmark1.o: $(HEADERS) ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/benchmark1/benchmark1.c
 	$(CC) $(CFLAGS) -c ./tests_benchmarks/benchmark1/benchmark1.c -o ./tests_benchmarks/benchmark1/benchmark1.o
 
 
@@ -165,12 +204,28 @@ build-benchmark1: ./tests_benchmarks/benchmark1/benchmark1.exe ./tests_benchmark
 #-----------------------------------------------------------
 benchmarks: build-benchmarks run-benchmarks
 
-run-benchmarks:
+run-benchmarks: build-benchmarks
 	cd ./tests_benchmarks/benchmark1/ && echo "\nBenchmark1:" && ./benchmark1.exe && cd ../..
 
-run-benchmarks-dynamic: install
+run-benchmarks-dynamic: build-benchmarks install
 	cd ./tests_benchmarks/benchmark1/ && echo "\nBenchmark1 dyn:" && ./benchmark1_dyn.exe && cd ../..
 
+
+
+#-----------------------------------------------------------
+#Custom tests and benchmarks
+#You should not run these commands.
+#The PHP files in the custom tests and benchmarks will call these commands in due time.
+#-----------------------------------------------------------
+#Test custom
+build-test-custom: ./tests_benchmarks/test_custom/test_custom.exe
+
+#static linking requires the library to come after the test object
+./tests_benchmarks/test_custom/test_custom.exe: ./bin/libTSODLULS_with_competitor_algorithms_$(VERSION).a ./tests_benchmarks/test_custom/test_custom.o
+	$(CC) -static -L./bin/ ./tests_benchmarks/test_custom/test_custom.o -lTSODLULS_with_competitor_algorithms_$(VERSION) -o ./tests_benchmarks/test_custom/test_custom.exe
+
+./tests_benchmarks/test_custom/test_custom.o: $(HEADERS-COMPETITOR) ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/test_custom/test_custom.c
+	$(CC) -O3 -c ./tests_benchmarks/test_custom/test_custom.c -o ./tests_benchmarks/test_custom/test_custom.o
 
 
 #-----------------------------------------------------------
@@ -180,4 +235,6 @@ clean:
 	rm -f ./bin/*
 	rm -f ./tests_benchmarks/test1/*.o ./tests_benchmarks/test1/*.exe ./tests_benchmarks/test1/*.test_result
 	rm -f ./tests_benchmarks/test2/*.o ./tests_benchmarks/test2/*.exe ./tests_benchmarks/test2/*.test_result
+	rm -f ./tests_benchmarks/test_custom/*.o ./tests_benchmarks/test_custom/*.exe ./tests_benchmarks/test_custom/*.test_result ./tests_benchmarks/test_custom/*.c
 	rm -f ./tests_benchmarks/benchmark1/*.o ./tests_benchmarks/benchmark1/*.exe ./tests_benchmarks/benchmark1/*.test_result
+	rm -f ./tests_benchmarks/benchmark_custom/*.o ./tests_benchmarks/benchmark_custom/*.exe ./tests_benchmarks/benchmark_custom/*.test_result ./tests_benchmarks/benchmark_custom/*.c

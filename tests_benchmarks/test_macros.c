@@ -76,6 +76,19 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_uint8() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    arr_cells__short[i].i_key = (uint64_t)arr_ui_8_seed[i];\
+    arr_cells__short[i].i_key = arr_cells__short[i].i_key << 56;/*putting info on most significant bits*/\
+    arr_cells__short[i].p_object = &(arr_ui_8_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_uint8_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -85,9 +98,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     arr_cells__short[i].i_key = (uint64_t)arr_ui_8_seed[i];\
     arr_cells__short[i].i_key = arr_cells__short[i].i_key << 56;/*putting info on most significant bits*/\
     arr_cells__short[i].p_object = &(arr_ui_8_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -218,6 +228,19 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_uint16() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    arr_cells__short[i].i_key = (uint64_t)arr_ui_16_seed[i];\
+    arr_cells__short[i].i_key = arr_cells__short[i].i_key << 48;/*putting info on most significant bits*/\
+    arr_cells__short[i].p_object = &(arr_ui_16_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_uint16_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -227,9 +250,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     arr_cells__short[i].i_key = (uint64_t)arr_ui_16_seed[i];\
     arr_cells__short[i].i_key = arr_cells__short[i].i_key << 48;/*putting info on most significant bits*/\
     arr_cells__short[i].p_object = &(arr_ui_16_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -360,6 +380,19 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_uint32() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    arr_cells__short[i].i_key = (uint64_t)arr_ui_32_seed[i];\
+    arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;/*putting info on most significant bits*/\
+    arr_cells__short[i].p_object = &(arr_ui_32_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_uint32_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -369,9 +402,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     arr_cells__short[i].i_key = (uint64_t)arr_ui_32_seed[i];\
     arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;/*putting info on most significant bits*/\
     arr_cells__short[i].p_object = &(arr_ui_32_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -502,6 +532,18 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_uint64() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    arr_cells__short[i].i_key = arr_ui_64_seed[i];\
+    arr_cells__short[i].p_object = &(arr_ui_64_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_uint64_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -510,9 +552,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
   for(i = 0; i < i_number_of_elements; ++i){\
     arr_cells__short[i].i_key = arr_ui_64_seed[i];\
     arr_cells__short[i].p_object = &(arr_ui_64_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -644,6 +683,20 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_int8() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    ui8 = TSODLULS_get_uint8_from_int8(arr_i_8_seed[i]);\
+    arr_cells__short[i].i_key = (uint64_t)ui8;\
+    arr_cells__short[i].i_key = arr_cells__short[i].i_key << 56;/*putting info on most significant bits*/\
+    arr_cells__short[i].p_object = &(arr_i_8_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_int8_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -654,9 +707,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     arr_cells__short[i].i_key = (uint64_t)ui8;\
     arr_cells__short[i].i_key = arr_cells__short[i].i_key << 56;/*putting info on most significant bits*/\
     arr_cells__short[i].p_object = &(arr_i_8_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -788,6 +838,20 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_int16() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    ui16 = TSODLULS_get_uint16_from_int16(arr_i_16_seed[i]);\
+    arr_cells__short[i].i_key = (uint64_t)ui16;\
+    arr_cells__short[i].i_key = arr_cells__short[i].i_key << 48;/*putting info on most significant bits*/\
+    arr_cells__short[i].p_object = &(arr_i_16_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_int16_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -798,9 +862,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     arr_cells__short[i].i_key = (uint64_t)ui16;\
     arr_cells__short[i].i_key = arr_cells__short[i].i_key << 48;/*putting info on most significant bits*/\
     arr_cells__short[i].p_object = &(arr_i_16_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -932,6 +993,20 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_int32() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    ui32 = TSODLULS_get_uint32_from_int32(arr_i_32_seed[i]);\
+    arr_cells__short[i].i_key = (uint64_t)ui32;\
+    arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;/*putting info on most significant bits*/\
+    arr_cells__short[i].p_object = &(arr_i_32_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_int32_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -942,9 +1017,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     arr_cells__short[i].i_key = (uint64_t)ui32;\
     arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;/*putting info on most significant bits*/\
     arr_cells__short[i].p_object = &(arr_i_32_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -1076,6 +1148,19 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_int64() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    ui64 = TSODLULS_get_uint64_from_int64(arr_i_64_seed[i]);\
+    arr_cells__short[i].i_key = ui64;\
+    arr_cells__short[i].p_object = &(arr_i_64_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_int64_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -1085,9 +1170,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     TSODLULS_get_uint64_from_int64__macraff(ui64, arr_i_64_seed[i]);\
     arr_cells__short[i].i_key = ui64;\
     arr_cells__short[i].p_object = &(arr_i_64_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -1219,6 +1301,20 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_float() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    ui32 = TSODLULS_get_uint_from_float(arr_f_float_seed[i]);\
+    arr_cells__short[i].i_key = (uint64_t)ui32;\
+    arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;/*putting info on most significant bits*/\
+    arr_cells__short[i].p_object = &(arr_f_float_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_float_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -1229,9 +1325,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     arr_cells__short[i].i_key = (uint64_t)ui32;\
     arr_cells__short[i].i_key = arr_cells__short[i].i_key << 32;/*putting info on most significant bits*/\
     arr_cells__short[i].p_object = &(arr_f_float_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 
@@ -1368,6 +1461,19 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
+#define TSODLULS_code_fragment_init_short_cells_for_double() \
+  i_result = TSODLULS_init_array_of_elements__short(&arr_cells__short, i_number_of_elements);\
+  if(i_result != 0){\
+    break;\
+  }\
+  for(i = 0; i < i_number_of_elements; ++i){\
+    ui64 = TSODLULS_get_uint_from_double(arr_f_double_seed[i]);\
+    arr_cells__short[i].i_key = ui64;\
+    arr_cells__short[i].p_object = &(arr_f_double_seed[i]);\
+  }
+
+
+
 #define TSODLULS_code_fragment_init_short_cells_for_double_with_macraffs() \
   TSODLULS_init_array_of_elements__short__macraff(i_result, &arr_cells__short, i_number_of_elements);\
   if(i_result != 0){\
@@ -1377,9 +1483,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     TSODLULS_get_uint_from_double__macraff(ui64, arr_f_double_seed[i]);\
     arr_cells__short[i].i_key = ui64;\
     arr_cells__short[i].p_object = &(arr_f_double_seed[i]);\
-  }\
-  if(i_result != 0){\
-    break;\
   }
 
 

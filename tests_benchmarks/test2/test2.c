@@ -862,7 +862,7 @@ int main(int argc, char *argv[]){
     TSODLULS_free(arr_f_double_result2);
 
 
-    printf("Test 2 succeded.\n");
+    printf("Test 2 succeeded.\n");
   }
   while(0);
 

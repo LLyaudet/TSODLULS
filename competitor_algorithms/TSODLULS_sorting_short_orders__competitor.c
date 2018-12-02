@@ -17,7 +17,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 ©Copyright 2018 Laurent Lyaudet
 */
 
-#include "TSODLULS.h"
+#include "TSODLULS__competitor.h"
 
 
 
@@ -26,40 +26,10 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------------
 /**
  * Sorting functions for short nextified strings
- * The current state of the art sorting function for nextified strings.
- * Its implementation may change without warning.
- */
-int TSODLULS_sort__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements,
-  uint8_t i_max_length
-){
-  return TSODLULS_sort_radix8_count__short(arr_elements, i_number_of_elements, i_max_length);
-}//end function TSODLULS_sort()
-
-
-
-/**
- * Sorting functions for short nextified strings
- * The current state of the art stable sorting function for nextified strings.
- * Its implementation may change without warning.
- */
-int TSODLULS_sort_stable__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements,
-  uint8_t i_max_length
-){
-  return TSODLULS_sort_radix8_count__short(arr_elements, i_number_of_elements, i_max_length);
-}//end function TSODLULS_sort_stable()
-
-
-
-/**
- * Sorting functions for short nextified strings
  * A stable sorting algorithm for nextified strings based on radix sort with octets digits
  * and counting sort as a subroutine.
  */
-int TSODLULS_sort_radix8_count__short(
+int TSODLULS_sort_radix8_count__short__mark1(
   t_TSODLULS_sort_element__short* arr_elements,
   size_t i_number_of_elements,
   uint8_t i_max_length
@@ -266,7 +236,7 @@ int TSODLULS_sort_radix8_count__short(
   TSODLULS_free(arr_elements_copy);
   TSODLULS_free(arr_instances);
   return 0;
-}//end function TSODLULS_sort_radix8_count__short()
+}//end function TSODLULS_sort_radix8_count__short__mark1()
 
 
 

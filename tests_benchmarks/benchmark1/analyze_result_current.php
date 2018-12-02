@@ -11,7 +11,7 @@ if($sResults === false){
 $arrSLines = explode("\n", $sResults);
 //We clean the lines
 foreach($arrSLines as $i => $sLine){
-  if($sLine == '' || $sLine[0] !== '|' || substr($sLine, 0 2) == '|n'){
+  if($sLine == '' || $sLine[0] !== '|' || substr($sLine, 0, 2) == '|n'){
     unset($arrSLines[$i]);
   }
 }

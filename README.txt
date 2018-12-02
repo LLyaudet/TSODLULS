@@ -324,12 +324,23 @@ It just contains a .gitignore by default.
 COPYING contains the license GPL3.
 COPYING.LESSER contains the license LGPL3.
 
-Folder tests_benchmarks contains the file test_functions.c
-(mainly for generating random variables), and a folder for each
+The folder "tests_benchmarks" contains the files "test_functions.c"
+(mainly for generating random variables), "test_macros.c", and a folder for each
 test/benchmark.
 In each test/benchmark, there is a .c file containing the related code
 and that describes the purpose of the test/benchmark.
 Some tests or benchmarks may use helper scripts in PHP (for analyzing the results, etc.).
+
+The folder "competitor_algorithms" contains variants of algorithms/implementations
+that were tested and benchmarked. Its structure is similar to the library .c and .h files
+(TSODLULS.h has an equivalent TSODLULS__competitor.h file,
+TSODLULS_sorting_long_orders.c has an equivalent TSODLULS_sorting_long_orders__competitor.c file, etc.).
+The makefile has a rule to construct a variant of the static library with all competitor algorithms.
+This static library is used for custom tests and benchmarks for testing and comparing
+competitor algorithms and their variants.
+The main library should contain the best implementations of the best competitor algorithms.
+It applies to sorting algorithms but also to the other functions of the library,
+as soon as many variants emerged.
 
 
 ----------------------------------------------------------------------------
