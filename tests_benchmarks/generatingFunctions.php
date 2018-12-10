@@ -78,7 +78,7 @@ function getInitFragmentForDirect($sSubTest, $iResult, $bMacraff){
   global $arrSubTests;
   $sArraySubstring = $arrSubTests[$sSubTest]['array_substring'];
   return 'memcpy(arr_'.$sArraySubstring.'_result'.$iResult.', arr_'.$sArraySubstring.'_seed, i_number_of_elements * sizeof('.$arrSubTests[$sSubTest]['type'].'));';
-}
+}//end function getInitFragmentForDirect()
 
 
 
@@ -86,7 +86,7 @@ function getInitFragmentForLongCells($sSubTest, $iResult, $bMacraff){
   return 'TSODLULS_code_fragment_init_long_cells_for_'.$sSubTest
         .($bMacraff ? '_with_macraffs' : '')
         .'();';
-}
+}//end function getInitFragmentForLongCells()
 
 
 
@@ -94,7 +94,7 @@ function getInitFragmentForShortCells($sSubTest, $iResult, $bMacraff){
   return 'TSODLULS_code_fragment_init_short_cells_for_'.$sSubTest
         .($bMacraff ? '_with_macraffs' : '')
         .'();';
-}
+}//end function getInitFragmentForShortCells()
 
 
 
@@ -170,7 +170,7 @@ function getSortFunctionCall($arrDataAlgorithm, $sSubTest, $iResult){
   }
 
   return $sFunctionCall.');';
-}
+}//end function getSortFunctionCall()
 
 
 
@@ -178,7 +178,7 @@ function getPostFragmentForLongCells($sSubTest, $iResult, $bMacraff){
   return 'TSODLULS_code_fragment_fill_result'.$iResult.'_with_long_cells_for_'.$sSubTest
         .($bMacraff ? '_with_macraffs' : '')
         .'();';
-}
+}//end function getPostFragmentForLongCells()
 
 
 
@@ -186,7 +186,7 @@ function getPostFragmentForShortCells($sSubTest, $iResult, $bMacraff){
   return 'TSODLULS_code_fragment_fill_result'.$iResult.'_with_short_cells_for_'.$sSubTest
         .'_no_macraff_needed'//($bMacraff ? '_with_macraffs' : '')
         .'();';
-}
+}//end function getPostFragmentForShortCells()
 
 
 
@@ -234,5 +234,58 @@ function getTestingFragmentFor($arrDataAlgorithm, $sSubTest, $bMacraff){
                ."(\"qsort direct and ".$arrDataAlgorithm['name']
                .($bMacraff ? " (macraff)" : "")." gave different results (".$sSubTest.")\\n\");\n";
   return $sFragment;
-}
+}//end function getTestingFragmentFor()
+
+
+
+function getComparingFragmentFor($arrDataAlgorithm, $sSubTest, $bMacraff){
+  $sFragment = '';
+  $sCellType = $arrDataAlgorithm['celltype'];
+  $sInitTimer = "clock_gettime(CLOCK_MONOTONIC, &start);";
+  //Init
+  switch($sCellType){
+    case 'direct':
+      $sFragment .= getInitFragmentForDirect($sSubTest, 1, $bMacraff);
+      //Init fragment for direct is not counted as preparation time for fair comparison
+      $sFragment .= "\n".$sInitTimer;
+    break;
+
+    case 'long':
+      $sFragment .= $sInitTimer;
+      $sFragment .= "\n".getInitFragmentForLongCells($sSubTest, 1, $bMacraff);
+    break;
+
+    case 'short':
+      $sFragment .= $sInitTimer;
+      $sFragment .= "\n".getInitFragmentForShortCells($sSubTest, 1, $bMacraff);
+    break;
+
+    default:
+    die("Unknown celltype ".$sCellType."\n");
+  }
+  //Sorting
+  $sFragment .= "\n".getSortFunctionCall($arrDataAlgorithm, $sSubTest, 1);
+  //Post-processing
+  switch($sCellType){
+    case 'direct':
+      //nothing to do
+    break;
+
+    case 'long':
+      $sFragment .= "\n".getPostFragmentForLongCells($sSubTest, 1, $bMacraff);
+    break;
+
+    case 'short':
+      $sFragment .= "\n".getPostFragmentForShortCells($sSubTest, 1, $bMacraff);
+    break;
+
+    default:
+    die("Unknown celltype ".$sCellType."\n");
+  }
+  //Time result
+  $sFragment .= "\nTSODLULS_code_fragment_print_time();";
+  return $sFragment;
+}//end function getComparingFragmentFor()
+
+
 

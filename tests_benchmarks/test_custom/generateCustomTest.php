@@ -18,44 +18,14 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 ©Copyright 2018 Laurent Lyaudet
 */
 
-include('../sortingAlgorithmsList.php');
-$iChosenAlgorithm = 0;
-do{
-  echo "Hello, please choose an algorithm to test\n",
-       " (input the number before the name and press return).\n",
-       "The test will compare the sorted array obtained with qsort direct\n",
-       " and the one obtained with the algorithm you selected.\n\n";
+include('../getUserChoiceFunctions.php');
 
-  $i = 0;
-  foreach($arrArrSortingAlgorithms as $sName => $arrDataAlgorithm){
-    ++$i;
-    echo "[$i] ", $sName, "\n";
-  }
+$sMessage = "Hello, please choose an algorithm to test\n"
+           ." (input the number before the name and press return).\n"
+           ."The test will compare the sorted array obtained with qsort direct\n"
+           ." and the one obtained with the algorithm you selected.\n\n";
 
-  $input = readline();
-
-  if(!ctype_digit($input)){
-    echo "Invalid input. Please input a positive integer.\n";
-    continue;
-  }
-  $input = (int)$input;
-  if($input <= 0 || $input > $i){
-    echo "Invalid input. Please input a positive integer in the range [1,$i].\n";
-    continue;
-  }
-  $iChosenAlgorithm = $input;
-}
-while($iChosenAlgorithm === 0);
-
-$i = 0;
-foreach($arrArrSortingAlgorithms as $sName => $arrDataAlgorithm){
-  ++$i;
-  if($i === $iChosenAlgorithm){
-    break;//$sName and $arrData are correct
-  }
-}
-
-echo "You selected [$iChosenAlgorithm] $sName.\n";
+$arrDataAlgorithm = getChoiceForAlgorithm($sMessage);
 
 include('../generatingFunctions.php');
 
@@ -66,7 +36,7 @@ if($sCustomTest == ''){
 }
 foreach($arrSubTests as $sSubTest => $arrDataSubTest){
   if(strpos($sCustomTest, 'PHP__INCLUDE_TEST_CODE_FOR_CHOSEN_ALGORITHM__'.$sSubTest) === false){
-    die("The template file test_custom.c.tpl do not contain the insertion token for sorting ".$sSubTest.".\n");
+    die("The template file test_custom.c.tpl does not contain the insertion token for sorting ".$sSubTest.".\n");
   }
   $sFragment = getTestingFragmentFor($arrDataAlgorithm, $sSubTest, false);
   if($arrDataAlgorithm['celltype'] !== 'direct'){
