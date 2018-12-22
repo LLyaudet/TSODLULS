@@ -28,6 +28,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 #include <endian.h>
 #include <ieee754.h>
 #include <byteswap.h>
+#include <limits.h>
 
 //------------------------------------------------------------------------------------
 //Constants
@@ -96,6 +97,20 @@ typedef struct TSODLULS_radix_instance {
   size_t i_depth;
   unsigned int b_copy;
 } t_TSODLULS_radix_instance;
+
+
+
+typedef struct {
+  t_TSODLULS_sort_element* p_low;
+  t_TSODLULS_sort_element* p_high;
+} t_TSODLULS_qsort_stack_node;
+
+
+
+typedef struct {
+  t_TSODLULS_sort_element__short* p_low;
+  t_TSODLULS_sort_element__short* p_high;
+} t_TSODLULS_qsort_stack_node__short;
 
 
 
@@ -356,6 +371,17 @@ int TSODLULS_sort_radix8_count__short(
   t_TSODLULS_sort_element__short* arr_elements,
   size_t i_number_of_elements,
   uint8_t i_max_length
+);
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
 );
 
 

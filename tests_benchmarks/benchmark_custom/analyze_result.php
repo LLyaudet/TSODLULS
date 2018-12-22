@@ -47,7 +47,7 @@ foreach($arrTests as $sTest => $iFirstColumn){
            ($fCurrentBestAlgo2 / $fCurrentBestAlgo1), " faster).\n";
     }
     else{
-      echo "     algo2 wins over qsort algo1\n",
+      echo "     algo2 wins over algo1\n",
            "     with $fCurrentBestAlgo2 seconds against $fCurrentBestAlgo1 (",
            ($fCurrentBestAlgo1 / $fCurrentBestAlgo2), " faster).\n";
     }

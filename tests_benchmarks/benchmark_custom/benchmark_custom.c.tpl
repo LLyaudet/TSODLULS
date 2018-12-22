@@ -39,7 +39,7 @@ n starts at value 1 and is multiplied by two until it reaches n_max.
 */
 
 #include "../test_functions.c"
-
+#include "../../competitor_algorithms/TSODLULS__competitor.h"
 
 
 int main(int argc, char *argv[]){

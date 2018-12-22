@@ -30,7 +30,7 @@ OBJECTS-STATIC=./bin/TSODLULS_finite_orders.o ./bin/TSODLULS_sorting_long_orders
 
 OBJECTS-DYNAMIC=./bin/TSODLULS_finite_orders_dyn.o ./bin/TSODLULS_sorting_long_orders_dyn.o ./bin/TSODLULS_sorting_short_orders_dyn.o ./bin/TSODLULS_comparison_dyn.o ./bin/TSODLULS_misc_dyn.o ./bin/TSODLULS_padding_dyn.o
 
-OBJECTS-STATIC-COMPETITOR=./bin/TSODLULS_finite_orders__competitor.o ./bin/TSODLULS_sorting_long_orders__competitor.o ./bin/TSODLULS_sorting_short_orders__competitor.o ./bin/TSODLULS_comparison__competitor.o ./bin/TSODLULS_misc__competitor.o ./bin/TSODLULS_padding__competitor.o
+OBJECTS-STATIC-COMPETITOR=./bin/TSODLULS_finite_orders__competitor.o ./bin/TSODLULS_sorting_long_orders__competitor.o ./bin/TSODLULS_sorting_short_orders__competitor.o ./bin/TSODLULS_comparison__competitor.o ./bin/TSODLULS_misc__competitor.o ./bin/TSODLULS_padding__competitor.o ./bin/TSODLULS__competitor__generated_qsort.o
 
 .PHONY: run-tests run-tests-dynamic clean run-benchmarks run-benchmarks-dynamic
 
@@ -116,6 +116,9 @@ build-static-with-competitor-algorithms: ./bin/libTSODLULS_with_competitor_algor
 
 ./bin/TSODLULS_padding__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_padding__competitor.c
 	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_padding__competitor.c -o ./bin/TSODLULS_padding__competitor.o
+
+./bin/TSODLULS__competitor__generated_qsort.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS__competitor__generated_qsort.c
+	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS__competitor__generated_qsort.c -o ./bin/TSODLULS__competitor__generated_qsort.o
 
 #-----------------------------------------------------------
 #Build tests

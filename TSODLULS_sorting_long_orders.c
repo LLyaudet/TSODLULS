@@ -64,7 +64,7 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
   void* p_for_realloc = NULL;
   size_t i_size_for_realloc = 0;
 
-  if(i_number_of_elements < 1){
+  if(i_number_of_elements < 2){
     return 0;//nothing to sort
   }
 

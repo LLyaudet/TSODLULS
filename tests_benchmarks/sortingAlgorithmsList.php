@@ -108,6 +108,43 @@ $arrArrSortingAlgorithms = array(
     'comparison' => false,
     'stable' => true,
   ),
+  'TSODLULS_sort_radix8_count__short__mark2' => array(
+    'name' => 'TSODLULS_sort_radix8_count__short__mark2',
+    'function' => 'TSODLULS_sort_radix8_count__short__mark2',
+    'celltype' => 'short',
+    'size' => 'direct',
+    'comparison' => false,
+    'stable' => true,
+  ),
+  'TSODLULS_qsort_inlined__short' => array(
+    'name' => 'TSODLULS_qsort_inlined__short',
+    'function' => 'TSODLULS_qsort_inlined__short',
+    'celltype' => 'short',
+    'size' => false,
+    'comparison' => false,
+    'stable' => false,
+  ),
+  'TSODLULS_sort_radix8_count_qsort__short' => array(
+    'name' => 'TSODLULS_sort_radix8_count_qsort__short',
+    'function' => 'TSODLULS_sort_radix8_count_qsort__short',
+    'celltype' => 'short',
+    'size' => 'direct',
+    'comparison' => false,
+    'stable' => false,
+  ),
 );
+
+$iMinThreshold = 3;
+$iMaxThreshold = 8;
+for($i = $iMinThreshold; $i <= $iMaxThreshold; ++$i){
+  $arrArrSortingAlgorithms['TSODLULS_qsort_inlined__short_'.$i] = array(
+    'name' => 'TSODLULS_qsort_inlined__short_'.$i,
+    'function' => 'TSODLULS_qsort_inlined__short_'.$i,
+    'celltype' => 'short',
+    'size' => false,
+    'comparison' => false,
+    'stable' => false,
+  );
+}
 
 ?>
