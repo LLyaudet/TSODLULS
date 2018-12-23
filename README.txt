@@ -354,7 +354,7 @@ If you can email me for helping make this library more portable, please do.
 
 
 ----------------------------------------------------------------------------
-Hello world
+Hello world - Using the library
 ----------------------------------------------------------------------------
 Using the library for sorting 32-bits signed integers can be done as follow:
  - assume you have an array of 32-bits signed integers
@@ -395,4 +395,84 @@ Using the library for sorting 32-bits signed integers can be done as follow:
       arr_i32_result[i] = *((int32_t*)(arr_cells[i].p_object));
     }
  - More examples are available in tests and benchmarks.
+
+
+
+----------------------------------------------------------------------------
+Hello world - Designing new sorting algorithms
+----------------------------------------------------------------------------
+We created an architecture within this library so that it is easy to prototype
+and benchmark a new sorting algorithm. For this purpose, we use a few PHP
+helper scripts.
+Let us give an example that you can follow in order to get started.
+We will explain how we went from algorithm TSODLULS_sort_radix8_count__short__mark2
+to TSODLULS_sort_radix8_count__short__mark3.
+
+1°)First step
+First you can find TSODLULS_sort_radix8_count__short__mark2 in
+./competitor_algorithms/TSODLULS_sorting_short_orders__competitor.c
+Open this file and copy-paste the code of the function
+TSODLULS_sort_radix8_count__short__mark2 and rename it
+TSODLULS_sort_radix8_count__short__MyMark.
+In the code of TSODLULS_sort_radix8_count__short__MyMark,
+replace
+  arr_instances = calloc(7 * 256, sizeof(t_TSODLULS_radix_instance));
+  if(arr_instances == NULL){
+    TSODLULS_free(arr_elements_copy);
+    return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
+  }
+by
+  if(i_max_length - 1 > 0){
+    arr_instances = calloc((i_max_length - 1) * 256, sizeof(t_TSODLULS_radix_instance));
+    if(arr_instances == NULL){
+      TSODLULS_free(arr_elements_copy);
+      return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
+    }
+  }
+Save and that's it for this file.
+
+2°)Second step
+You need to modify the header file now.
+Open ./competitor_algorithms/TSODLULS__competitor.h
+and copy-paste the declaration of TSODLULS_sort_radix8_count__short__mark2
+just below and rename it TSODLULS_sort_radix8_count__short__MyMark.
+
+3°)Third step
+You need to declare your algorithm in the list of competitor
+algorithms for PHP helper scripts.
+Open ./tests_benchmarks/sortingAlgorithmsList.php and copy-paste
+  'TSODLULS_sort_radix8_count__short__mark2' => array(
+    'name' => 'TSODLULS_sort_radix8_count__short__mark2',
+    'function' => 'TSODLULS_sort_radix8_count__short__mark2',
+    'celltype' => 'short',
+    'size' => 'direct',
+    'comparison' => false,
+    'stable' => true,
+  ),
+just below, renaming as usual:
+  'TSODLULS_sort_radix8_count__short__MyMark' => array(//Here it must be a unique key
+    'name' => 'TSODLULS_sort_radix8_count__short__MyMark',//You can put anything here as long as you recognize your algorithm
+    'function' => 'TSODLULS_sort_radix8_count__short__MyMark',//Spell it correctly
+    'celltype' => 'short',//it works on short cells, there are direct, short and long cells
+    'size' => 'direct',//the number of bytes of the primitive datatypes will be added as a parameter to the function call
+    'comparison' => false,//no comparison function will be added as a parameter to the function call
+    'stable' => true,//this algorithm is a stable one, information only (no feature related yet)
+  ),
+
+4°)Fourth step
+Ready to test and benchmark your algorithm?
+Let's go!
+a)Test
+Open a terminal and cd in ./tests_benchmarks/test_custom/
+Run the command
+  php generateCustomTest.php
+and choose your algorithm.
+b)Benchmark
+Open a terminal and cd in ./tests_benchmarks/benchmark_custom/
+Run the command
+  php generateCustomBenchmark.php
+and choose your algorithm and its competitor.
+You can select 'y' when asked if you want to use macraffs.
+
+Et voilà ! Happy hacking :)
 
