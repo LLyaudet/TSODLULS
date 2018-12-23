@@ -54,10 +54,12 @@ int main(int argc, char *argv[]){
   uint64_t i;
 
   //arrays
-  size_t i_number_of_elements = 1;
+  //size_t i_number_of_elements = 1;
+  size_t i_number_of_elements = @iNumberOfElementsMin@;//Your choice
   //size_t i_number_of_elements_max = 1024;//2^10
-  size_t i_number_of_elements_max = 1048576;//2^20
+  //size_t i_number_of_elements_max = 1048576;//2^20
   //size_t i_number_of_elements_max = 33554432;//2^25
+  size_t i_number_of_elements_max = @iNumberOfElementsMax@;//Your choice
   uint64_t* arr_seeds64 = NULL;
   uint8_t* arr_ui_8_seed = NULL;
   uint8_t* arr_ui_8_result1 = NULL;

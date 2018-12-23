@@ -386,6 +386,22 @@ int TSODLULS_qsort_inlined__short(
 
 
 
+/**
+ * Sorting functions for short nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
+ * When the number of elements to sort is at most 5, we use insertion sort
+ * A variant with single memory allocation adapted to the max-depth.
+ * This is the current best algorithm and it is a stable one :)
+ */
+int TSODLULS_sort_radix8_count_insertion__short(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+);
+
+
+
 //------------------------------------------------------------------------------------
 //Comparing
 //------------------------------------------------------------------------------------

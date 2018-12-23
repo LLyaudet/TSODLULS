@@ -79,5 +79,45 @@ function getBChoiceForMacraff(){
 
 
 
+function getINumberOfElementsMin(){
+  do{
+    echo "What will be the minimum number of elements to sort for this benchmark ? [default: 1]\n";
+    $input = readline();
+    if($input === ''){
+      return 1;
+    }
+    if(ctype_digit($input)
+      && strlen($input) < 14
+      && ((int)$input) >= 1
+    ){
+      return (int)$input;
+    }
+    echo "Type a number between 1 and 9 999 999 999 999 or hit return for default value of 1.\n";
+  }
+  while(true);
+}//end function getINumberOfElementsMin()
+
+
+
+function getINumberOfElementsMax(){
+  do{
+    echo "The number of elements to be sorted will be multiplied by two at each round,",
+         " until it exceeds the maximum number.\n";
+    echo "What will be the maximum number of elements to sort for this benchmark ? [default: 1048576]\n";
+    $input = readline();
+    if($input === ''){
+      return 1048576;
+    }
+    if(ctype_digit($input)
+      && strlen($input) < 14
+      && ((int)$input) >= 1
+    ){
+      return (int)$input;
+    }
+    echo "Type a number between 1 and 9 999 999 999 999 or hit return for default value of 1048576.\n";
+  }
+  while(true);
+}//end function getINumberOfElementsMax()
+
 
 

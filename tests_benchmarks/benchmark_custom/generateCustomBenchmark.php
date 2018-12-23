@@ -40,9 +40,13 @@ if($arrDataAlgorithm2['celltype'] != 'direct'){
   $bWithMacraff2 = getBChoiceForMacraff();
 }
 
+$iNumberOfElementsMin = getINumberOfElementsMin();
+$iNumberOfElementsMax = getINumberOfElementsMax();
+
 echo $arrDataAlgorithm1['name'], ($bWithMacraff1 ? " with macraffs" : ""), " and ",
      $arrDataAlgorithm2['name'], ($bWithMacraff2 ? " with macraffs" : ""),
-     " will be compared.\n";
+     " will be compared with a number of elements",
+     " between $iNumberOfElementsMin and $iNumberOfElementsMax.\n";
 
 include('../generatingFunctions.php');
 
@@ -51,6 +55,17 @@ $sCustomBenchmark = file_get_contents('./benchmark_custom.c.tpl');
 if($sCustomBenchmark == ''){
   die("The template file benchmark_custom.c.tpl was not found, or couldn't be read, or was empty.\n");
 }
+
+if(strpos($sCustomBenchmark, '@iNumberOfElementsMin@') === false){
+  die("The template file benchmark_custom.c.tpl does not contain the insertion token @iNumberOfElementsMin@.\n");
+}
+$sCustomBenchmark = str_replace('@iNumberOfElementsMin@', (string)$iNumberOfElementsMin, $sCustomBenchmark);
+
+if(strpos($sCustomBenchmark, '@iNumberOfElementsMax@') === false){
+  die("The template file benchmark_custom.c.tpl does not contain the insertion token @iNumberOfElementsMax@.\n");
+}
+$sCustomBenchmark = str_replace('@iNumberOfElementsMax@', (string)$iNumberOfElementsMax, $sCustomBenchmark);
+
 foreach($arrSubTests as $sSubTest => $arrDataSubTest){
   if(strpos($sCustomBenchmark, 'PHP__INCLUDE_BENCHMARK_CODE_FOR_CHOSEN_ALGORITHMS__'.$sSubTest) === false){
     die("The template file benchmark_custom.c.tpl does not contain the insertion token for sorting ".$sSubTest.".\n");

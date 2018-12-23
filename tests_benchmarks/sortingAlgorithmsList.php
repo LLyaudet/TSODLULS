@@ -140,6 +140,14 @@ $arrArrSortingAlgorithms = array(
     'comparison' => false,
     'stable' => false,
   ),
+  'TSODLULS_sort_radix8_count_insertion__short' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion__short',
+    'function' => 'TSODLULS_sort_radix8_count_insertion__short',
+    'celltype' => 'short',
+    'size' => 'direct',
+    'comparison' => false,
+    'stable' => true,
+  ),
 );
 
 $iMinThreshold = 3;
