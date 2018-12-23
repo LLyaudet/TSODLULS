@@ -116,6 +116,14 @@ $arrArrSortingAlgorithms = array(
     'comparison' => false,
     'stable' => true,
   ),
+  'TSODLULS_sort_radix8_count__short__mark3' => array(
+    'name' => 'TSODLULS_sort_radix8_count__short__mark3',
+    'function' => 'TSODLULS_sort_radix8_count__short__mark3',
+    'celltype' => 'short',
+    'size' => 'direct',
+    'comparison' => false,
+    'stable' => true,
+  ),
   'TSODLULS_qsort_inlined__short' => array(
     'name' => 'TSODLULS_qsort_inlined__short',
     'function' => 'TSODLULS_qsort_inlined__short',

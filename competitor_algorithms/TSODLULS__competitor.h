@@ -69,6 +69,21 @@ int TSODLULS_sort_radix8_count__short__mark2(
 
 /**
  * Sorting functions for short nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
+ * A variant with single memory allocation adapted to the max-depth.
+ * It is slightly faster for 32 and 64 bits datatypes.
+ */
+int TSODLULS_sort_radix8_count__short__mark3(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+);
+
+
+
+/**
+ * Sorting functions for short nextified strings
  * A sorting algorithm for nextified strings based on radix sort with octets digits
  * and counting sort as a subroutine.
  * When the number of elements is below some threshold, it uses glibc qsort.
