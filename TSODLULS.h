@@ -392,6 +392,7 @@ int TSODLULS_qsort_inlined__short(
  * and counting sort as a subroutine.
  * When the number of elements to sort is at most 5, we use insertion sort
  * A variant with single memory allocation adapted to the max-depth.
+ * No insertion sort if there is more than 5 elements and it is 8 bits datatype.
  * This is the current best algorithm and it is a stable one :)
  */
 int TSODLULS_sort_radix8_count_insertion__short(

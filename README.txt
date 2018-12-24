@@ -476,3 +476,10 @@ You can select 'y' when asked if you want to use macraffs.
 
 Et voilà ! Happy hacking :)
 
+PS: If you use the custom benchmark, you will notice that when two algorithms are close,
+the second algorithm you choose is slightly faster (except for some range with int8 test).
+This is probably because of cache memory.
+That's what we noticed on our laptop but your mileage may vary.
+Anyway we suggest you launch the custom benchmark twice
+(choosing the two algorithms in both orders).
+
