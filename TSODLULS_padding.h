@@ -67,3 +67,28 @@ void TSODLULS_padd(
 
 
 
+/**
+ * Padding functions
+ * Decrease last lex padding multibyte
+ * (Done once at the end of a string for a lex node)
+ */
+int TSODLULS_decrease_last_lex_padding(
+  t_TSODLULS_sort_element* p_sort_element,
+  int8_t i_number_of_lex_padding_bytes,
+  int8_t i_number_of_contrelex_padding_bytes
+);
+
+
+
+/**
+ * Padding functions
+ * Increase last contrelex padding multibyte
+ * (Done once at the end of a string for a contrelex node)
+ */
+int TSODLULS_increase_last_contrelex_padding(
+  t_TSODLULS_sort_element* p_sort_element,
+  int8_t i_number_of_contrelex_padding_bytes
+);
+
+
+

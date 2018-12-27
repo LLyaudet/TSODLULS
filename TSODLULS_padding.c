@@ -162,3 +162,71 @@ void TSODLULS_padd(
 
 
 
+/**
+ * Padding functions
+ * Decrease last lex padding multibyte
+ * (Done once at the end of a string for a lex node)
+ */
+int TSODLULS_decrease_last_lex_padding(
+  t_TSODLULS_sort_element* p_sort_element,
+  int8_t i_number_of_lex_padding_bytes,
+  int8_t i_number_of_contrelex_padding_bytes
+){
+  int8_t i_offset = 0;
+  size_t i_base = p_sort_element->i_key_size - 1;//last byte
+  if(i_number_of_lex_padding_bytes == I_HALF_BYTE
+    //&& i_number_of_contrelex_padding_bytes == I_HALF_BYTE
+  ){
+    if(p_sort_element->s_key[i_base] < 16){
+      return I_ERROR__COULD_NOT_DECREASE_LEX_MULTIBYTE;
+    }
+    p_sort_element->s_key[i_base] -= 16;
+    return 0;
+  }
+
+  i_base -= i_number_of_contrelex_padding_bytes;
+  while(i_offset < i_number_of_lex_padding_bytes){
+    if(p_sort_element->s_key[i_base - i_offset] > 0){
+      --(p_sort_element->s_key[i_base - i_offset]);
+      return 0;
+    }
+    p_sort_element->s_key[i_base - i_offset] = 255;
+    ++i_offset;
+  }
+  return I_ERROR__COULD_NOT_DECREASE_LEX_MULTIBYTE;
+}//end function TSODLULS_decrease_last_lex_padding()
+
+
+
+/**
+ * Padding functions
+ * Increase last contrelex padding multibyte
+ * (Done once at the end of a string for a contrelex node)
+ */
+int TSODLULS_increase_last_contrelex_padding(
+  t_TSODLULS_sort_element* p_sort_element,
+  int8_t i_number_of_contrelex_padding_bytes
+){
+  int8_t i_offset = 0;
+  size_t i_base = p_sort_element->i_key_size - 1;//last byte
+  if(i_number_of_contrelex_padding_bytes == I_HALF_BYTE){
+    if((p_sort_element->s_key[i_base] % 16) == 15){
+      return I_ERROR__COULD_NOT_INCREASE_CONTRELEX_MULTIBYTE;
+    }
+    ++p_sort_element->s_key[i_base];
+    return 0;
+  }
+
+  while(i_offset < i_number_of_contrelex_padding_bytes){
+    if(p_sort_element->s_key[i_base - i_offset] < 255){
+      ++(p_sort_element->s_key[i_base - i_offset]);
+      return 0;
+    }
+    p_sort_element->s_key[i_base - i_offset] = 0;
+    ++i_offset;
+  }
+  return I_ERROR__COULD_NOT_INCREASE_CONTRELEX_MULTIBYTE;
+}//end function TSODLULS_decrease_last_lex_padding()
+
+
+

@@ -21,14 +21,24 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 include('../sortingAlgorithmsList.php');
 
-function getChoiceForAlgorithm($sMessage){
+function getChoiceForAlgorithm($sMessage, $bNotShortCells = false){
   global $arrArrSortingAlgorithms;
+
+  $arrArrSortingAlgorithmsFiltered = $arrArrSortingAlgorithms;
+  if($bNotShortCells){
+    foreach($arrArrSortingAlgorithmsFiltered as $key => $arr){
+      if($arr['celltype'] === 'short'){
+        unset($arrArrSortingAlgorithmsFiltered[$key]);
+      }
+    }
+  }
+
   $iChosenAlgorithm = 0;
   do{
     echo $sMessage;
 
     $i = 0;
-    foreach($arrArrSortingAlgorithms as $sName => $arrDataAlgorithm){
+    foreach($arrArrSortingAlgorithmsFiltered as $sName => $arrDataAlgorithm){
       ++$i;
       echo "[$i] ", $sName, "\n";
     }
@@ -49,7 +59,7 @@ function getChoiceForAlgorithm($sMessage){
   while($iChosenAlgorithm === 0);
 
   $i = 0;
-  foreach($arrArrSortingAlgorithms as $sName => $arrDataAlgorithm){
+  foreach($arrArrSortingAlgorithmsFiltered as $sName => $arrDataAlgorithm){
     ++$i;
     if($i === $iChosenAlgorithm){
       break;//$sName and $arrData are correct

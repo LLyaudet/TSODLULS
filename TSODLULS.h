@@ -54,6 +54,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 //-sorting parameters errors
 #define I_ERROR__MAX_LENGTH_SHOULD_BE_POSITIVE 200
 #define I_ERROR__MAX_LENGTH_SHOULD_BE_AT_MOST_8 201
+//padding increment/decrement on lex or contrelex node errors
+#define I_ERROR__COULD_NOT_DECREASE_LEX_MULTIBYTE 300
+#define I_ERROR__COULD_NOT_INCREASE_CONTRELEX_MULTIBYTE 301
 //Negative error codes are user defined
 
 
@@ -652,6 +655,32 @@ void TSODLULS_padd(
   int8_t i_number_of_contrelex_padding_bytes,
   int8_t i_current_offset
 );
+
+
+
+/**
+ * Padding functions
+ * Decrease last lex padding multibyte
+ * (Done once at the end of a string for a lex node)
+ */
+int TSODLULS_decrease_last_lex_padding(
+  t_TSODLULS_sort_element* p_sort_element,
+  int8_t i_number_of_lex_padding_bytes,
+  int8_t i_number_of_contrelex_padding_bytes
+);
+
+
+
+/**
+ * Padding functions
+ * Increase last contrelex padding multibyte
+ * (Done once at the end of a string for a contrelex node)
+ */
+int TSODLULS_increase_last_contrelex_padding(
+  t_TSODLULS_sort_element* p_sort_element,
+  int8_t i_number_of_contrelex_padding_bytes
+);
+
 
 
 #include "TSODLULS__macro.h"
