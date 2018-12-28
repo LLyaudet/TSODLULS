@@ -174,6 +174,10 @@ int TSODLULS_decrease_last_lex_padding(
 ){
   int8_t i_offset = 0;
   size_t i_base = p_sort_element->i_key_size - 1;//last byte
+  if(i_number_of_lex_padding_bytes == 0){//no padding, nothing to do
+    return 0;
+  }
+
   if(i_number_of_lex_padding_bytes == I_HALF_BYTE
     //&& i_number_of_contrelex_padding_bytes == I_HALF_BYTE
   ){
@@ -209,6 +213,10 @@ int TSODLULS_increase_last_contrelex_padding(
 ){
   int8_t i_offset = 0;
   size_t i_base = p_sort_element->i_key_size - 1;//last byte
+  if(i_number_of_contrelex_padding_bytes == 0){//no padding, nothing to do
+    return 0;
+  }
+
   if(i_number_of_contrelex_padding_bytes == I_HALF_BYTE){
     if((p_sort_element->s_key[i_base] % 16) == 15){
       return I_ERROR__COULD_NOT_INCREASE_CONTRELEX_MULTIBYTE;

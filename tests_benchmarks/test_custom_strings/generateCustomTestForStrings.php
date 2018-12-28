@@ -27,6 +27,10 @@ $sMessage = "Hello, please choose an algorithm to test\n"
 
 $arrDataAlgorithm = getChoiceForAlgorithm($sMessage, true);
 
+$iMinLengthOfString = getIMinLengthOfString();
+$iMaxLengthOfString = getIMaxLengthOfString();
+$iLengthOfCommonPrefix = getILengthOfCommonPrefix($iMinLengthOfString);
+
 include('../generatingFunctionsString.php');
 
 echo "Generating file test_custom_strings.c\n";
@@ -34,6 +38,23 @@ $sCustomTest = file_get_contents('./test_custom_strings.c.tpl');
 if($sCustomTest == ''){
   die("The template file test_custom_strings.c.tpl was not found, or couldn't be read, or was empty.\n");
 }
+
+if(strpos($sCustomTest, '@iMinLengthOfString@') === false){
+  die("The template file test_custom_strings.c.tpl does not contain the insertion token @iMinLengthOfString@.\n");
+}
+$sCustomTest = str_replace('@iMinLengthOfString@', (string)$iMinLengthOfString, $sCustomTest);
+
+if(strpos($sCustomTest, '@iMaxLengthOfString@') === false){
+  die("The template file test_custom_strings.c.tpl does not contain the insertion token @iMaxLengthOfString@.\n");
+}
+$sCustomTest = str_replace('@iMaxLengthOfString@', (string)$iMaxLengthOfString, $sCustomTest);
+
+if(strpos($sCustomTest, '@iLengthOfCommonPrefix@') === false){
+  die("The template file test_custom_strings.c.tpl does not contain the insertion token @iLengthOfCommonPrefix@.\n");
+}
+$sCustomTest = str_replace('@iLengthOfCommonPrefix@', (string)$iLengthOfCommonPrefix, $sCustomTest);
+
+
 foreach($arrSubTests as $sSubTest => $arrDataSubTest){
   if(strpos($sCustomTest, 'PHP__INCLUDE_TEST_CODE_FOR_CHOSEN_ALGORITHM__'.$sSubTest) === false){
     die("The template file test_custom_strings.c.tpl does not contain the insertion token for sorting ".$sSubTest.".\n");

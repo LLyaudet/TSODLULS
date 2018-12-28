@@ -48,6 +48,17 @@ int main(int argc, char *argv[]){
   t_TSODLULS_oString** arr_p_os_strings_result2 = NULL;
   t_TSODLULS_sort_element* arr_cells = NULL;
 
+  size_t i_min_length_of_string = @iMinLengthOfString@;
+  size_t i_max_length_of_string = @iMaxLengthOfString@;
+  size_t i_length_of_common_prefix = @iLengthOfCommonPrefix@;
+  size_t i_length_padding_multiplicator = 1;
+  size_t i_length_padding_increment = 0;
+  int8_t i_number_of_lex_padding_bytes_before = 0;
+  int8_t i_number_of_contrelex_padding_bytes_before = 0;
+  int8_t i_number_of_lex_padding_bytes_after = 0;
+  int8_t i_number_of_contrelex_padding_bytes_after = 0;
+  t_TSODLULS_oString os_common_prefix;
+
   //copy-pasted from TSODLULS__macro.h
   union ieee754_float TSODLULS_macraff_ieee754_float;
   union ieee754_double TSODLULS_macraff_ieee754_double;
@@ -89,6 +100,38 @@ int main(int argc, char *argv[]){
       printf("This is not the expected value. Results may have more bias.\n");
     }
 
+    if(i_min_length_of_string == 0){
+      /*
+      Not needed, because of depth 1 of the tree structured order definition (one lex node),
+      it is sufficient to add a starting byte set to 0 (string of length 0) or 1 (longer string)
+      i_number_of_lex_padding_bytes_before = -1;
+      i_number_of_contrelex_padding_bytes_before = -1;
+      i_length_padding_multiplicator += 1;
+      */
+      i_length_padding_increment = 1;
+    }
+
+    if(i_min_length_of_string != i_max_length_of_string){
+      i_number_of_lex_padding_bytes_after = -1;
+      i_number_of_contrelex_padding_bytes_after = -1;
+      i_length_padding_multiplicator += 1;
+    }
+
+    if(i_length_of_common_prefix > 0){
+      os_common_prefix.s_string = calloc(i_length_of_common_prefix, sizeof(char));
+      if(os_common_prefix.s_string == NULL){
+        i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
+        break;
+      }
+      os_common_prefix.i_string_size = 0;
+      os_common_prefix.i_allocated_size = i_length_of_common_prefix;
+      //and filling each string
+      for(j = 0; j < i_length_of_common_prefix; ++j){
+        os_common_prefix.s_string[j] = get_random_printable_ascii_char();
+        ++(os_common_prefix.i_string_size);
+      }
+    }
+
     arr_os_strings_seed = calloc(i_number_of_elements, sizeof(t_TSODLULS_oString));
     if(arr_os_strings_seed == NULL){
       i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
@@ -105,8 +148,15 @@ int main(int argc, char *argv[]){
       arr_os_strings_seed[i].i_string_size = 0;
       arr_os_strings_seed[i].i_allocated_size = 128;
       //and filling each string
-      k = 100 + (rand() % 29);
-      for(j = 0; j < k; ++j){
+      for(j = 0; j < i_length_of_common_prefix; ++j){
+        arr_os_strings_seed[i].s_string[j] = os_common_prefix.s_string[j];
+        ++(arr_os_strings_seed[i].i_string_size);
+      }
+      k = i_min_length_of_string;
+      if(i_max_length_of_string > i_min_length_of_string){
+        k += (rand() % (i_max_length_of_string - i_min_length_of_string + 1));
+      }
+      for(j = arr_os_strings_seed[i].i_string_size; j < k; ++j){
         arr_os_strings_seed[i].s_string[j] = get_random_printable_ascii_char();
         ++(arr_os_strings_seed[i].i_string_size);
       }

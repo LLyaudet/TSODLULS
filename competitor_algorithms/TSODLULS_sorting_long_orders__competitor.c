@@ -96,19 +96,28 @@ int TSODLULS_sort_radix8_count__mark1(t_TSODLULS_sort_element* arr_elements, siz
 
     if(i_number_of_distinct_bytes == 1){
       ++current_instance.i_depth;
-      //if we are done sorting this instance and all deeper subinstances
-      if(arr_elements[current_instance.i_offset_first].i_key_size <= current_instance.i_depth){
-        if(current_instance.b_copy){
+      if(current_instance.b_copy){
+        //if we are done sorting this instance and all deeper subinstances
+        if(arr_elements_copy[current_instance.i_offset_first].i_key_size <= current_instance.i_depth){
           memcpy(
-            &(arr_elements[current_instance.i_offset_first]),
-            &(arr_elements_copy[current_instance.i_offset_first]),
-            (current_instance.i_offset_last - current_instance.i_offset_first + 1) * sizeof(t_TSODLULS_sort_element)
+              &(arr_elements[current_instance.i_offset_first]),
+              &(arr_elements_copy[current_instance.i_offset_first]),
+              (current_instance.i_offset_last - current_instance.i_offset_first + 1) * sizeof(t_TSODLULS_sort_element)
           );
+          if(i_current_instance == 0){
+            break;
+          }
+          current_instance = arr_instances[--i_current_instance];
         }
-        if(i_current_instance == 0){
-          break;
+      }
+      else{
+        //if we are done sorting this instance and all deeper subinstances
+        if(arr_elements[current_instance.i_offset_first].i_key_size <= current_instance.i_depth){
+          if(i_current_instance == 0){
+            break;
+          }
+          current_instance = arr_instances[--i_current_instance];
         }
-        current_instance = arr_instances[--i_current_instance];
       }
       continue;
     }

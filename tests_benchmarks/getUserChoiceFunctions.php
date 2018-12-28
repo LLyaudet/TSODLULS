@@ -131,3 +131,65 @@ function getINumberOfElementsMax(){
 
 
 
+function getIMinLengthOfString(){
+  do{
+    echo "What will be the minimum length of strings to sort for this test/benchmark ? [default: 1] (0 is a valid choice)\n";
+    $input = readline();
+    if($input === ''){
+      return 1;
+    }
+    if(ctype_digit($input)
+      && strlen($input) < 8
+    ){
+      return (int)$input;
+    }
+    echo "Type a number between 0 and 9 999 999 or hit return for default value of 1.\n";
+  }
+  while(true);
+}//end function getIMinLengthOfString()
+
+
+
+function getIMaxLengthOfString(){
+  do{
+    echo "What will be the maximum length of strings to sort for this test/benchmark ? [default: 128]\n";
+    $input = readline();
+    if($input === ''){
+      return 128;
+    }
+    if(ctype_digit($input)
+      && strlen($input) < 8
+      && ((int)$input) >= 1
+    ){
+      return (int)$input;
+    }
+    echo "Type a number between 1 and 9 999 999 or hit return for default value of 128.\n";
+  }
+  while(true);
+}//end function getIMaxLengthOfString()
+
+
+
+function getILengthOfCommonPrefix($iMinLengthOfString){
+  if($iMinLengthOfString == 0){
+    return 0;
+  }
+  do{
+    echo "What will be the length of the common prefix of strings to sort for this test/benchmark ? [default: 0]\n";
+    echo "It must be at most the minimum length of $iMinLengthOfString that you chose.\n";
+    $input = readline();
+    if($input === ''){
+      return 0;
+    }
+    if(ctype_digit($input)
+      && strlen($input) < 8
+      && ((int)$input) <= $iMinLengthOfString
+    ){
+      return (int)$input;
+    }
+    echo "Type a number between 0 and $iMinLengthOfString or hit return for default value of 0.\n";
+  }
+  while(true);
+}//end function getILengthOfCommonPrefix()
+
+

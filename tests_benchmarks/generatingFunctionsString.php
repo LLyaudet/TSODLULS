@@ -62,24 +62,33 @@ function getInitFragmentForLongCells($sSubTest, $iResult, $bMacraff){
     if(i_result != 0){
       break;
     }
+    //printf("Avant\n");
     for(i = 0; i < i_number_of_elements; ++i){
       TSODLULS_element_allocate_space_for_key__macraff(
         i_result,
         &(arr_cells[i]),
-        arr_os_strings_seed[i].i_string_size * 2
+        (arr_os_strings_seed[i].i_string_size * i_length_padding_multiplicator) + i_length_padding_increment
       );
       if(i_result != 0){
         break;
+      }
+      if(i_min_length_of_string == 0){
+        if(arr_os_strings_seed[i].i_string_size == 0){
+          arr_cells[i].s_key[arr_cells[i].i_key_size++] = 0;
+        }
+        else{
+          arr_cells[i].s_key[arr_cells[i].i_key_size++] = 1;
+        }
       }
       for(j = 0; j < arr_os_strings_seed[i].i_string_size; ++j){
         TSODLULS_add_bytes_to_key_from_uint8__macraff(
             i_result,
             &(arr_cells[i]),
             '.$sGetByte.',
-            0,
-            0,
-            -1,//half byte lex padding after
-            -1,//half byte contrelex padding after
+            i_number_of_lex_padding_bytes_before,
+            i_number_of_contrelex_padding_bytes_before,
+            i_number_of_lex_padding_bytes_after,
+            i_number_of_contrelex_padding_bytes_after,
             1,
             0
         );
@@ -92,10 +101,14 @@ function getInitFragmentForLongCells($sSubTest, $iResult, $bMacraff){
       }
       i_result = TSODLULS_decrease_last_lex_padding(
         &(arr_cells[i]),
-        -1,
-        -1
+        i_number_of_lex_padding_bytes_after,
+        i_number_of_contrelex_padding_bytes_after
       );
       arr_cells[i].p_object = &(arr_os_strings_seed[i]);
+      /*
+      print_bits_for_key(&(arr_cells[i]));
+      print_bits_for_string(&(arr_os_strings_seed[i]));
+      */
     }
     if(i_result != 0){
       break;
@@ -107,22 +120,31 @@ function getInitFragmentForLongCells($sSubTest, $iResult, $bMacraff){
     if(i_result != 0){
       break;
     }
+    //printf("Avant\n");
     for(i = 0; i < i_number_of_elements; ++i){
       i_result = TSODLULS_element_allocate_space_for_key(
         &(arr_cells[i]),
-        arr_os_strings_seed[i].i_string_size * 2
+        (arr_os_strings_seed[i].i_string_size * i_length_padding_multiplicator) + i_length_padding_increment
       );
       if(i_result != 0){
         break;
+      }
+      if(i_min_length_of_string == 0){
+        if(arr_os_strings_seed[i].i_string_size == 0){
+          arr_cells[i].s_key[arr_cells[i].i_key_size++] = 0;
+        }
+        else{
+          arr_cells[i].s_key[arr_cells[i].i_key_size++] = 1;
+        }
       }
       for(j = 0; j < arr_os_strings_seed[i].i_string_size; ++j){
         i_result = TSODLULS_add_bytes_to_key_from_uint8(
             &(arr_cells[i]),
             '.$sGetByte.',
-            0,
-            0,
-            -1,//half byte lex padding after
-            -1,//half byte contrelex padding after
+            i_number_of_lex_padding_bytes_before,
+            i_number_of_contrelex_padding_bytes_before,
+            i_number_of_lex_padding_bytes_after,
+            i_number_of_contrelex_padding_bytes_after,
             1,
             0
         );
@@ -135,10 +157,16 @@ function getInitFragmentForLongCells($sSubTest, $iResult, $bMacraff){
       }
       i_result = TSODLULS_decrease_last_lex_padding(
         &(arr_cells[i]),
-        -1,
-        -1
+        i_number_of_lex_padding_bytes_after,
+        i_number_of_contrelex_padding_bytes_after
       );
       arr_cells[i].p_object = &(arr_os_strings_seed[i]);
+      /*
+      print_bits_for_key(&(arr_cells[i]));
+      print_bits_for_string(&(arr_os_strings_seed[i]));
+      print_bits_for(&(arr_cells[i].i_key_size), 8);
+      printf("\n");
+      */
     }
     if(i_result != 0){
       break;
@@ -216,8 +244,14 @@ function getPostFragmentForLongCells($sSubTest, $iResult, $bMacraff){
   global $arrSubTests;
 
   return '
+    //printf("Apres\n");
     for(i = 0; i < i_number_of_elements; ++i){
       arr_'.$arrSubTests[$sSubTest]['array_substring'].'_result'.$iResult.'[i] = arr_cells[i].p_object;
+      /*
+      print_bits_for_key(&(arr_cells[i]));
+      print_bits_for_string(arr_'.$arrSubTests[$sSubTest]['array_substring'].'_result'.$iResult.'[i]);
+      printf("\n");
+      */
     }
     TSODLULS_free_keys_in_array_of_elements'.($bMacraff ? '__macraff' : '').'(arr_cells, i_number_of_elements);
     TSODLULS_free(arr_cells);
@@ -263,10 +297,19 @@ function getTestingFragmentFor($arrDataAlgorithm, $sSubTest, $bMacraff){
   $sFragment .= '
     for(i = 0; i < i_number_of_elements; ++i){
       if(arr_'.$arrSubTests[$sSubTest]['array_substring'].'_result2[i] != arr_'.$arrSubTests[$sSubTest]['array_substring'].'_result1[i]){
-        printf("qsort direct and '.$arrDataAlgorithm['name']
+        //If the strings are not the same object, we must check wether they contain the same string
+        if(compare_p_os_'.$sSubTest.'(
+              &(arr_'.$arrSubTests[$sSubTest]['array_substring'].'_result2[i]),
+              &(arr_'.$arrSubTests[$sSubTest]['array_substring'].'_result1[i])
+           ) != 0
+        ){
+          print_bits_for_string(arr_'.$arrSubTests[$sSubTest]['array_substring'].'_result1[i]);
+          print_bits_for_string(arr_'.$arrSubTests[$sSubTest]['array_substring'].'_result2[i]);
+          printf("qsort direct and '.$arrDataAlgorithm['name']
                .($bMacraff ? ' (macraff)' : '').' gave different results ('.$sSubTest.')\n");
-        i_result = -1;
-        break;
+          i_result = -1;
+          break;
+        }
       }
     }
     if(i_result != 0){

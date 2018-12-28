@@ -361,3 +361,51 @@ int compare_p_os_string_with_collation(const void *a, const void *b){
 
 
 
+void print_bits_for_string(t_TSODLULS_oString* p_os_string){
+  unsigned char* p_data_char = NULL;
+  if(p_os_string->s_string == NULL){
+    printf("String is null.\n");
+    return;
+  }
+
+  p_data_char = (unsigned char*) p_os_string->s_string;
+  for(size_t i = 0; i < p_os_string->i_string_size; ++i){
+    for(int j = 7; j >= 0; --j){
+      if((p_data_char[i] >> j) & 1){
+        printf("1");
+      }
+      else{
+        printf("0");
+      }
+    }
+    printf(" ");
+  }
+  printf("\n");
+}
+
+
+
+void print_bits_for_key(t_TSODLULS_sort_element* p_sort_element){
+  unsigned char* p_data_char = NULL;
+  if(p_sort_element->s_key == NULL){
+    printf("Key is null.\n");
+    return;
+  }
+
+  p_data_char = (unsigned char*) p_sort_element->s_key;
+  for(size_t i = 0; i < p_sort_element->i_key_size; ++i){
+    for(int j = 7; j >= 0; --j){
+      if((p_data_char[i] >> j) & 1){
+        printf("1");
+      }
+      else{
+        printf("0");
+      }
+    }
+    printf(" ");
+  }
+  printf("\n");
+}
+
+
+
