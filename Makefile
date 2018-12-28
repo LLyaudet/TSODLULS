@@ -250,6 +250,17 @@ build-benchmark-custom: ./tests_benchmarks/benchmark_custom/benchmark_custom.exe
 ./tests_benchmarks/benchmark_custom/benchmark_custom.o: $(HEADERS-COMPETITOR) ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/benchmark_custom/benchmark_custom.c
 	$(CC) -O3 -c ./tests_benchmarks/benchmark_custom/benchmark_custom.c -o ./tests_benchmarks/benchmark_custom/benchmark_custom.o
 
+#Benchmark custom for strings
+build-benchmark-custom-strings: ./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.exe
+
+#static linking requires the library to come after the test object
+./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.exe: ./bin/libTSODLULS_with_competitor_algorithms_$(VERSION).a ./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.o
+	$(CC) -static -L./bin/ ./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.o -lTSODLULS_with_competitor_algorithms_$(VERSION) -o ./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.exe
+
+./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.o: $(HEADERS-COMPETITOR) ./tests_benchmarks/test_functions.c ./tests_benchmarks/test_macros.c ./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.c
+	$(CC) -O3 -c ./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.c -o ./tests_benchmarks/benchmark_custom_strings/benchmark_custom_strings.o
+
+
 
 #-----------------------------------------------------------
 #Clean
@@ -262,3 +273,7 @@ clean:
 	rm -f ./tests_benchmarks/test_custom_strings/*.o ./tests_benchmarks/test_custom_strings/*.exe ./tests_benchmarks/test_custom_strings/*.test_result ./tests_benchmarks/test_custom_strings/*.c
 	rm -f ./tests_benchmarks/benchmark1/*.o ./tests_benchmarks/benchmark1/*.exe ./tests_benchmarks/benchmark1/*.test_result
 	rm -f ./tests_benchmarks/benchmark_custom/*.o ./tests_benchmarks/benchmark_custom/*.exe ./tests_benchmarks/benchmark_custom/*.test_result ./tests_benchmarks/benchmark_custom/*.c
+	rm -f ./tests_benchmarks/benchmark_custom_strings/*.o ./tests_benchmarks/benchmark_custom_strings/*.exe ./tests_benchmarks/benchmark_custom_strings/*.test_result ./tests_benchmarks/benchmark_custom_strings/*.c
+
+
+

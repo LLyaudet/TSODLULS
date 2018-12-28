@@ -125,7 +125,6 @@ int main(int argc, char *argv[]){
       }
       os_common_prefix.i_string_size = 0;
       os_common_prefix.i_allocated_size = i_length_of_common_prefix;
-      //and filling each string
       for(j = 0; j < i_length_of_common_prefix; ++j){
         os_common_prefix.s_string[j] = get_random_printable_ascii_char();
         ++(os_common_prefix.i_string_size);
@@ -140,22 +139,23 @@ int main(int argc, char *argv[]){
 
     //allocating the strings
     for(i = 0; i < i_number_of_elements; ++i){
-      arr_os_strings_seed[i].s_string = calloc(128, sizeof(char));
+      k = i_min_length_of_string;
+      if(i_max_length_of_string > i_min_length_of_string){
+        k += (rand() % (i_max_length_of_string - i_min_length_of_string + 1));
+      }
+      arr_os_strings_seed[i].s_string = calloc(k, sizeof(char));
       if(arr_os_strings_seed[i].s_string == NULL){
         i_result = I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
         break;
       }
       arr_os_strings_seed[i].i_string_size = 0;
-      arr_os_strings_seed[i].i_allocated_size = 128;
+      arr_os_strings_seed[i].i_allocated_size = k;
       //and filling each string
       for(j = 0; j < i_length_of_common_prefix; ++j){
         arr_os_strings_seed[i].s_string[j] = os_common_prefix.s_string[j];
         ++(arr_os_strings_seed[i].i_string_size);
       }
-      k = i_min_length_of_string;
-      if(i_max_length_of_string > i_min_length_of_string){
-        k += (rand() % (i_max_length_of_string - i_min_length_of_string + 1));
-      }
+
       for(j = arr_os_strings_seed[i].i_string_size; j < k; ++j){
         arr_os_strings_seed[i].s_string[j] = get_random_printable_ascii_char();
         ++(arr_os_strings_seed[i].i_string_size);
@@ -224,6 +224,11 @@ int main(int argc, char *argv[]){
       TSODLULS_free_key__macraff(&(arr_cells[i]));
     }
     TSODLULS_free(arr_cells);
+  }
+  if(i_length_of_common_prefix > 0
+    && os_common_prefix.s_string != NULL
+  ){
+    TSODLULS_free(os_common_prefix.s_string);
   }
 
   return i_result;

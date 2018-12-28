@@ -35,16 +35,8 @@ foreach($arrSLines as $i => $sLine){
 }
 
 $arrTests = array(
-  'uint8' => 2,
-  'uint16' => 4,
-  'uint32' => 6,
-  'uint64' => 8,
-  'int8' => 10,
-  'int16' => 12,
-  'int32' => 14,
-  'int64' => 16,
-  'float' => 18,
-  'double' => 20,
+  'string without collation' => 2,
+  'string with collation' => 4,
 );
 
 foreach($arrTests as $sTest => $iFirstColumn){
