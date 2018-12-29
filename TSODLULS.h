@@ -344,6 +344,19 @@ int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_n
 
 
 
+/**
+ * Sorting functions for long nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
+ * When the number of elements to sort is at most: 5 for initial sort or 2 for radix sequel, we use insertion sort
+ */
+int TSODLULS_sort_radix8_count_insertion(
+  t_TSODLULS_sort_element* arr_elements,
+  size_t i_number_of_elements
+);
+
+
+
 //------------------------------------------------------------------------------------
 //Sorting short orders
 //------------------------------------------------------------------------------------

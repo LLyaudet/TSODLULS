@@ -180,6 +180,30 @@ $arrArrSortingAlgorithms = array(
     'comparison' => false,
     'stable' => true,
   ),
+  'TSODLULS_sort_radix8_count_insertion' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion',
+    'function' => 'TSODLULS_sort_radix8_count_insertion',
+    'celltype' => 'long',
+    'size' => false,
+    'comparison' => false,
+    'stable' => true,
+  ),
+  'TSODLULS_sort_radix8_count_insertion__mark1' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion__mark1',
+    'function' => 'TSODLULS_sort_radix8_count_insertion__mark1',
+    'celltype' => 'long',
+    'size' => false,
+    'comparison' => false,
+    'stable' => true,
+  ),
+  'TSODLULS_sort_radix8_count_insertion__mark2' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion__mark2',
+    'function' => 'TSODLULS_sort_radix8_count_insertion__mark2',
+    'celltype' => 'long',
+    'size' => false,
+    'comparison' => false,
+    'stable' => true,
+  ),
 );
 
 $iMinThreshold = 3;
