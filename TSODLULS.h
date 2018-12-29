@@ -103,6 +103,14 @@ typedef struct TSODLULS_radix_instance {
 
 
 
+typedef struct TSODLULS_radix_instance__no_copy {
+  size_t i_offset_first;
+  size_t i_offset_last;
+  size_t i_depth;
+} t_TSODLULS_radix_instance__no_copy;
+
+
+
 typedef struct {
   t_TSODLULS_sort_element* p_low;
   t_TSODLULS_sort_element* p_high;

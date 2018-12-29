@@ -172,6 +172,14 @@ $arrArrSortingAlgorithms = array(
     'comparison' => false,
     'stable' => true,
   ),
+  'TSODLULS_sort_radix8_count_insertion__short__mark4' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark4',
+    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark4',
+    'celltype' => 'short',
+    'size' => 'direct',
+    'comparison' => false,
+    'stable' => true,
+  ),
 );
 
 $iMinThreshold = 3;
