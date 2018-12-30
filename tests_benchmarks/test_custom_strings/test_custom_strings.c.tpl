@@ -58,11 +58,14 @@ int main(int argc, char *argv[]){
   int8_t i_number_of_lex_padding_bytes_after = 0;
   int8_t i_number_of_contrelex_padding_bytes_after = 0;
   t_TSODLULS_oString os_common_prefix;
+  uint8_t i_current_bit_level_offset = 0;
 
   //copy-pasted from TSODLULS__macro.h
   union ieee754_float TSODLULS_macraff_ieee754_float;
   union ieee754_double TSODLULS_macraff_ieee754_double;
   uint8_t TSODLULS_macraff_ui8;
+  uint8_t TSODLULS_macraff_ui8_2;
+  uint8_t TSODLULS_macraff_ui8_3;
   uint16_t TSODLULS_macraff_ui16;
   uint32_t TSODLULS_macraff_ui32;
   uint64_t TSODLULS_macraff_ui64;

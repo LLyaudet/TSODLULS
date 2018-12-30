@@ -27,6 +27,11 @@ $sMessage = "Hello, please choose an algorithm to test\n"
 
 $arrDataAlgorithm = getChoiceForAlgorithm($sMessage, true);
 
+$bWithBitLevelPadding = false;
+if($arrDataAlgorithm['celltype'] === 'long'){
+  $bWithBitLevelPadding = getBChoiceForBitLevelPadding();
+}
+
 $iMinLengthOfString = getIMinLengthOfString();
 $iMaxLengthOfString = getIMaxLengthOfString();
 $iLengthOfCommonPrefix = getILengthOfCommonPrefix($iMinLengthOfString);
@@ -59,9 +64,9 @@ foreach($arrSubTests as $sSubTest => $arrDataSubTest){
   if(strpos($sCustomTest, 'PHP__INCLUDE_TEST_CODE_FOR_CHOSEN_ALGORITHM__'.$sSubTest) === false){
     die("The template file test_custom_strings.c.tpl does not contain the insertion token for sorting ".$sSubTest.".\n");
   }
-  $sFragment = getTestingFragmentFor($arrDataAlgorithm, $sSubTest, false);
+  $sFragment = getTestingFragmentFor($arrDataAlgorithm, $sSubTest, false, $bWithBitLevelPadding);
   if($arrDataAlgorithm['celltype'] !== 'direct'){
-    $sFragment .= "\n    ".getTestingFragmentFor($arrDataAlgorithm, $sSubTest, true);
+    $sFragment .= "\n    ".getTestingFragmentFor($arrDataAlgorithm, $sSubTest, true, $bWithBitLevelPadding);
   }
   $sCustomTest = str_replace('PHP__INCLUDE_TEST_CODE_FOR_CHOSEN_ALGORITHM__'.$sSubTest, $sFragment, $sCustomTest);
 }

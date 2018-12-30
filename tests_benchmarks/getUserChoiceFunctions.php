@@ -193,3 +193,21 @@ function getILengthOfCommonPrefix($iMinLengthOfString){
 }//end function getILengthOfCommonPrefix()
 
 
+
+function getBChoiceForBitLevelPadding(){
+  do{
+    echo "Would-you like to test/benchmark it using bit-level padding ? [y/n]\n";
+    $input = readline();
+    if($input === 'y'){
+      return true;
+    }
+    if($input === 'n'){
+      return false;
+    }
+    echo "Type 'y' or 'n' please.\n";
+  }
+  while(true);
+}//end function getBChoiceForBitLevelPadding()
+
+
+

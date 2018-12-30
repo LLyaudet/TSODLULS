@@ -30,6 +30,11 @@ if($arrDataAlgorithm1['celltype'] != 'direct'){
   $bWithMacraff1 = getBChoiceForMacraff();
 }
 
+$bWithBitLevelPadding1 = false;
+if($arrDataAlgorithm1['celltype'] === 'long'){
+  $bWithBitLevelPadding1 = getBChoiceForBitLevelPadding();
+}
+
 $sMessage = "Hello, please choose a second algorithm to benchmark\n"
            ." (input the number before the name and press return).\n\n";
 
@@ -40,14 +45,19 @@ if($arrDataAlgorithm2['celltype'] != 'direct'){
   $bWithMacraff2 = getBChoiceForMacraff();
 }
 
+$bWithBitLevelPadding2 = false;
+if($arrDataAlgorithm2['celltype'] === 'long'){
+  $bWithBitLevelPadding2 = getBChoiceForBitLevelPadding();
+}
+
 $iNumberOfElementsMin = getINumberOfElementsMin();
 $iNumberOfElementsMax = getINumberOfElementsMax();
 $iMinLengthOfString = getIMinLengthOfString();
 $iMaxLengthOfString = getIMaxLengthOfString();
 $iLengthOfCommonPrefix = getILengthOfCommonPrefix($iMinLengthOfString);
 
-echo $arrDataAlgorithm1['name'], ($bWithMacraff1 ? " with macraffs" : ""), " and ",
-     $arrDataAlgorithm2['name'], ($bWithMacraff2 ? " with macraffs" : ""),
+echo $arrDataAlgorithm1['name'], ($bWithMacraff1 ? " with macraffs" : ""), ($bWithBitLevelPadding1 ? " with bit level padding" : ""), " and ",
+     $arrDataAlgorithm2['name'], ($bWithMacraff2 ? " with macraffs" : ""), ($bWithBitLevelPadding2 ? " with bit level padding" : ""),
      " will be compared with a number of strings",
      " between $iNumberOfElementsMin and $iNumberOfElementsMax.\n",
      "Each string will have length between $iMinLengthOfString and $iMaxLengthOfString,",
@@ -90,8 +100,8 @@ foreach($arrSubTests as $sSubTest => $arrDataSubTest){
   if(strpos($sCustomBenchmark, 'PHP__INCLUDE_BENCHMARK_CODE_FOR_CHOSEN_ALGORITHMS__'.$sSubTest) === false){
     die("The template file benchmark_custom_strings.c.tpl does not contain the insertion token for sorting ".$sSubTest.".\n");
   }
-  $sFragment = getComparingFragmentFor($arrDataAlgorithm1, $sSubTest, $bWithMacraff1)
-         ."\n".getComparingFragmentFor($arrDataAlgorithm2, $sSubTest, $bWithMacraff2);
+  $sFragment = getComparingFragmentFor($arrDataAlgorithm1, $sSubTest, $bWithMacraff1, $bWithBitLevelPadding1)
+         ."\n".getComparingFragmentFor($arrDataAlgorithm2, $sSubTest, $bWithMacraff2, $bWithBitLevelPadding2);
   $sCustomBenchmark = str_replace('PHP__INCLUDE_BENCHMARK_CODE_FOR_CHOSEN_ALGORITHMS__'.$sSubTest, $sFragment, $sCustomBenchmark);
 }
 if(file_put_contents('./benchmark_custom_strings.c', $sCustomBenchmark) == 0){

@@ -20,6 +20,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 This file contains macraffs corresponding to the functions in TSODLULS_padding.c.
 It is more pleasant to look at the source code there than to read the macros and macraffs here.
 The macraffs in this file use the following auxiliary variables:
+  uint8_t TSODLULS_macraff_ui8;
+  uint8_t TSODLULS_macraff_ui8_2;
+  uint8_t TSODLULS_macraff_ui8_3;
   int8_t TSODLULS_macraff_i8;
   int8_t TSODLULS_macraff_i8_2;
   int8_t TSODLULS_macraff_i8_3;
@@ -213,6 +216,42 @@ do{\
       }\
     }\
   }\
+}while(0);
+
+
+
+/**
+ * Padding functions
+ * Add a few bits to the current key, managing current bit offset
+ * and returning new current bit offset
+ * This macraff requires the following auxiliary variables:
+ *   uint8_t TSODLULS_macraff_ui8;
+ *   uint8_t TSODLULS_macraff_ui8_2;
+ *   uint8_t TSODLULS_macraff_ui8_3;
+ *   t_TSODLULS_sort_element* TSODLULS_macraff_p_sort_element;
+ */
+#define TSODLULS_add_bits_with_bit_level_offset__macraff(\
+  i_offset_aff,\
+  p_sort_element,\
+  i_data_byte,\
+  i_number_of_data_bits,\
+  i_current_bit_level_offset\
+) \
+do{\
+  TSODLULS_macraff_p_sort_element = (p_sort_element);\
+  TSODLULS_macraff_ui8 = (i_data_byte);\
+  TSODLULS_macraff_ui8_2 = (i_number_of_data_bits);\
+  TSODLULS_macraff_ui8_3 = (i_current_bit_level_offset);\
+  if(TSODLULS_macraff_ui8_3 > 0){\
+    TSODLULS_macraff_p_sort_element->s_key[TSODLULS_macraff_p_sort_element->i_key_size - 1] |= TSODLULS_macraff_ui8 >> TSODLULS_macraff_ui8_3;\
+    if(TSODLULS_macraff_ui8_3 + TSODLULS_macraff_ui8_2 > 8){\
+      TSODLULS_macraff_p_sort_element->s_key[TSODLULS_macraff_p_sort_element->i_key_size++] |= TSODLULS_macraff_ui8 << (8 - TSODLULS_macraff_ui8_3);\
+    }\
+  }\
+  else{\
+    TSODLULS_macraff_p_sort_element->s_key[TSODLULS_macraff_p_sort_element->i_key_size++] = TSODLULS_macraff_ui8;\
+  }\
+  (i_offset_aff) = (i_current_bit_level_offset + i_number_of_data_bits) % 8;\
 }while(0);
 
 

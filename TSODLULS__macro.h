@@ -66,6 +66,8 @@ The macraffs in this library use the following auxiliary variables:
   union ieee754_float TSODLULS_macraff_ieee754_float;
   union ieee754_double TSODLULS_macraff_ieee754_double;
   uint8_t TSODLULS_macraff_ui8;
+  uint8_t TSODLULS_macraff_ui8_2;
+  uint8_t TSODLULS_macraff_ui8_3;
   uint16_t TSODLULS_macraff_ui16;
   uint32_t TSODLULS_macraff_ui32;
   uint64_t TSODLULS_macraff_ui64;

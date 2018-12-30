@@ -238,3 +238,32 @@ int TSODLULS_increase_last_contrelex_padding(
 
 
 
+/**
+ * Padding functions
+ * Add a few bits to the current key, managing current bit offset
+ * and returning new current bit offset
+ * Available as a macraff (see TSODLULS_padding__macro.h).
+ */
+uint8_t TSODLULS_add_bits_with_bit_level_offset(
+  t_TSODLULS_sort_element* p_sort_element,
+  uint8_t i_data_byte,
+  uint8_t i_number_of_data_bits,//bits are in most significant digits
+  uint8_t i_current_bit_level_offset
+){
+  uint8_t i_byte_mask;
+  if(i_current_bit_level_offset > 0){
+    i_byte_mask = i_data_byte >> i_current_bit_level_offset;
+    p_sort_element->s_key[p_sort_element->i_key_size - 1] |= i_byte_mask;//first byte mask
+    if(i_current_bit_level_offset + i_number_of_data_bits > 8){
+      i_byte_mask = i_data_byte << (8 - i_current_bit_level_offset);
+      p_sort_element->s_key[p_sort_element->i_key_size++] |= i_byte_mask;//second byte mask
+    }
+  }
+  else{
+    p_sort_element->s_key[p_sort_element->i_key_size++] = i_data_byte;
+  }
+  return (i_current_bit_level_offset + i_number_of_data_bits) % 8;
+}//end function TSODLULS_add_bits_with_bit_level_offset()
+
+
+
