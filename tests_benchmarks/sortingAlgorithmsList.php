@@ -180,6 +180,22 @@ $arrArrSortingAlgorithms = array(
     'comparison' => false,
     'stable' => true,
   ),
+  'TSODLULS_sort_radix8_count_insertion__short__mark5' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark5',
+    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark5',
+    'celltype' => 'short',
+    'size' => 'direct',
+    'comparison' => false,
+    'stable' => true,
+  ),
+  'TSODLULS_sort_radix8_count_insertion__short__mark6' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark6',
+    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark6',
+    'celltype' => 'short',
+    'size' => 'direct',
+    'comparison' => false,
+    'stable' => true,
+  ),
   'TSODLULS_sort_radix8_count_insertion' => array(
     'name' => 'TSODLULS_sort_radix8_count_insertion',
     'function' => 'TSODLULS_sort_radix8_count_insertion',
@@ -199,6 +215,14 @@ $arrArrSortingAlgorithms = array(
   'TSODLULS_sort_radix8_count_insertion__mark2' => array(
     'name' => 'TSODLULS_sort_radix8_count_insertion__mark2',
     'function' => 'TSODLULS_sort_radix8_count_insertion__mark2',
+    'celltype' => 'long',
+    'size' => false,
+    'comparison' => false,
+    'stable' => true,
+  ),
+  'TSODLULS_sort_radix8_count_insertion__mark3' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion__mark3',
+    'function' => 'TSODLULS_sort_radix8_count_insertion__mark3',
     'celltype' => 'long',
     'size' => false,
     'comparison' => false,

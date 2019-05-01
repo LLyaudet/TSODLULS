@@ -20,6 +20,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 #define DEF_TSODLULS__COMPETITOR
 
 #include "../TSODLULS.h"
+#include <unistd.h>
 
 //------------------------------------------------------------------------------------
 //Conversion of finite orders
@@ -53,9 +54,23 @@ int TSODLULS_sort_radix8_count_insertion__mark1(
  * Sorting functions for long nextified strings
  * A stable sorting algorithm for nextified strings based on radix sort with octets digits
  * and counting sort as a subroutine.
- * When the number of elements to sort is at most: 5 for initial sort or 2 for radix sequel, we use insertion sort
+ * When the number of elements to sort is at most: 5 for initial sort or 2 for radix sequel, we use insertion sort.
  */
 int TSODLULS_sort_radix8_count_insertion__mark2(
+  t_TSODLULS_sort_element* arr_elements,
+  size_t i_number_of_elements
+);
+
+
+
+/**
+ * Sorting functions for long nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
+ * When the number of elements to sort is at most: 5 for initial sort or 2 for radix sequel, we use insertion sort.
+ * No data move if the array is already sorted (code variant).
+ */
+int TSODLULS_sort_radix8_count_insertion__mark3(
   t_TSODLULS_sort_element* arr_elements,
   size_t i_number_of_elements
 );
@@ -181,6 +196,40 @@ int TSODLULS_sort_radix8_count_insertion__short__mark3(
  * No instance in copy buffer, after each step copy is moved in original buffer
  */
 int TSODLULS_sort_radix8_count_insertion__short__mark4(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+);
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
+ * When the number of elements to sort is at most 5, we use insertion sort.
+ * A variant with single memory allocation adapted to the max-depth.
+ * No insertion sort if there is more than 5 elements and it is 8 bits datatype.
+ * No data move if the array is already sorted.
+ */
+int TSODLULS_sort_radix8_count_insertion__short__mark5(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements,
+  uint8_t i_max_length
+);
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
+ * When the number of elements to sort is at most 5, we use insertion sort.
+ * A variant with single memory allocation adapted to the max-depth.
+ * No insertion sort if there is more than 5 elements and it is 8 bits datatype.
+ * No data move if the array is already sorted (code variant).
+ */
+int TSODLULS_sort_radix8_count_insertion__short__mark6(
   t_TSODLULS_sort_element__short* arr_elements,
   size_t i_number_of_elements,
   uint8_t i_max_length
