@@ -15,7 +15,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
-©Copyright 2018 Laurent Lyaudet
+©Copyright 2018-2019 Laurent Lyaudet
 */
 //This file is used with custom tests and benchmarks
 
@@ -223,6 +223,14 @@ $arrArrSortingAlgorithms = array(
   'TSODLULS_sort_radix8_count_insertion__mark3' => array(
     'name' => 'TSODLULS_sort_radix8_count_insertion__mark3',
     'function' => 'TSODLULS_sort_radix8_count_insertion__mark3',
+    'celltype' => 'long',
+    'size' => false,
+    'comparison' => false,
+    'stable' => true,
+  ),
+  'TSODLULS_sort_radix8_count_insertion__mark4' => array(
+    'name' => 'TSODLULS_sort_radix8_count_insertion__mark4',
+    'function' => 'TSODLULS_sort_radix8_count_insertion__mark4',
     'celltype' => 'long',
     'size' => false,
     'comparison' => false,

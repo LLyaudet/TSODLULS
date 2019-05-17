@@ -14,7 +14,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
-©Copyright 2018 Laurent Lyaudet
+©Copyright 2018-2019 Laurent Lyaudet
 */
 #ifndef DEF_TSODLULS__COMPETITOR
 #define DEF_TSODLULS__COMPETITOR
@@ -71,6 +71,20 @@ int TSODLULS_sort_radix8_count_insertion__mark2(
  * No data move if the array is already sorted (code variant).
  */
 int TSODLULS_sort_radix8_count_insertion__mark3(
+  t_TSODLULS_sort_element* arr_elements,
+  size_t i_number_of_elements
+);
+
+
+
+/**
+ * Sorting functions for long nextified strings
+ * A stable sorting algorithm for nextified strings based on radix sort with octets digits
+ * and counting sort as a subroutine.
+ * When the number of elements to sort is at most: 5 for initial sort or 2 for radix sequel, we use insertion sort.
+ * No data move if the array is already sorted (code variant, double loop).
+ */
+int TSODLULS_sort_radix8_count_insertion__mark4(
   t_TSODLULS_sort_element* arr_elements,
   size_t i_number_of_elements
 );
