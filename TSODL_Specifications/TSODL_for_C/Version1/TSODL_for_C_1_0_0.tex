@@ -74,10 +74,13 @@
 
 
 
-\author{Laurent Lyaudet \url{https://lyaudet.eu/laurent/}}
+\author{Laurent Lyaudet \url{https://lyaudet.eu/laurent/} Laurent.Lyaudet@gmail.com}
 \title{
   Specifications of TSODL for C\\
-  Version 1.0.0 Draft
+  Version 1.0.0 Draft\\
+  There is a lot of work to complete these specifications.\\
+  Please send me an email if you want to help out.\\
+  Thanks
 }
 
 \begin{document}
@@ -113,10 +116,14 @@ computed from the tree structured order definition,
 and both code could switch between comparison model and lexicographic model, whichever is faster,
 according to the number of elements to sort and other parameters deduced from the tree structured order definition.
 
-First each node of a tree structured order is centered around an object (or a structure in C language, etc.).
+We first note that each node of a tree structured order is centered around an object (or a structure in C language, etc.).
 The root node is centered on the main objects, the ones that correspond to the wanted level of granularity.
 
 Let us explain our ideas using an example from our current work in business software for freight forwarders.
+(Next chapter presents much more simple examples with increasing complexity.
+This example does not respect all specifications,
+and aims at giving an idea of the possibilities of the language with only one example.
+If it is too cryptic, go ahead and read the next chapter for more explanations.)
 Each night/morning, a freight forwarder receives trucks with freight from other freight forwarders.
 For each truck and each day, we have an ``Arrival note'' in the database.
 To this arrival note are linked shipments, each shipment has a certain number of handling units.
@@ -132,7 +139,7 @@ NEXT(
     CURRENT.arrival_note.forwarder_name VARCHAR(NULL),
     CURRENT.arrival_note.total_weight DOUBLE DESC,
     CURRENT.weight DOUBLE,
-    LEX(
+    LEXICOGRAPHIC(
         1,
         0, //0 codes omega (countable infinity)
         CURRENT.number_of_handling_units, //the actual prelude length
@@ -147,7 +154,8 @@ NEXT(
 
 Note that we assumed denormalization or caching for the total weight of an arrival note.
 With TSO-encoding, that value, if not directly available, would be computed once and stocked into the TSO-encoding.
-With black box model and callbacks, you have to cache this value somehow, otherwise it will be computed on each comparison.
+With black box comparison model and callbacks, you have to cache this value somehow,
+otherwise it will be computed on each comparison.
 
 The goal of these specifications is to detail the definition
 of the Tree Structured Orders Definition Language (TSODL)
@@ -156,8 +164,29 @@ in its dialect adapted to the C programming language (TSODL for C).
 \chapter{Preview}
 \label{chapter:preview}
 
-Introduction chapter presented an exemple of TSOD.
-We give here more examples specific to C code.
+Introduction chapter presented an example of TSOD.
+We give here more examples specific to C code with increasing complexity.
+
+Assume you want to sort an array of integers by ascending order.
+Your TSOD would simply be:
+\begin{verbatim}
+CURRENT INT
+\end{verbatim}
+or it could be:
+\begin{verbatim}
+CURRENT INT ASC
+\end{verbatim}
+\verb?CURRENT? is a reserved keyword for current item in the array,
+its meaning may vary when we go down in a hierarchy of structs.
+\verb?INT? is a reserved keyword for specifying that the current item in the array is of int C type.
+\verb?ASC? is a reserved keyword taken from SQL for specifying ascending order.
+
+If you want to sort an array of pointers to integers by ascending order.
+Your TSOD would simply be:
+\begin{verbatim}
+*CURRENT INT
+\end{verbatim}
+We do not reinvent the wheel, we use the C native distinction between '\verb?CURRENT?' and '\verb?*CURRENT?'.
 
 Assume you have a C struct defined as follow:
 \begin{verbatim}
@@ -179,12 +208,11 @@ or it could be:
 \begin{verbatim}
 CURRENT.i_horse_power INT ASC
 \end{verbatim}
-\emph{CURRENT} is a reserved keyword for current item in the array,
-its meaning may vary when we go down in a hierarchy of structs.
-\emph{INT} is a reserved keyword for specifying that the field i\_horse\_power is of int C type.
-\emph{ASC} is a reserved keyword taken from SQL for specifying ascending order.
+\verb?CURRENT? now means a struct of type t\_my\_car, whilst it denoted an int in previous example,
+it always means the current item in the current array.
+\verb?INT? specifies that the field i\_horse\_power is of int C type.
 
-If you want to sort an array of pointers to such structs by horse power.
+If you want to sort an array of \emph{pointers} to such structs by horse power.
 Your TSOD would simply be:
 \begin{verbatim}
 CURRENT->i_horse_power INT
@@ -195,7 +223,7 @@ If you want to sort by descending horse power:
 \begin{verbatim}
 CURRENT->i_horse_power INT DESC
 \end{verbatim}
-\emph{DESC} is a reserved keyword taken from SQL for specifying descending order.
+\verb?DESC? is a reserved keyword taken from SQL for specifying descending order.
 
 If you want to sort by descending horse power, and then break ties by ascending mileage:
 \begin{verbatim}
@@ -206,7 +234,7 @@ NEXT(
 \end{verbatim}
 The line returns and the indentation convey no meaning,
 but it is nicer to read.
-\emph{NEXT} is a reserved keyword for \emph{Next} partial order (if current fields are equal, compare \emph{Next} fields).
+\verb?NEXT? is a reserved keyword for \emph{Next} partial order (if current fields are equal, compare \emph{Next} fields).
 Note that by default, TSODL for C is case sensitive.
 You may use ``pragmas'', to be defined later, so that the keywords are case insensitive.
 The comma after FLOAT is no accident, you may optionaly end a list with a comma.
@@ -221,11 +249,11 @@ NEXT(
   CURRENT->i_year INT,
 )
 \end{verbatim}
-\emph{VARCHAR} is a reserved keyword taken from SQL meaning that the length of the string may vary.
+\verb?VARCHAR? is a reserved keyword taken from SQL meaning that the length of the string may vary.
 By default, varying length strings will be sorted using lexicographic order.
-\emph{VARCHAR(NULL)} means that the end of the string is known thanks to a null byte (value 0).
-If you fancy your own strings terminated by a byte of value 3, you can use \emph{VARCHAR(NULL(3))}.
-\emph{VARCHAR(NULL(0))} and \emph{VARCHAR(NULL)} have the same meaning.
+\verb?VARCHAR(NULL)? means that the end of the string is known thanks to a null byte (value 0).
+If you fancy your own strings terminated by a byte of value 3, you can use \verb?VARCHAR(NULL(3))?.
+\verb?VARCHAR(NULL(0))? and \verb?VARCHAR(NULL)? have the same meaning.
 
 Assume that the C struct is slightly different:
 \begin{verbatim}
@@ -277,7 +305,7 @@ Let us assume that you have a C function with the following signature:
 \begin{verbatim}
 char my_collation(char* s_string, size_t* p_i_current_offset);
 \end{verbatim}
-\emph{my\_collation} groups lowercase and uppercase letters.
+\verb?my_collation? groups lowercase and uppercase letters.
 You may use the TSOD:
 \begin{verbatim}
 NEXT(
@@ -306,9 +334,170 @@ NEXT(
   CURRENT->i_year INT RANGE(1900, 2100),
 )
 \end{verbatim}
-With \emph{RANGE(1900, 2100)}, TSODLULS knows that only a single byte is required to sort by year instead of 2 or 4 bytes.
-With \emph{RANGE(0, 2500000)}, TSODLULS knows that only three bytes are required for each unicode character.
+With \verb?RANGE(1900, 2100)?, TSODLULS knows that only a single byte is required to sort by year instead of 2 or 4 bytes.
+With \verb?RANGE(0, 2500000)?, TSODLULS knows that only three bytes are required for each unicode character.
 Shortening the key used for sorting is crucial for good performances.
+
+Assume you want to sort the cars by constructor using the hierarchic order instead of the lexicographic order
+(sorting by length before sorting by letters values).
+We introduce a \verb?HIERARCHIC? keyword for this,
+that will iterate over the characters and count the number of them.
+However, there are many ways to iterate in programming languages;
+we want to avoid tight coupling between the way to iterate and the order theoretic definitions like:
+\begin{itemize}
+\item \verb?LEXICOGRAPHIC? comparison between two non-equal elements is done on the two first subelements
+  at the same rank that are defined and different;
+  if we cannot find two such subelements, then one element is a prefix of the other,
+  and the shorter comes first,
+\item \verb?HIERARCHIC? the shorter element comes first,
+  if they have the same length, then they are compared with Next partial order,
+\item \verb?CONTRELEXICOGRAPHIC? comparison between two non-equal elements is done on the two first subelements
+  at the same rank that are defined and different;
+  if we cannot find two such subelements, then one element is a prefix of the other,
+  and the longer comes first,
+\item \verb?CONTREHIERARCHIC? the longer element comes first,
+  if they have the same length, then they are compared with Next partial order.
+\end{itemize}
+All these order theoretic definitions are variations of the Next partial order,
+and they are sufficient to express most of the orders used in informatics.
+(We fancy using \emph{informatics} instead of \emph{computer science + computer engineering + computer technology}.
+We also fancy using ``contre'' instead of ``contra'' in contrelexicographic and contrehierarchic.
+This is french colonialism on english language :P.
+The english colonialism on french language is much more common :).
+Some people will reject it as ``globish'' but since we created the two terms
+contrelexicographic and contrehierarchic (contrelexicographique and contrehi\'erarchique in french),
+we wanted to express this paternity.
+We will not blame you if you say/write contra-lexicographic and contra-hierarchic instead :).)
+In what follows, we distinguish the \emph{finite arity order-operator} \verb?NEXT?
+of the four \emph{infinite arity order-operators} \verb?LEXICOGRAPHIC?,
+ \verb?HIERARCHIC?, \verb?CONTRELEXICOGRAPHIC?, \verb?CONTREHIERARCHIC?.
+
+We also introduce some iterator keywords:
+\begin{itemize}
+\item \verb?ARRAY_ITERATOR?,
+\item \verb?POINTER_ITERATOR?.
+\end{itemize}
+The benefit of having iterators separated from order theoretic definitions will become visible
+with the example of so-called ``natural sorting''.
+But, for now, we come back at our example of sorting the cars by constructor using the hierarchic order.
+
+
+\begin{verbatim}
+NEXT(
+  ARRAY_ITERATOR(
+    CURRENT->s_constructor,//the string/array under this iterator
+    1,//minimum length of the string/array under this iterator
+      //for example, it could be 0 or 31
+      //this is a promess you make to TSODL parser
+    31,//maximum length of the string/array under this iterator
+       //if it is not equal to 0, it must be at least the minimum length
+       //if you write 0, you tell TSODL parser that max size_t is the limit
+       //this is a promess you make to TSODL parser,
+    char,//the C type of the elements of the string/array under this iterator
+    NULL,//the way to tell the end of the array has been reached
+         //NULL means that the char with value 0 denotes the end of the string
+         //it could be "CURRENT->i_s_constructor_size INT" instead
+         //         or "CURRENT->i_s_constructor_size SIZE_T" instead
+         //         or an expression like "MAX(15, CURRENT->i_s_constructor_size INT)"
+         //            if you want to iterate only on the first 15 items
+    NEXT(//inside these parentheses, CURRENT is redefined
+         // to be an element of the array (CURRENT has type char)
+         //between these parentheses is listed a finite list of orders
+         //each suborder must start with an infinite arity order-operator
+         //in order to match the iterator semantic
+      HIERARCHIC(
+        //below an infinite arity order-operator is an infinite list of orders
+        //these list must be ultimately periodic
+        //the square brackets denote the period
+        //for this example, we have an uniform sequence/list of suborder
+        //(uniform means periodic of period of length 1)
+        //there is no order listed before the square brackets
+        [
+          CURRENT CHAR(1) COLLATION(INT8 my_collation)
+        ]
+      )
+    )
+  ),
+  CURRENT->i_year INT RANGE(1900, 2100),
+)
+\end{verbatim}
+
+Without all the comments, it is slightly more concise.
+\begin{verbatim}
+NEXT(
+  ARRAY_ITERATOR(
+    CURRENT->s_constructor,
+    1,
+    31,
+    char,
+    NULL,
+    NEXT(
+      HIERARCHIC(
+        [
+          CURRENT CHAR(1) COLLATION(INT8 my_collation)
+        ]
+      )
+    )
+  ),
+  CURRENT->i_year INT RANGE(1900, 2100),
+)
+\end{verbatim}
+
+Recall that ``natural order'' on strings is the order where the strings starting with digits comes first,
+all the consecutive decimal digits in the string are grouped together as denoting an integer,
+thus sorting by lexicographical order on letters part of the string and integer order on digit parts of the string.
+If we want to sort the cars by ``natural order'' of model, we obtain the following TSODL:
+\begin{verbatim}
+NEXT(
+  ARRAY_ITERATOR(
+    CURRENT->s_constructor,
+    1,
+    31,
+    char,
+    NULL,
+    LEXICOGRAPHIC(//this is lexicographic order on suborders
+                  //suborders take care of letters parts and digits parts
+                  //the sequence of suborders will be periodic of length 3
+      [
+      LEXICOGRAPHIC(
+        [
+          CURRENT CHAR(1) COLLATION(INT8 my_collation)
+        ]
+      )
+      END WITH FUNCTION(is_digit),//we read characters until the end of the string
+                                  //or until we read an ASCII digit
+                                  //is_digit can be any custom function from char to bool
+      LEXICOGRAPHIC(
+        [
+          CURRENT CHAR(1) COLLATION(INT8 my_collation_break_ties)
+        ]
+      )
+      START WITH PREVIOUS_START//when breaking ties we 'rewind' the iterator
+      END WITH FUNCTION(is_digit),
+      ]
+
+      HIERARCHIC(
+        [
+          CURRENT CHAR(1) COLLATION(INT8 RANGE(0, 9) from_digit_to_int)
+        ]
+      )
+      SKIP PREFIX WITH FUNCTION(is_digit_0)//We must ignore prefixes of 0 for integer order
+      END WITH FUNCTION(is_letter),
+
+      HIERARCHIC(//We still need to break ties between '12', '012' and '00012'
+        [
+          //We only count the bytes, hence dummy collation
+          CURRENT CHAR(1) COLLATION(INT8 RANGE(0, 0) DUMMY)
+        ]
+      )
+      START WITH PREVIOUS_START//when breaking ties, we 'rewind' the iterator
+      END WITH FUNCTION(is_letter),
+      ]//this ends the period of suborders
+    )
+  ),
+  CURRENT->i_year INT RANGE(1900, 2100),
+)
+\end{verbatim}
 
 
 \chapter{Production rules}
