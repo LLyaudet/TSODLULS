@@ -143,7 +143,7 @@ We use the following code style:
   - arrIElements for an array of integers
 - when needed we use "strict" Systems Hungarian notation,
   this is useful in tests and benchmarks where we have all primitive data types in one place.
-  Instead of creating variable names, we just abreviate the data types:
+  Instead of creating variable names, we just abbreviate the data types:
   - ui_8 or ui8 for some unsigned integer on 8 bits
   - i_32_2 or i32_2 for some signed integer on 32 bits and name i_32 or i32 was already taken...
 - We use two spaces indent without tabs.
