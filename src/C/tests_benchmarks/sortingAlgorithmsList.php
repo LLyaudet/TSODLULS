@@ -250,5 +250,15 @@ for($i = $iMinThreshold; $i <= $iMaxThreshold; ++$i){
     'stable' => false,
   );
 }
+for($i = $iMinThreshold; $i <= $iMaxThreshold; ++$i){
+  $arrArrSortingAlgorithms['TSODLULS_qsort_inlined__long_'.$i] = array(
+    'name' => 'TSODLULS_qsort_inlined__long_'.$i,
+    'function' => 'TSODLULS_qsort_inlined__long_'.$i,
+    'celltype' => 'long',
+    'size' => false,
+    'comparison' => false,
+    'stable' => false,
+  );
+}
 
 ?>

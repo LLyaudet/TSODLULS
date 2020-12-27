@@ -1,4 +1,3 @@
-/*
 This file is part of TSODLULS library.
 
 TSODLULS is free software: you can redistribute it and/or modify
@@ -15,4 +14,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 ©Copyright 2018-2020 Laurent Lyaudet
-*/
+
+---------------------------------------------------------------------------
+Purpose of this folder
+---------------------------------------------------------------------------
+
+This folder must contain body of competitor functions.
+One body may use C Preprocessor constants and thus corresponds to many C functions.
+The goal of separating one body per file is also to have a simple way to compare algorithms using diff tools.

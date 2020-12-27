@@ -14,7 +14,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
-©Copyright 2018-2019 Laurent Lyaudet
+©Copyright 2018-2020 Laurent Lyaudet
 */
 /*
 This file contains macraffs corresponding to the functions in TSODLULS_misc.c.
@@ -230,3 +230,20 @@ do{\
   }\
   (i_aff) = 0;\
 }while(0);
+
+
+
+/**
+ * Miscellaneous functions
+ * Set variable to min length of two long cells
+ */
+#define TSODLULS_set_min_length__macraff(\
+  i_aff,\
+  first_long_cell,\
+  second_long_cell\
+) \
+  (i_aff) = (first_long_cell)->i_key_size;\
+  if((second_long_cell)->i_key_size < (i_aff)){\
+    (i_aff) = (second_long_cell)->i_key_size;\
+  }
+

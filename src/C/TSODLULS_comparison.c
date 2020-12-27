@@ -14,7 +14,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
-©Copyright 2018-2019 Laurent Lyaudet
+©Copyright 2018-2020 Laurent Lyaudet
 */
 
 #include "TSODLULS.h"
@@ -302,7 +302,7 @@ int TSODLULS_compare_nextified_key_in_cell(const void *a, const void *b){
       break;
     }
   }
-  return i_result;
+  return (i_result > 0) - (i_result < 0);
 }//end function TSODLULS_compare_nextified_key_in_cell()
 
 

@@ -30,16 +30,16 @@ It corresponds to the C constant MAX_THRESH in glibc.
 */
 BEGIN_TPL
 /**
- * Sorting functions for short nextified strings
- * Qsort from glibc inlined with short cells.
+ * Sorting functions for long nextified strings
+ * Qsort from glibc inlined with long cells.
  */
-int TSODLULS_qsort_inlined__short_@iNumberOfElementsForInsertionSort@(
-  t_TSODLULS_sort_element__short* arr_elements,
+int TSODLULS_qsort_inlined__long_@iNumberOfElementsForInsertionSort@(
+  t_TSODLULS_sort_element* arr_elements,
   size_t i_number_of_elements
 ){
   #define MAX_THRESH @iNumberOfElementsForInsertionSort@
-  #include "./b/body_TSODLULS_qsort_inlined__short.c"
-}//end function TSODLULS_qsort_inlined__short_@iNumberOfElementsForInsertionSort@
+  #include "./b/body_TSODLULS_qsort_inlined__long.c"
+}//end function TSODLULS_qsort_inlined__long_@iNumberOfElementsForInsertionSort@
 
 
 
