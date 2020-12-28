@@ -34,7 +34,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
 //  t_TSODLULS_sort_element__long* arr_elements,
 //  size_t i_number_of_elements
 //){
-//  #define MAX_TRESH 5
+//  #define TSODLULS_MAX_THRESH 5
   t_TSODLULS_sort_element* base_ptr = arr_elements;
   t_TSODLULS_sort_element tmp_cell;//for swapping
   size_t i__compare;
@@ -61,15 +61,15 @@ If you want to understand this function body, please look first at stdlib/qsort.
     return 0;
   }
 
-  if(i_number_of_elements > MAX_THRESH){
+  if(i_number_of_elements > TSODLULS_MAX_THRESH){
     t_TSODLULS_sort_element* lo = base_ptr;
     t_TSODLULS_sort_element* hi = &lo[(i_number_of_elements - 1)];
-    t_TSODLULS_qsort_stack_node stack[STACK_SIZE];
+    t_TSODLULS_qsort_stack_node stack[TSODLULS_STACK_SIZE];
     t_TSODLULS_qsort_stack_node* top = stack;
 
-    PUSH(NULL, NULL);
+    TSODLULS_PUSH(NULL, NULL);
 
-    while(STACK_NOT_EMPTY){
+    while(TSODLULS_STACK_NOT_EMPTY){
       t_TSODLULS_sort_element* left_ptr;
       t_TSODLULS_sort_element* right_ptr;
 
@@ -181,32 +181,32 @@ If you want to understand this function body, please look first at stdlib/qsort.
          ignore one or both.  Otherwise, push the larger partition's
          bounds on the stack and continue sorting the smaller one. */
 
-      if((size_t)(right_ptr - lo) <= MAX_THRESH){
-        if ((size_t) (hi - left_ptr) <= MAX_THRESH){
+      if((size_t)(right_ptr - lo) <= TSODLULS_MAX_THRESH){
+        if ((size_t) (hi - left_ptr) <= TSODLULS_MAX_THRESH){
           /* Ignore both small partitions. */
-          POP (lo, hi);
+          TSODLULS_POP (lo, hi);
         }
         else{
         /* Ignore small left partition. */
           lo = left_ptr;
         }
       }
-      else if ((size_t) (hi - left_ptr) <= MAX_THRESH){
+      else if ((size_t) (hi - left_ptr) <= TSODLULS_MAX_THRESH){
         /* Ignore small right partition. */
         hi = right_ptr;
       }
       else if ((right_ptr - lo) > (hi - left_ptr)){
         /* Push larger left partition indices. */
-        PUSH (lo, right_ptr);
+        TSODLULS_PUSH (lo, right_ptr);
         lo = left_ptr;
       }
       else{
         /* Push larger right partition indices. */
-        PUSH (left_ptr, hi);
+        TSODLULS_PUSH (left_ptr, hi);
         hi = right_ptr;
       }
-    }//end while(STACK_NOT_EMPTY)
-  }//end if(i_number_of_elements > MAX_THRESH)
+    }//end while(TSODLULS_STACK_NOT_EMPTY)
+  }//end if(i_number_of_elements > TSODLULS_MAX_THRESH)
 
   /* Once the BASE_PTR array is partially sorted by quicksort the rest
      is completely sorted using insertion sort, since this is efficient
@@ -217,7 +217,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
   {
     t_TSODLULS_sort_element* const end_ptr = &base_ptr[(i_number_of_elements - 1)];
     t_TSODLULS_sort_element* tmp_ptr = base_ptr;
-    t_TSODLULS_sort_element* thresh = min(end_ptr, base_ptr + MAX_THRESH);
+    t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, base_ptr + TSODLULS_MAX_THRESH);
     t_TSODLULS_sort_element* run_ptr;
 
     /* Find smallest element in first threshold and place it at the

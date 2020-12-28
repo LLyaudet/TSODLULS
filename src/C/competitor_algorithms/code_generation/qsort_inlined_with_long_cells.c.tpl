@@ -37,8 +37,9 @@ int TSODLULS_qsort_inlined__long_@iNumberOfElementsForInsertionSort@(
   t_TSODLULS_sort_element* arr_elements,
   size_t i_number_of_elements
 ){
-  #define MAX_THRESH @iNumberOfElementsForInsertionSort@
+  #define TSODLULS_MAX_THRESH @iNumberOfElementsForInsertionSort@
   #include "./b/body_TSODLULS_qsort_inlined__long.c"
+  #undef TSODLULS_MAX_THRESH
 }//end function TSODLULS_qsort_inlined__long_@iNumberOfElementsForInsertionSort@
 
 

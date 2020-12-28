@@ -104,3 +104,6 @@ The macraffs in this library use the following auxiliary variables:
   free(pointer);\
   (pointer) = NULL;
 
+#define TSODLULS_min_exp(x, y) ((x) < (y) ? (x) : (y))
+
+
