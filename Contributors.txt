@@ -1,0 +1,12 @@
+----------------------------------------
+TSODLULS contributors
+----------------------------------------
+
+Current maintainer: Laurent Lyaudet
+
+Creator of the library: Laurent Lyaudet
+
+Contributors ordered lexicographicaly:
+Kunal Marwaha
+Laurent Lyaudet
+
