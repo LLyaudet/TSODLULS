@@ -266,6 +266,7 @@ int copy_string_as_primitive_datatype(
     p_os_string_new->s_string[i] = os_string_old.s_string[i];
   }
   p_os_string_new->i_string_size = os_string_old.i_string_size;
+  return 0;
 }
 
 
