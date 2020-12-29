@@ -25,11 +25,24 @@ $sMessage = "Hello, please choose an algorithm to test\n"
            ."The test will compare the sorted array obtained with qsort direct\n"
            ." and the one obtained with the algorithm you selected.\n\n";
 
-$arrDataAlgorithm = getChoiceForAlgorithm($sMessage, true);
+$arrDataAlgorithm = getChoiceForAlgorithm($sMessage, true, true);
 
-$bWithBitLevelPadding = false;
-if($arrDataAlgorithm['celltype'] === 'long'){
-  $bWithBitLevelPadding = getBChoiceForBitLevelPadding();
+if($arrDataAlgorithm === -1){
+  global $arrArrSortingAlgorithms;
+  $arrArrDataAlgorithm = $arrArrSortingAlgorithms;
+  foreach($arrArrDataAlgorithm as $key => $arr){
+    if($arr['celltype'] === 'short'){
+      unset($arrArrDataAlgorithm[$key]);
+    }
+  }
+  $bWithBitLevelPadding = 'both';
+}
+else{
+  $arrArrDataAlgorithm = array($arrDataAlgorithm);
+  $bWithBitLevelPadding = false;
+  if($arrDataAlgorithm['celltype'] === 'long'){
+    $bWithBitLevelPadding = getBChoiceForBitLevelPadding();
+  }
 }
 
 $iMinLengthOfString = getIMinLengthOfString();
@@ -38,69 +51,123 @@ $iLengthOfCommonPrefix = getILengthOfCommonPrefix($iMinLengthOfString);
 
 include('../generatingFunctionsString.php');
 
-echo "Generating file test_custom_strings.c\n";
-$sCustomTest = file_get_contents('./test_custom_strings.c.tpl');
-if($sCustomTest == ''){
-  die("The template file test_custom_strings.c.tpl was not found, or couldn't be read, or was empty.\n");
-}
-
-if(strpos($sCustomTest, '@iMinLengthOfString@') === false){
-  die("The template file test_custom_strings.c.tpl does not contain the insertion token @iMinLengthOfString@.\n");
-}
-$sCustomTest = str_replace('@iMinLengthOfString@', (string)$iMinLengthOfString, $sCustomTest);
-
-if(strpos($sCustomTest, '@iMaxLengthOfString@') === false){
-  die("The template file test_custom_strings.c.tpl does not contain the insertion token @iMaxLengthOfString@.\n");
-}
-$sCustomTest = str_replace('@iMaxLengthOfString@', (string)$iMaxLengthOfString, $sCustomTest);
-
-if(strpos($sCustomTest, '@iLengthOfCommonPrefix@') === false){
-  die("The template file test_custom_strings.c.tpl does not contain the insertion token @iLengthOfCommonPrefix@.\n");
-}
-$sCustomTest = str_replace('@iLengthOfCommonPrefix@', (string)$iLengthOfCommonPrefix, $sCustomTest);
-
-
-foreach($arrSubTests as $sSubTest => $arrDataSubTest){
-  if(strpos($sCustomTest, 'PHP__INCLUDE_TEST_CODE_FOR_CHOSEN_ALGORITHM__'.$sSubTest) === false){
-    die("The template file test_custom_strings.c.tpl does not contain the insertion token for sorting ".$sSubTest.".\n");
+foreach($arrArrDataAlgorithm as $arrDataAlgorithm){
+  if($bWithBitLevelPadding === 'both'){
+    build_and_run_test_for_algorithm_data(
+      $arrDataAlgorithm,
+      false,
+      $iMinLengthOfString,
+      $iMaxLengthOfString,
+      $iLengthOfCommonPrefix
+    );
+    if($arrDataAlgorithm['celltype'] === 'long'){
+      build_and_run_test_for_algorithm_data(
+        $arrDataAlgorithm,
+        true,
+        $iMinLengthOfString,
+        $iMaxLengthOfString,
+        $iLengthOfCommonPrefix
+      );
+    }
   }
-  $sFragment = getTestingFragmentFor($arrDataAlgorithm, $sSubTest, false, $bWithBitLevelPadding);
-  if($arrDataAlgorithm['celltype'] !== 'direct'){
-    $sFragment .= "\n    ".getTestingFragmentFor($arrDataAlgorithm, $sSubTest, true, $bWithBitLevelPadding);
+  else{
+    build_and_run_test_for_algorithm_data(
+      $arrDataAlgorithm,
+      $bWithBitLevelPadding,
+      $iMinLengthOfString,
+      $iMaxLengthOfString,
+      $iLengthOfCommonPrefix
+    );
   }
-  $sCustomTest = str_replace('PHP__INCLUDE_TEST_CODE_FOR_CHOSEN_ALGORITHM__'.$sSubTest, $sFragment, $sCustomTest);
 }
-if(file_put_contents('./test_custom_strings.c', $sCustomTest) == 0){
-  die("The file test_custom_strings.c could not be saved.\n");
-}
-echo "The file test_custom_strings.c was generated.\n";
 
-echo "Compiling.\n";
-chdir('../..');
-$iReturnCode = 0;
-$arrSOutput = array();
-exec('make build-test-custom-strings', $arrSOutput, $iReturnCode);
-if($iReturnCode !== 0){
-  echo "The compilation failed.\n";
+
+
+function build_and_run_test_for_algorithm_data(
+  $arrDataAlgorithm,
+  $bWithBitLevelPadding,
+  $iMinLengthOfString,
+  $iMaxLengthOfString,
+  $iLengthOfCommonPrefix
+){
+
+  global $arrSubTests;
+
+  $sName = $arrDataAlgorithm['name'];
+  if($bWithBitLevelPadding){
+    $sBitLevelPadding = 'with bit-level padding';
+  }
+  else{
+    $sBitLevelPadding = 'without bit-level padding';
+  }
+
+  echo "Generating file test_custom_strings.c for $sName $sBitLevelPadding\n";
+  $sCustomTest = file_get_contents('./test_custom_strings.c.tpl');
+  if($sCustomTest == ''){
+    die("The template file test_custom_strings.c.tpl was not found, or couldn't be read, or was empty.\n");
+  }
+
+  if(strpos($sCustomTest, '@iMinLengthOfString@') === false){
+    die("The template file test_custom_strings.c.tpl does not contain the insertion token @iMinLengthOfString@.\n");
+  }
+  $sCustomTest = str_replace('@iMinLengthOfString@', (string)$iMinLengthOfString, $sCustomTest);
+
+  if(strpos($sCustomTest, '@iMaxLengthOfString@') === false){
+    die("The template file test_custom_strings.c.tpl does not contain the insertion token @iMaxLengthOfString@.\n");
+  }
+  $sCustomTest = str_replace('@iMaxLengthOfString@', (string)$iMaxLengthOfString, $sCustomTest);
+
+  if(strpos($sCustomTest, '@iLengthOfCommonPrefix@') === false){
+    die("The template file test_custom_strings.c.tpl does not contain the insertion token @iLengthOfCommonPrefix@.\n");
+  }
+  $sCustomTest = str_replace('@iLengthOfCommonPrefix@', (string)$iLengthOfCommonPrefix, $sCustomTest);
+
+
+  foreach($arrSubTests as $sSubTest => $arrDataSubTest){
+    if(strpos($sCustomTest, 'PHP__INCLUDE_TEST_CODE_FOR_CHOSEN_ALGORITHM__'.$sSubTest) === false){
+      die("The template file test_custom_strings.c.tpl does not contain the insertion token for sorting ".$sSubTest.".\n");
+    }
+    $sFragment = getTestingFragmentFor($arrDataAlgorithm, $sSubTest, false, $bWithBitLevelPadding);
+    if($arrDataAlgorithm['celltype'] !== 'direct'){
+      $sFragment .= "\n    ".getTestingFragmentFor($arrDataAlgorithm, $sSubTest, true, $bWithBitLevelPadding);
+    }
+    $sCustomTest = str_replace('PHP__INCLUDE_TEST_CODE_FOR_CHOSEN_ALGORITHM__'.$sSubTest, $sFragment, $sCustomTest);
+  }
+  if(file_put_contents('./test_custom_strings.c', $sCustomTest) == 0){
+    die("The file test_custom_strings.c could not be saved.\n");
+  }
+  echo "The file test_custom_strings.c was generated.\n";
+
+  echo "Compiling.\n";
+  chdir('../..');
+  $iReturnCode = 0;
+  $arrSOutput = array();
+  exec('make build-test-custom-strings', $arrSOutput, $iReturnCode);
+  if($iReturnCode !== 0){
+    echo "The compilation failed.\n";
+    foreach($arrSOutput as $sLine){
+      echo $sLine, "\n";
+    }
+    die("The compilation failed.\n");
+  }
+  echo "The compilation succeeded.\n";
+
+  chdir('tests_benchmarks/test_custom_strings/');
+  $iReturnCode = 0;
+  $arrSOutput = array();
+  exec('./test_custom_strings.exe', $arrSOutput, $iReturnCode);
+  if($iReturnCode !== 0){
+    echo "Custom test failed.\n";
+  }
+  else{
+    echo "Custom test succeeded.\n";
+  }
+
   foreach($arrSOutput as $sLine){
     echo $sLine, "\n";
   }
-  die("The compilation failed.\n");
-}
-echo "The compilation succeeded.\n";
+}//end function build_and_run_test_for_algorithm_data()
 
-chdir('tests_benchmarks/test_custom_strings/');
-$iReturnCode = 0;
-$arrSOutput = array();
-exec('./test_custom_strings.exe', $arrSOutput, $iReturnCode);
-if($iReturnCode !== 0){
-  echo "Custom test failed.\n";
-}
-else{
-  echo "Custom test succeeded.\n";
-}
 
-foreach($arrSOutput as $sLine){
-  echo $sLine, "\n";
-}
+
 ?>

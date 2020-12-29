@@ -21,7 +21,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 include('../sortingAlgorithmsList.php');
 
-function getChoiceForAlgorithm($sMessage, $bNotShortCells = false){
+function getChoiceForAlgorithm($sMessage, $bNotShortCells = false, $bAll = false){
   global $arrArrSortingAlgorithms;
 
   $arrArrSortingAlgorithmsFiltered = $arrArrSortingAlgorithms;
@@ -43,20 +43,34 @@ function getChoiceForAlgorithm($sMessage, $bNotShortCells = false){
       echo "[$i] ", $sName, "\n";
     }
 
+    if($bAll){
+      echo "[all] all algorithms\n";
+    }
+
     $input = readline();
 
-    if(!ctype_digit($input)){
-      echo "Invalid input. Please input a positive integer.\n";
-      continue;
+    if($bAll && $input === 'all'){
+      $iChosenAlgorithm = -1;
     }
-    $input = (int)$input;
-    if($input <= 0 || $input > $i){
-      echo "Invalid input. Please input a positive integer in the range [1,$i].\n";
-      continue;
+    else{
+      if(!ctype_digit($input)){
+        echo "Invalid input. Please input a positive integer.\n";
+        continue;
+      }
+      $input = (int)$input;
+      if($input <= 0 || $input > $i){
+        echo "Invalid input. Please input a positive integer in the range [1,$i].\n";
+        continue;
+      }
+      $iChosenAlgorithm = $input;
     }
-    $iChosenAlgorithm = $input;
   }
   while($iChosenAlgorithm === 0);
+
+  if($iChosenAlgorithm === -1){
+    echo "You selected all algorithms.\n";
+    return -1;
+  }
 
   $i = 0;
   foreach($arrArrSortingAlgorithmsFiltered as $sName => $arrDataAlgorithm){
