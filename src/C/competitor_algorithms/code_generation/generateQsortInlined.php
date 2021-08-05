@@ -21,10 +21,12 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 $arrSTemplatePaths = array(
   'qsort_inlined_with_short_cells.c.tpl',
   'qsort_inlined_with_long_cells.c.tpl',
+  'qsort_with_comparison_callback.c.tpl',
 );
 $arrSCellTypes = array(
   'qsort_inlined_with_short_cells.c.tpl' => 'short',
   'qsort_inlined_with_long_cells.c.tpl' => 'long',
+  'qsort_with_comparison_callback.c.tpl' => 'direct',
 );
 $arrSTemplateFiles = array();
 
@@ -81,6 +83,20 @@ foreach($arrSTemplatePaths as $sTemplatePath){
           ."int TSODLULS_qsort_inlined__long_".$i."(\n"
           ."  t_TSODLULS_sort_element* arr_elements,\n"
           ."  size_t i_number_of_elements\n"
+          .");\n\n\n"
+      ;
+    }
+   if($sCell === 'direct'){
+      $sHeaderContent .= "\n"
+          ."/**\n"
+          ." * Sorting functions using a comparison callback for arbitrary data structures.\n"
+          ." * Qsort from glibc with minor modifications.\n"
+          ." */\n"
+          ."int TSODLULS_qsort__comparison_callback_".$i."(\n"
+          ."  void* arr_elements,\n"
+          ."  size_t i_number_of_elements,\n"
+          ."  size_t i_element_size,\n"
+          ."  t_comparison_function fn_comparison\n"
           .");\n\n\n"
       ;
     }

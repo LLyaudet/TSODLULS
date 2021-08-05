@@ -98,6 +98,9 @@ The macraffs in this library use the following auxiliary variables:
   t_TSODLULS_sort_element__short* TSODLULS_macraff_p_sort_element__short;
   t_TSODLULS_sort_element__short** TSODLULS_macraff_p_arr_elements__short;
   void* TSODLULS_macraff_p_void;
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char TSODLULS_macraff_char;
 */
 
 #define TSODLULS_free(pointer) \
@@ -105,5 +108,28 @@ The macraffs in this library use the following auxiliary variables:
   (pointer) = NULL;
 
 #define TSODLULS_min_exp(x, y) ((x) < (y) ? (x) : (y))
+
+/**
+ * Byte-wise swap two items of size SIZE.
+ * This macro is adapted from glibc 2.27.
+ * Written by Douglas C. Schmidt (schmidt@ics.uci.edu).
+ * Copyright (C) 1991-2018 Free Software Foundation, Inc.
+ * This macraff requires the following auxiliary variables:
+ *   size_t TSODLULS_macraff_isize;
+ *   char* TSODLULS_macraff_p_char;
+ *   char* TSODLULS_macraff_p_char_2;
+ *   char TSODLULS_macraff_char;
+*/
+#define TSODLULS_SWAP(a, b, size)\
+  do{\
+    TSODLULS_macraff_isize = (size);\
+    TSODLULS_macraff_p_char = (a);\
+    TSODLULS_macraff_p_char_2 = (b);\
+    do{\
+      TSODLULS_macraff_char = *TSODLULS_macraff_p_char;\
+      *TSODLULS_macraff_p_char++ = *TSODLULS_macraff_p_char_2;\
+      *TSODLULS_macraff_p_char_2++ = TSODLULS_macraff_char;\
+    } while (--TSODLULS_macraff_isize > 0);\
+  } while (0)
 
 

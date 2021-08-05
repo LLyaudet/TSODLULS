@@ -125,6 +125,17 @@ typedef struct {
 
 
 
+typedef struct {
+  char* p_low;
+  char* p_high;
+} t_TSODLULS_qsort_stack_node__comparison_callback;
+
+
+
+typedef int (*t_comparison_function) (const void *, const void *);
+
+
+
 //------------------------------------------------------------------------------------
 //Conversion of finite orders
 //------------------------------------------------------------------------------------

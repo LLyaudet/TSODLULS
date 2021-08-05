@@ -218,6 +218,114 @@ int TSODLULS_qsort_inlined__long_8(
 
 
 
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_3(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 3
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort__comparison_callback_3
+
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_4(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 4
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort__comparison_callback_4
+
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_5(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 5
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort__comparison_callback_5
+
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_6(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 6
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort__comparison_callback_6
+
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_7(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 7
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort__comparison_callback_7
+
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_8(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 8
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort__comparison_callback_8
+
+
+
+
 #undef TSODLULS_STACK_SIZE
 #undef TSODLULS_PUSH
 #undef TSODLULS_POP

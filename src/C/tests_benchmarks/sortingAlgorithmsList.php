@@ -260,5 +260,15 @@ for($i = $iMinThreshold; $i <= $iMaxThreshold; ++$i){
     'stable' => false,
   );
 }
+for($i = $iMinThreshold; $i <= $iMaxThreshold; ++$i){
+  $arrArrSortingAlgorithms['TSODLULS_qsort__comparison_callback_'.$i] = array(
+    'name' => 'TSODLULS_qsort__comparison_callback_'.$i,
+    'function' => 'TSODLULS_qsort__comparison_callback_'.$i,
+    'celltype' => 'direct',
+    'size' => 'cell',
+    'comparison' => 'direct',
+    'stable' => false,
+  );
+}
 
 ?>

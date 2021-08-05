@@ -150,3 +150,81 @@ int TSODLULS_qsort_inlined__long_8(
 );
 
 
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_3(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_4(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_5(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_6(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_7(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_8(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
