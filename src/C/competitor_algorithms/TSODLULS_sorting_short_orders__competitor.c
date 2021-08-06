@@ -213,3 +213,5 @@ int TSODLULS_sort_radix8_count_insertion__short__mark6(
 
 
 
+#include "TSODLULS_sorting_short_orders__competitor__generated.c"
+

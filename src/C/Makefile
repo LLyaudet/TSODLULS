@@ -45,12 +45,12 @@ OBJECTS-DYNAMIC=$(OBJECTS-DIRECTORY)TSODLULS_finite_orders_dyn.o \
                 $(OBJECTS-DIRECTORY)TSODLULS_padding_dyn.o
 
 OBJECTS-STATIC-COMPETITOR=$(OBJECTS-DIRECTORY)TSODLULS_finite_orders__competitor.o \
+                          $(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback__competitor.o \
                           $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders__competitor.o \
                           $(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders__competitor.o \
                           $(OBJECTS-DIRECTORY)TSODLULS_comparison__competitor.o \
                           $(OBJECTS-DIRECTORY)TSODLULS_misc__competitor.o \
                           $(OBJECTS-DIRECTORY)TSODLULS_padding__competitor.o \
-                          $(OBJECTS-DIRECTORY)TSODLULS__competitor__generated_qsort.o
 
 .PHONY: run-tests run-tests-dynamic clean run-benchmarks run-benchmarks-dynamic
 
@@ -122,6 +122,9 @@ $(LIB-DIRECTORY)libTSODLULS_with_competitor_algorithms_$(VERSION).a: $(OBJECTS-S
 $(OBJECTS-DIRECTORY)TSODLULS_finite_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_finite_orders__competitor.c
 	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_finite_orders__competitor.c -o $(OBJECTS-DIRECTORY)TSODLULS_finite_orders__competitor.o
 
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_comparison_callback__competitor.c
+	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_sorting_comparison_callback__competitor.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback__competitor.o
+
 $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_long_orders__competitor.c
 	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_sorting_long_orders__competitor.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders__competitor.o
 
@@ -136,9 +139,6 @@ $(OBJECTS-DIRECTORY)TSODLULS_misc__competitor.o: $(HEADERS-COMPETITOR) ./competi
 
 $(OBJECTS-DIRECTORY)TSODLULS_padding__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_padding__competitor.c
 	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_padding__competitor.c -o $(OBJECTS-DIRECTORY)TSODLULS_padding__competitor.o
-
-$(OBJECTS-DIRECTORY)TSODLULS__competitor__generated_qsort.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS__competitor__generated_qsort.c
-	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS__competitor__generated_qsort.c -o $(OBJECTS-DIRECTORY)TSODLULS__competitor__generated_qsort.o
 
 #-----------------------------------------------------------
 #Build tests

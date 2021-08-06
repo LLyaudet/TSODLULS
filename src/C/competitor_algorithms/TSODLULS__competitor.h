@@ -251,7 +251,9 @@ int TSODLULS_sort_radix8_count_insertion__short__mark6(
 
 
 
-#include "./TSODLULS__competitor__generated_qsort.h"
+#include "TSODLULS_sorting_comparison_callback__competitor__generated.h"
+#include "TSODLULS_sorting_long_orders__competitor__generated.h"
+#include "TSODLULS_sorting_short_orders__competitor__generated.h"
 
 
 

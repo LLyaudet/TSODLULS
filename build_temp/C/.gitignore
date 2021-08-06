@@ -11,6 +11,9 @@ TSODLULS_misc.o
 TSODLULS_padding__competitor.o
 TSODLULS_padding_dyn.o
 TSODLULS_padding.o
+TSODLULS_sorting_comparison_callback__competitor.o
+TSODLULS_sorting_comparison_callback_dyn.o
+TSODLULS_sorting_comparison_callback.o
 TSODLULS_sorting_long_orders__competitor.o
 TSODLULS_sorting_long_orders_dyn.o
 TSODLULS_sorting_long_orders.o

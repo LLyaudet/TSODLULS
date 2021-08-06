@@ -112,3 +112,9 @@ int TSODLULS_sort_radix8_count_insertion__mark4(
   #undef TSODLULS_MAX_THRESH_SEQUEL
 }//end function TSODLULS_sort_radix8_count_insertion__mark4()
 
+
+
+#include "TSODLULS_sorting_long_orders__competitor__generated.c"
+
+
+
