@@ -25,6 +25,8 @@ OBJECTS-DIRECTORY=../../build_temp/C/
 
 LIB-DIRECTORY=../../build_final/bin/
 
+FUNCTIONS-BODIES-DIRECTORY=competitor_algorithms/b/
+
 #The headers that are actually needed for the library
 HEADERS=./TSODLULS.h ./TSODLULS__macro.h ./TSODLULS_finite_orders__macro.h ./TSODLULS_misc__macro.h ./TSODLULS_padding__macro.h
 
@@ -50,7 +52,32 @@ OBJECTS-STATIC-COMPETITOR=$(OBJECTS-DIRECTORY)TSODLULS_finite_orders__competitor
                           $(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders__competitor.o \
                           $(OBJECTS-DIRECTORY)TSODLULS_comparison__competitor.o \
                           $(OBJECTS-DIRECTORY)TSODLULS_misc__competitor.o \
-                          $(OBJECTS-DIRECTORY)TSODLULS_padding__competitor.o \
+                          $(OBJECTS-DIRECTORY)TSODLULS_padding__competitor.o
+
+FUNCTIONS-BODIES-SORTING-COMPARISON-CALLBACK=$(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_qsort__comparison_callback.c
+
+FUNCTIONS-BODIES-SORTING-LONG=$(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_qsort_inlined__long.c \
+                              $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__mark1.c \
+                              $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__mark2.c \
+                              $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__mark3.c \
+                              $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__mark4.c \
+                              $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count__mark1.c
+
+FUNCTIONS-BODIES-SORTING-SHORT=$(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_qsort_inlined__short.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__short__mark1.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__short__mark2.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__short__mark3.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__short__mark4.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__short__mark5.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_insertion__short__mark6.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count_qsort__short.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count__short__mark1.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count__short__mark2.c \
+                               $(FUNCTIONS-BODIES-DIRECTORY)body_TSODLULS_sort_radix8_count__short__mark3.c
+
+FUNCTIONS-BODIES=$(FUNCTIONS-BODIES-SORTING-COMPARISON-CALLBACK) \
+                 $(FUNCTIONS-BODIES-SORTING-LONG) \
+                 $(FUNCTIONS-BODIES-SORTING-SHORT)
 
 .PHONY: run-tests run-tests-dynamic clean run-benchmarks run-benchmarks-dynamic
 
@@ -72,10 +99,10 @@ $(LIB-DIRECTORY)libTSODLULS_$(VERSION).a: $(OBJECTS-STATIC)
 $(OBJECTS-DIRECTORY)TSODLULS_finite_orders.o: $(HEADERS) ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_finite_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_finite_orders.o
 
-$(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders.o: $(HEADERS) ./TSODLULS_sorting_long_orders.c
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders.o: $(HEADERS) ./TSODLULS_sorting_long_orders.c $(FUNCTIONS-BODIES-SORTING-LONG)
 	$(CC) $(CFLAGS) -c ./TSODLULS_sorting_long_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders.o
 
-$(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders.o: $(HEADERS) ./TSODLULS_sorting_short_orders.c
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders.o: $(HEADERS) ./TSODLULS_sorting_short_orders.c $(FUNCTIONS-BODIES-SORTING-SHORT)
 	$(CC) $(CFLAGS) -c ./TSODLULS_sorting_short_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders.o
 
 $(OBJECTS-DIRECTORY)TSODLULS_comparison.o: $(HEADERS) ./TSODLULS_comparison.c
@@ -96,10 +123,10 @@ $(LIB-DIRECTORY)libTSODLULS_$(VERSION).so: $(OBJECTS-DYNAMIC)
 $(OBJECTS-DIRECTORY)TSODLULS_finite_orders_dyn.o: $(HEADERS) ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_finite_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_finite_orders_dyn.o
 
-$(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders_dyn.o: $(HEADERS) ./TSODLULS_sorting_long_orders.c
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders_dyn.o: $(HEADERS) ./TSODLULS_sorting_long_orders.c $(FUNCTIONS-BODIES-SORTING-LONG)
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting_long_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders_dyn.o
 
-$(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders_dyn.o: $(HEADERS) ./TSODLULS_sorting_short_orders.c
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders_dyn.o: $(HEADERS) ./TSODLULS_sorting_short_orders.c $(FUNCTIONS-BODIES-SORTING-SHORT)
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting_short_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders_dyn.o
 
 $(OBJECTS-DIRECTORY)TSODLULS_comparison_dyn.o: $(HEADERS) ./TSODLULS_comparison.c
@@ -122,13 +149,13 @@ $(LIB-DIRECTORY)libTSODLULS_with_competitor_algorithms_$(VERSION).a: $(OBJECTS-S
 $(OBJECTS-DIRECTORY)TSODLULS_finite_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_finite_orders__competitor.c
 	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_finite_orders__competitor.c -o $(OBJECTS-DIRECTORY)TSODLULS_finite_orders__competitor.o
 
-$(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_comparison_callback__competitor.c
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_comparison_callback__competitor.c ./competitor_algorithms/TSODLULS_sorting_comparison_callback__competitor__generated.c $(FUNCTIONS-BODIES-SORTING-COMPARISON-CALLBACK)
 	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_sorting_comparison_callback__competitor.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback__competitor.o
 
-$(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_long_orders__competitor.c
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_long_orders__competitor.c ./competitor_algorithms/TSODLULS_sorting_long_orders__competitor__generated.c $(FUNCTIONS-BODIES-SORTING-LONG)
 	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_sorting_long_orders__competitor.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders__competitor.o
 
-$(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_short_orders__competitor.c
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_sorting_short_orders__competitor.c ./competitor_algorithms/TSODLULS_sorting_short_orders__competitor__generated.c $(FUNCTIONS-BODIES-SORTING-SHORT)
 	$(CC) $(CFLAGS) -c ./competitor_algorithms/TSODLULS_sorting_short_orders__competitor.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders__competitor.o
 
 $(OBJECTS-DIRECTORY)TSODLULS_comparison__competitor.o: $(HEADERS-COMPETITOR) ./competitor_algorithms/TSODLULS_comparison__competitor.c
