@@ -44,11 +44,6 @@ If you want to understand this function body, please look first at stdlib/qsort.
 //  #define TSODLULS_MAX_THRESH 5
   char* base_ptr = (char*) arr_elements;
   const size_t max_threshold_size = TSODLULS_MAX_THRESH * i_element_size;
-  //for swapping
-  size_t TSODLULS_macraff_isize;
-  char* TSODLULS_macraff_p_char;
-  char* TSODLULS_macraff_p_char_2;
-  char TSODLULS_macraff_char;
 
   if(i_number_of_elements < 2){//this is an optimization over glibc qsort! :P >< >< ><
     /* Avoid lossage with unsigned arithmetic below.  */
@@ -76,12 +71,12 @@ If you want to understand this function body, please look first at stdlib/qsort.
       char* mid = lo + i_element_size * ((hi - lo) / i_element_size >> 1);
 
       if((*fn_comparison) ((void *) mid, (void *) lo) < 0){
-        TSODLULS_SWAP(mid, lo, i_element_size);
+        TSODLULS_SWAP_VAR(mid, lo, i_element_size);
       }
       if((*fn_comparison) ((void *) hi, (void *) mid) < 0){
-        TSODLULS_SWAP(mid, hi, i_element_size);
+        TSODLULS_SWAP_VAR(mid, hi, i_element_size);
         if((*fn_comparison) ((void *) mid, (void *) lo) < 0){
-          TSODLULS_SWAP(mid, lo, i_element_size);
+          TSODLULS_SWAP_VAR(mid, lo, i_element_size);
         }
       }
 
@@ -101,7 +96,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
         }
 
         if(left_ptr < right_ptr){
-          TSODLULS_SWAP(left_ptr, right_ptr, i_element_size);
+          TSODLULS_SWAP_VAR(left_ptr, right_ptr, i_element_size);
           if(mid == left_ptr){
             mid = right_ptr;
           }
@@ -174,7 +169,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
     }
 
     if(tmp_ptr != base_ptr){
-      TSODLULS_SWAP(tmp_ptr, base_ptr, i_element_size);
+      TSODLULS_SWAP_VAR(tmp_ptr, base_ptr, i_element_size);
     }
 
     /* Insertion sort, running from left-hand-side up to right-hand-side.  */

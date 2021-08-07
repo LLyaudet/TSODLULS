@@ -18,6 +18,47 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 ©Copyright 2018-2021 Laurent Lyaudet
 */
 
+$arrSwapVarParameter = array(
+  'macro' => 'TSODLULS_SWAP_VAR',
+  'macro_args' => 3,
+  'type' => 'enum',
+  'values' => array(
+    array('index' => 0, 'value_for_macro_def' => 'TSODLULS_SWAP_VAR_1', 'value_for_function_name' => '1'),
+    array('index' => 1, 'value_for_macro_def' => 'TSODLULS_SWAP_VAR_2', 'value_for_function_name' => '2',
+          'macraff_variables' => array(
+            'size_t TSODLULS_macraff_isize;',
+            'char* TSODLULS_macraff_p_char;',
+            'char* TSODLULS_macraff_p_char_2;',
+            'char TSODLULS_macraff_char;',
+          ),
+    ),
+    array('index' => 2, 'value_for_macro_def' => 'TSODLULS_SWAP_VAR_3', 'value_for_function_name' => '3'),
+    array('index' => 3, 'value_for_macro_def' => 'TSODLULS_SWAP_VAR_4', 'value_for_function_name' => '4',
+          'macraff_variables' => array(
+            'char* TSODLULS_macraff_p_char;',
+            'char* TSODLULS_macraff_p_char_2;',
+            'char* TSODLULS_macraff_p_char_3;',
+            'char TSODLULS_macraff_char;',
+          ),
+    ),
+    array('index' => 4, 'value_for_macro_def' => 'TSODLULS_SWAP_VAR_5', 'value_for_function_name' => '5',
+          'macraff_variables' => array(
+            'size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);',
+          ),
+    ),
+    array('index' => 5, 'value_for_macro_def' => 'TSODLULS_SWAP_VAR_6', 'value_for_function_name' => '6',
+          'macraff_variables' => array(
+            'size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);',
+            'size_t TSODLULS_macraff_isize;',
+            't_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;',
+            't_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;',
+            't_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;',
+          ),
+    ),
+  ),
+);
+
+
 $arrArrCompetitorsListByFile = array(
   'TSODLULS_sorting_comparison_callback__competitor__generated' => array(
     'header_head' => '',
@@ -44,6 +85,7 @@ $arrArrCompetitorsListByFile = array(
         'function_comment' => " * Qsort from glibc with minor modifications.\n",
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 3, 'max_value' => 8,),
+          $arrSwapVarParameter,
         ),
       ),
     ),

@@ -34,16 +34,18 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
  * Sorting functions using a comparison callback for arbitrary data structures.
  * Qsort from glibc with minor modifications.
  */
-int TSODLULS_qsort__comparison_callback_3(
+int TSODLULS_qsort__comparison_callback_3_1(
   void* arr_elements,
   size_t i_number_of_elements,
   size_t i_element_size,
   t_comparison_function fn_comparison
 ){
   #define TSODLULS_MAX_THRESH 3
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
   #include "./b/body_TSODLULS_qsort__comparison_callback.c"
   #undef TSODLULS_MAX_THRESH
-}//end function TSODLULS_qsort__comparison_callback_3()
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_3_1()
 
 
 
@@ -51,16 +53,127 @@ int TSODLULS_qsort__comparison_callback_3(
  * Sorting functions using a comparison callback for arbitrary data structures.
  * Qsort from glibc with minor modifications.
  */
-int TSODLULS_qsort__comparison_callback_4(
+int TSODLULS_qsort__comparison_callback_3_2(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 3
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_2(a0,a1,a2)
+  size_t TSODLULS_macraff_isize;
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_3_2()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_3_3(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 3
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_3(a0,a1,a2)
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_3_3()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_3_4(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 3
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_4(a0,a1,a2)
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char* TSODLULS_macraff_p_char_3;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_3_4()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_3_5(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 3
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_3_5()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_3_6(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 3
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_6(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  size_t TSODLULS_macraff_isize;
+  t_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_3_6()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_4_1(
   void* arr_elements,
   size_t i_number_of_elements,
   size_t i_element_size,
   t_comparison_function fn_comparison
 ){
   #define TSODLULS_MAX_THRESH 4
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
   #include "./b/body_TSODLULS_qsort__comparison_callback.c"
   #undef TSODLULS_MAX_THRESH
-}//end function TSODLULS_qsort__comparison_callback_4()
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_4_1()
 
 
 
@@ -68,16 +181,127 @@ int TSODLULS_qsort__comparison_callback_4(
  * Sorting functions using a comparison callback for arbitrary data structures.
  * Qsort from glibc with minor modifications.
  */
-int TSODLULS_qsort__comparison_callback_5(
+int TSODLULS_qsort__comparison_callback_4_2(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 4
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_2(a0,a1,a2)
+  size_t TSODLULS_macraff_isize;
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_4_2()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_4_3(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 4
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_3(a0,a1,a2)
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_4_3()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_4_4(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 4
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_4(a0,a1,a2)
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char* TSODLULS_macraff_p_char_3;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_4_4()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_4_5(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 4
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_4_5()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_4_6(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 4
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_6(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  size_t TSODLULS_macraff_isize;
+  t_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_4_6()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_5_1(
   void* arr_elements,
   size_t i_number_of_elements,
   size_t i_element_size,
   t_comparison_function fn_comparison
 ){
   #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
   #include "./b/body_TSODLULS_qsort__comparison_callback.c"
   #undef TSODLULS_MAX_THRESH
-}//end function TSODLULS_qsort__comparison_callback_5()
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_5_1()
 
 
 
@@ -85,16 +309,127 @@ int TSODLULS_qsort__comparison_callback_5(
  * Sorting functions using a comparison callback for arbitrary data structures.
  * Qsort from glibc with minor modifications.
  */
-int TSODLULS_qsort__comparison_callback_6(
+int TSODLULS_qsort__comparison_callback_5_2(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_2(a0,a1,a2)
+  size_t TSODLULS_macraff_isize;
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_5_2()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_5_3(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_3(a0,a1,a2)
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_5_3()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_5_4(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_4(a0,a1,a2)
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char* TSODLULS_macraff_p_char_3;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_5_4()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_5_5(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_5_5()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_5_6(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_6(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  size_t TSODLULS_macraff_isize;
+  t_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_5_6()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_6_1(
   void* arr_elements,
   size_t i_number_of_elements,
   size_t i_element_size,
   t_comparison_function fn_comparison
 ){
   #define TSODLULS_MAX_THRESH 6
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
   #include "./b/body_TSODLULS_qsort__comparison_callback.c"
   #undef TSODLULS_MAX_THRESH
-}//end function TSODLULS_qsort__comparison_callback_6()
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_6_1()
 
 
 
@@ -102,16 +437,127 @@ int TSODLULS_qsort__comparison_callback_6(
  * Sorting functions using a comparison callback for arbitrary data structures.
  * Qsort from glibc with minor modifications.
  */
-int TSODLULS_qsort__comparison_callback_7(
+int TSODLULS_qsort__comparison_callback_6_2(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 6
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_2(a0,a1,a2)
+  size_t TSODLULS_macraff_isize;
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_6_2()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_6_3(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 6
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_3(a0,a1,a2)
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_6_3()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_6_4(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 6
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_4(a0,a1,a2)
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char* TSODLULS_macraff_p_char_3;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_6_4()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_6_5(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 6
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_6_5()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_6_6(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 6
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_6(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  size_t TSODLULS_macraff_isize;
+  t_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_6_6()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_7_1(
   void* arr_elements,
   size_t i_number_of_elements,
   size_t i_element_size,
   t_comparison_function fn_comparison
 ){
   #define TSODLULS_MAX_THRESH 7
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
   #include "./b/body_TSODLULS_qsort__comparison_callback.c"
   #undef TSODLULS_MAX_THRESH
-}//end function TSODLULS_qsort__comparison_callback_7()
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_7_1()
 
 
 
@@ -119,16 +565,236 @@ int TSODLULS_qsort__comparison_callback_7(
  * Sorting functions using a comparison callback for arbitrary data structures.
  * Qsort from glibc with minor modifications.
  */
-int TSODLULS_qsort__comparison_callback_8(
+int TSODLULS_qsort__comparison_callback_7_2(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 7
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_2(a0,a1,a2)
+  size_t TSODLULS_macraff_isize;
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_7_2()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_7_3(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 7
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_3(a0,a1,a2)
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_7_3()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_7_4(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 7
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_4(a0,a1,a2)
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char* TSODLULS_macraff_p_char_3;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_7_4()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_7_5(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 7
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_7_5()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_7_6(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 7
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_6(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  size_t TSODLULS_macraff_isize;
+  t_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_7_6()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_8_1(
   void* arr_elements,
   size_t i_number_of_elements,
   size_t i_element_size,
   t_comparison_function fn_comparison
 ){
   #define TSODLULS_MAX_THRESH 8
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
   #include "./b/body_TSODLULS_qsort__comparison_callback.c"
   #undef TSODLULS_MAX_THRESH
-}//end function TSODLULS_qsort__comparison_callback_8()
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_8_1()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_8_2(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 8
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_2(a0,a1,a2)
+  size_t TSODLULS_macraff_isize;
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_8_2()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_8_3(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 8
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_3(a0,a1,a2)
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_8_3()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_8_4(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 8
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_4(a0,a1,a2)
+  char* TSODLULS_macraff_p_char;
+  char* TSODLULS_macraff_p_char_2;
+  char* TSODLULS_macraff_p_char_3;
+  char TSODLULS_macraff_char;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_8_4()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_8_5(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 8
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_8_5()
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * Qsort from glibc with minor modifications.
+ */
+int TSODLULS_qsort__comparison_callback_8_6(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+){
+  #define TSODLULS_MAX_THRESH 8
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_6(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  size_t TSODLULS_macraff_isize;
+  t_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;
+  #include "./b/body_TSODLULS_qsort__comparison_callback.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_SWAP_VAR
+}//end function TSODLULS_qsort__comparison_callback_8_6()
 
 
 

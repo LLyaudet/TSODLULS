@@ -74,16 +74,40 @@ function getSCodeForFunctionAndParametersValues(
   $sParameters
 ){
   $sCode = getSSignatureForFunctionAndParameters($arrFunctionData, $sParameters)."{\n";
+  $arrMacraffVariables = array();
   for($i = 0, $iMax = count($arrParameters); $i < $iMax; ++$i){
-    $sCode .= '  #define '.$arrFunctionData['parameters'][$i]['macro'].' ';
+    $sArgs = '';
+    if(isset($arrFunctionData['parameters'][$i]['macro_args'])){
+      for($j = 0, $jMax = $arrFunctionData['parameters'][$i]['macro_args']; $j < $jMax; ++$j){
+        if($j === 0){
+          $sArgs .= '(';
+        }
+        else{
+          $sArgs .= ',';
+        }
+        $sArgs .= 'a'.$j;
+      }
+      $sArgs .= ')';
+    }
+    $sCode .= '  #define '.$arrFunctionData['parameters'][$i]['macro'].$sArgs.' ';
     if(is_array($arrParameters[$i])){
       $sCode .= $arrParameters[$i]['value_for_macro_def'];
     }
     else{
       $sCode .= $arrParameters[$i];
     }
-    $sCode .= "\n";
+    $sCode .= $sArgs."\n";
+
+    if(is_array($arrParameters[$i]) && isset($arrParameters[$i]['macraff_variables'])){
+      $arrMacraffVariables = array_merge($arrMacraffVariables,  $arrParameters[$i]['macraff_variables']);
+    }
   }
+
+  $arrMacraffVariables = array_unique($arrMacraffVariables);
+  if(count($arrMacraffVariables) > 0){
+    $sCode .= '  '.implode("\n  ", $arrMacraffVariables)."\n";
+  }
+
   $sCode .= '  #include "./b/body_'.$arrFunctionData['function'].'.c"'."\n";
   for($i = 0, $iMax = count($arrParameters); $i < $iMax; ++$i){
     $sCode .= '  #undef '.$arrFunctionData['parameters'][$i]['macro']."\n";
@@ -102,6 +126,14 @@ function getNextParameterValue($currentValue, $arrParameterData){
       }
       if($currentValue + 1 <= $arrParameterData['max_value']){
         return $currentValue + 1;
+      }
+    break;
+    case 'enum':
+      if($currentValue === null){
+        return $arrParameterData['values'][0];
+      }
+      if(isset($arrParameterData['values'][$currentValue['index'] + 1])){
+        return $arrParameterData['values'][$currentValue['index'] + 1];
       }
     break;
   }

@@ -100,7 +100,12 @@ The macraffs in this library use the following auxiliary variables:
   void* TSODLULS_macraff_p_void;
   char* TSODLULS_macraff_p_char;
   char* TSODLULS_macraff_p_char_2;
+  char* TSODLULS_macraff_p_char_3;
   char TSODLULS_macraff_char;
+  t_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;
+  t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
 */
 
 #define TSODLULS_free(pointer) \
@@ -109,27 +114,334 @@ The macraffs in this library use the following auxiliary variables:
 
 #define TSODLULS_min_exp(x, y) ((x) < (y) ? (x) : (y))
 
+
+
+/*
+There is no simple and portable way to have double char, quad char and octo char in C.
+Where the interesting feature of char is to be the smallest addressable memory unit.
+And I seek other larger addressable memory units handled by the hardware (CPU...).
+sizeof is not available in preprocessor.
+We take what is available:
+__SIZEOF_INT__
+__SIZEOF_LONG__
+__SIZEOF_LONG_LONG__
+__SIZEOF_SHORT__
+__SIZEOF_POINTER__
+__SIZEOF_FLOAT__
+__SIZEOF_DOUBLE__
+__SIZEOF_LONG_DOUBLE__
+__SIZEOF_SIZE_T__
+__SIZEOF_WCHAR_T__
+__SIZEOF_WINT_T__
+__SIZEOF_PTRDIFF_T__
+*/
+typedef union {
+  char c;
+  int i;
+  long int l;
+  long long int ll;
+  short int s;
+/*
+  void* p;
+  float f;
+  double d;
+  long double ld;
+  size_t st;
+  wchar_t wc;
+  wint_t wi;
+  ptrdiff_t pt;
+*/
+} t_TSODLULS_sizables_union;
+typedef union {
+  char* c;
+  int* i;
+  long int* l;
+  long long int* ll;
+  short int* s;
+/*
+  void** p;
+  float* f;
+  double* d;
+  long double* ld;
+  size_t* st;
+  wchar_t* wc;
+  wint_t* wi;
+  ptrdiff_t* pt;
+*/
+} t_TSODLULS_sizables_pointers_union;
+
+//Magic numbers constants for a switch
+#define TSODLULS_CHAR_SWAP 0
+#define TSODLULS_INT_SWAP 1
+#define TSODLULS_LONG_INT_SWAP 2
+#define TSODLULS_LONG_LONG_INT_SWAP 3
+#define TSODLULS_SHORT_INT_SWAP 4
+
+#if __SIZEOF_INT__ == 2
+  #define TSODLULS_CHUNK_SIZE_2 TSODLULS_INT_SWAP
+#elif __SIZEOF_LONG__ == 2
+  #define TSODLULS_CHUNK_SIZE_2 TSODLULS_LONG_INT_SWAP
+#elif __SIZEOF_LONG_LONG__ == 2
+  #define TSODLULS_CHUNK_SIZE_2 TSODLULS_LONG_LONG_INT_SWAP
+#elif __SIZEOF_SHORT__ == 2
+  #define TSODLULS_CHUNK_SIZE_2 TSODLULS_SHORT_INT_SWAP
+#else
+  #define TSODLULS_CHUNK_SIZE_2 TSODLULS_CHAR_SWAP
+#endif
+
+#if __SIZEOF_INT__ == 4
+  #define TSODLULS_CHUNK_SIZE_4 TSODLULS_INT_SWAP
+#elif __SIZEOF_LONG__ == 4
+  #define TSODLULS_CHUNK_SIZE_4 TSODLULS_LONG_INT_SWAP
+#elif __SIZEOF_LONG_LONG__ == 4
+  #define TSODLULS_CHUNK_SIZE_4 TSODLULS_LONG_LONG_INT_SWAP
+#elif __SIZEOF_SHORT__ == 4
+  #define TSODLULS_CHUNK_SIZE_4 TSODLULS_SHORT_INT_SWAP
+#else
+  #define TSODLULS_CHUNK_SIZE_4 TSODLULS_CHUNK_SIZE_2
+#endif
+
+#if __SIZEOF_INT__ == 8
+  #define TSODLULS_CHUNK_SIZE_8 TSODLULS_INT_SWAP
+#elif __SIZEOF_LONG__ == 8
+  #define TSODLULS_CHUNK_SIZE_8 TSODLULS_LONG_INT_SWAP
+#elif __SIZEOF_LONG_LONG__ == 8
+  #define TSODLULS_CHUNK_SIZE_8 TSODLULS_LONG_LONG_INT_SWAP
+#elif __SIZEOF_SHORT__ == 8
+  #define TSODLULS_CHUNK_SIZE_8 TSODLULS_SHORT_INT_SWAP
+#else
+  #define TSODLULS_CHUNK_SIZE_8 TSODLULS_CHUNK_SIZE_4
+#endif
+
+
+
+/**
+ * Computes the chunk size used for swapping many items of same size
+*/
+#define TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(size)\
+  (size < 1 ? TSODLULS_CHAR_SWAP : \
+    (size & 1 ? TSODLULS_CHAR_SWAP : \
+      (size & 2 ? TSODLULS_CHUNK_SIZE_2 : \
+        ( size & 4 ? TSODLULS_CHUNK_SIZE_4 : TSODLULS_CHUNK_SIZE_8))))
+
+
+
 /**
  * Byte-wise swap two items of size SIZE.
  * This macro is adapted from glibc 2.27.
  * Written by Douglas C. Schmidt (schmidt@ics.uci.edu).
  * Copyright (C) 1991-2018 Free Software Foundation, Inc.
+ * (SWAP_VAR for swap varying length cells)
+*/
+#define TSODLULS_SWAP_VAR_1(a, b, size)\
+  do{\
+    size_t isize_tsodluls_swap_var = (size);\
+    char* p_c_tsodluls_swap_var_1 = (char *) (a);\
+    char* p_c_tsodluls_swap_var_2 = (char *) (b);\
+    do{\
+      char c_tsodluls_swap_var = *p_c_tsodluls_swap_var_1;\
+      *p_c_tsodluls_swap_var_1++ = *p_c_tsodluls_swap_var_2;\
+      *p_c_tsodluls_swap_var_2++ = c_tsodluls_swap_var;\
+    }while(--isize_tsodluls_swap_var > 0);\
+  }while(0);
+
+
+
+/**
+ * Byte-wise swap two items of size SIZE.
  * This macraff requires the following auxiliary variables:
  *   size_t TSODLULS_macraff_isize;
  *   char* TSODLULS_macraff_p_char;
  *   char* TSODLULS_macraff_p_char_2;
  *   char TSODLULS_macraff_char;
 */
-#define TSODLULS_SWAP(a, b, size)\
+#define TSODLULS_SWAP_VAR_2(a, b, size)\
   do{\
     TSODLULS_macraff_isize = (size);\
-    TSODLULS_macraff_p_char = (a);\
-    TSODLULS_macraff_p_char_2 = (b);\
+    TSODLULS_macraff_p_char = (char *) (a);\
+    TSODLULS_macraff_p_char_2 = (char *) (b);\
     do{\
       TSODLULS_macraff_char = *TSODLULS_macraff_p_char;\
       *TSODLULS_macraff_p_char++ = *TSODLULS_macraff_p_char_2;\
       *TSODLULS_macraff_p_char_2++ = TSODLULS_macraff_char;\
-    } while (--TSODLULS_macraff_isize > 0);\
-  } while (0)
+    }while(--TSODLULS_macraff_isize > 0);\
+  }while(0);
+
+
+
+/**
+ * Byte-wise swap two items of size SIZE.
+*/
+#define TSODLULS_SWAP_VAR_3(a, b, size)\
+  do{\
+    char* p_c_tsodluls_swap_var_1 = (char *) (a);\
+    char* p_c_tsodluls_swap_var_2 = (char *) (b);\
+    char* p_c_tsodluls_swap_var_3 = p_c_tsodluls_swap_var_1 + (size);\
+    do{\
+      char c_tsodluls_swap_var = *p_c_tsodluls_swap_var_1;\
+      *p_c_tsodluls_swap_var_1++ = *p_c_tsodluls_swap_var_2;\
+      *p_c_tsodluls_swap_var_2++ = c_tsodluls_swap_var;\
+    }while(p_c_tsodluls_swap_var_1 < p_c_tsodluls_swap_var_3);\
+  }while(0);
+
+
+
+/**
+ * Byte-wise swap two items of size SIZE.
+ * This macraff requires the following auxiliary variables:
+ *   char* TSODLULS_macraff_p_char;
+ *   char* TSODLULS_macraff_p_char_2;
+ *   char* TSODLULS_macraff_p_char_3;
+ *   char TSODLULS_macraff_char;
+*/
+#define TSODLULS_SWAP_VAR_4(a, b, size)\
+  do{\
+    TSODLULS_macraff_p_char = (char *) (a);\
+    TSODLULS_macraff_p_char_2 = (char *) (b);\
+    TSODLULS_macraff_p_char_3 = TSODLULS_macraff_p_char + (size);\
+    do{\
+      TSODLULS_macraff_char = *TSODLULS_macraff_p_char;\
+      *TSODLULS_macraff_p_char++ = *TSODLULS_macraff_p_char_2;\
+      *TSODLULS_macraff_p_char_2++ = TSODLULS_macraff_char;\
+    }while(TSODLULS_macraff_p_char < TSODLULS_macraff_p_char_3);\
+  }while(0);
+
+
+
+/**
+ * Byte-wise swap two items of size SIZE taking into account chunk_size.
+ * It's half a macraff because it needs:
+ *   size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+ * that cannot be given as an argument to the macro for compatibility with others SWAP_VAR
+ * (adding always a fourth argument yields unused variable notices on compilation).
+*/
+#define TSODLULS_SWAP_VAR_5(a, b, size)\
+  switch(TSODLULS_macraff_i_chunk_size){\
+    case TSODLULS_CHAR_SWAP:\
+      do{\
+        size_t isize_tsodluls_swap_var = (size);\
+        char* p_c_tsodluls_swap_var_1 = (char *) (a);\
+        char* p_c_tsodluls_swap_var_2 = (char *) (b);\
+        do{\
+          char c_tsodluls_swap_var_1 = *p_c_tsodluls_swap_var_1;\
+          *p_c_tsodluls_swap_var_1++ = *p_c_tsodluls_swap_var_2;\
+          *p_c_tsodluls_swap_var_2++ = c_tsodluls_swap_var_1;\
+        }while(--isize_tsodluls_swap_var > 0);\
+      }while(0);\
+    break;\
+    case TSODLULS_INT_SWAP:\
+      do{\
+        size_t isize_tsodluls_swap_var = (size);\
+        int* p_i_tsodluls_swap_var_1 = (int *) (a);\
+        int* p_i_tsodluls_swap_var_2 = (int *) (b);\
+        do{\
+          int i_tsodluls_swap_var_1 = *p_i_tsodluls_swap_var_1;\
+          *p_i_tsodluls_swap_var_1++ = *p_i_tsodluls_swap_var_2;\
+          *p_i_tsodluls_swap_var_2++ = i_tsodluls_swap_var_1;\
+        }while((isize_tsodluls_swap_var -= sizeof(int)) > 0);\
+      }while(0);\
+    break;\
+    case TSODLULS_LONG_INT_SWAP:\
+      do{\
+        size_t isize_tsodluls_swap_var = (size);\
+        long int* p_li_tsodluls_swap_var_1 = (long int *) (a);\
+        long int* p_li_tsodluls_swap_var_2 = (long int *) (b);\
+        do{\
+          long int li_tsodluls_swap_var_1 = *p_li_tsodluls_swap_var_1;\
+          *p_li_tsodluls_swap_var_1++ = *p_li_tsodluls_swap_var_2;\
+          *p_li_tsodluls_swap_var_2++ = li_tsodluls_swap_var_1;\
+        }while((isize_tsodluls_swap_var -= sizeof(long int)) > 0);\
+      }while(0);\
+    break;\
+    case TSODLULS_LONG_LONG_INT_SWAP:\
+      do{\
+        size_t isize_tsodluls_swap_var = (size);\
+        long long int* p_lli_tsodluls_swap_var_1 = (long long int *) (a);\
+        long long int* p_lli_tsodluls_swap_var_2 = (long long int *) (b);\
+        do{\
+          long long int lli_tsodluls_swap_var_1 = *p_lli_tsodluls_swap_var_1;\
+          *p_lli_tsodluls_swap_var_1++ = *p_lli_tsodluls_swap_var_2;\
+          *p_lli_tsodluls_swap_var_2++ = lli_tsodluls_swap_var_1;\
+        }while((isize_tsodluls_swap_var -= sizeof(long long int)) > 0);\
+      }while(0);\
+    break;\
+    case TSODLULS_SHORT_INT_SWAP:\
+      do{\
+        size_t isize_tsodluls_swap_var = (size);\
+        short int* p_si_tsodluls_swap_var_1 = (short int *) (a);\
+        short int* p_si_tsodluls_swap_var_2 = (short int *) (b);\
+        do{\
+          short int si_tsodluls_swap_var_1 = *p_si_tsodluls_swap_var_1;\
+          *p_si_tsodluls_swap_var_1++ = *p_si_tsodluls_swap_var_2;\
+          *p_si_tsodluls_swap_var_2++ = si_tsodluls_swap_var_1;\
+        }while((isize_tsodluls_swap_var -= sizeof(short int)) > 0);\
+      }while(0);\
+    break;\
+  }
+
+
+
+/**
+ * Byte-wise swap two items of size SIZE taking into account chunk_size.
+ * A macraff version of TSODLULS_SWAP_VAR_5.
+ * This macraff requires the following auxiliary variables:
+ *   size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+ *   size_t TSODLULS_macraff_isize;
+ *   t_TSODLULS_sizables_union TSODLULS_macraff_sizables_union;
+ *   t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;
+ *   t_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;
+*/
+#define TSODLULS_SWAP_VAR_6(a, b, size)\
+  do{\
+    TSODLULS_macraff_isize = (size);\
+    switch(TSODLULS_macraff_i_chunk_size){\
+      case TSODLULS_CHAR_SWAP:\
+        TSODLULS_macraff_sizables_pointers_union_1.c = (char *) (a);\
+        TSODLULS_macraff_sizables_pointers_union_2.c = (char *) (b);\
+        do{\
+          TSODLULS_macraff_sizables_union.c = *TSODLULS_macraff_sizables_pointers_union_1.c;\
+          *TSODLULS_macraff_sizables_pointers_union_1.c++ = *TSODLULS_macraff_sizables_pointers_union_2.c;\
+          *TSODLULS_macraff_sizables_pointers_union_2.c++ = TSODLULS_macraff_sizables_union.c;\
+        }while(--TSODLULS_macraff_isize > 0);\
+      break;\
+      case TSODLULS_INT_SWAP:\
+        TSODLULS_macraff_sizables_pointers_union_1.i = (int *) (a);\
+        TSODLULS_macraff_sizables_pointers_union_2.i = (int *) (b);\
+        do{\
+          TSODLULS_macraff_sizables_union.i = *TSODLULS_macraff_sizables_pointers_union_1.i;\
+          *TSODLULS_macraff_sizables_pointers_union_1.i++ = *TSODLULS_macraff_sizables_pointers_union_2.i;\
+          *TSODLULS_macraff_sizables_pointers_union_2.i++ = TSODLULS_macraff_sizables_union.i;\
+        }while((TSODLULS_macraff_isize -= sizeof(int)) > 0);\
+      break;\
+      case TSODLULS_LONG_INT_SWAP:\
+        TSODLULS_macraff_sizables_pointers_union_1.l = (long int *) (a);\
+        TSODLULS_macraff_sizables_pointers_union_2.l = (long int *) (b);\
+        do{\
+          TSODLULS_macraff_sizables_union.l = *TSODLULS_macraff_sizables_pointers_union_1.l;\
+          *TSODLULS_macraff_sizables_pointers_union_1.l++ = *TSODLULS_macraff_sizables_pointers_union_2.l;\
+          *TSODLULS_macraff_sizables_pointers_union_2.l++ = TSODLULS_macraff_sizables_union.l;\
+        }while((TSODLULS_macraff_isize -= sizeof(long int)) > 0);\
+      break;\
+      case TSODLULS_LONG_LONG_INT_SWAP:\
+        TSODLULS_macraff_sizables_pointers_union_1.ll = (long long int *) (a);\
+        TSODLULS_macraff_sizables_pointers_union_2.ll = (long long int *) (b);\
+        do{\
+          TSODLULS_macraff_sizables_union.ll = *TSODLULS_macraff_sizables_pointers_union_1.ll;\
+          *TSODLULS_macraff_sizables_pointers_union_1.ll++ = *TSODLULS_macraff_sizables_pointers_union_2.ll;\
+          *TSODLULS_macraff_sizables_pointers_union_2.ll++ = TSODLULS_macraff_sizables_union.ll;\
+        }while((TSODLULS_macraff_isize -= sizeof(long long int)) > 0);\
+      break;\
+      case TSODLULS_SHORT_INT_SWAP:\
+        TSODLULS_macraff_sizables_pointers_union_1.s = (short int *) (a);\
+        TSODLULS_macraff_sizables_pointers_union_2.s = (short int *) (b);\
+        do{\
+          TSODLULS_macraff_sizables_union.s = *TSODLULS_macraff_sizables_pointers_union_1.s;\
+          *TSODLULS_macraff_sizables_pointers_union_1.s++ = *TSODLULS_macraff_sizables_pointers_union_2.s;\
+          *TSODLULS_macraff_sizables_pointers_union_2.s++ = TSODLULS_macraff_sizables_union.s;\
+        }while((TSODLULS_macraff_isize -= sizeof(short int)) > 0);\
+      break;\
+    }\
+  }while(0);\
+
 
 
