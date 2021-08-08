@@ -42,6 +42,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
 //  t_comparison_function fn_comparison
 //){
 //  #define TSODLULS_MAX_THRESH 5
+//  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
   char* base_ptr = (char*) arr_elements;
   const size_t max_threshold_size = TSODLULS_MAX_THRESH * i_element_size;
 
@@ -151,7 +152,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
      for partitions below MAX_THRESH size. BASE_PTR points to the beginning
      of the array to sort, and END_PTR points at the very last element in
      the array (*not* one beyond it!). */
-
+  #if TSODLULS_MAX_THRESH > 1
   {
     char* const end_ptr = &base_ptr[i_element_size * (i_number_of_elements - 1)];
     char* tmp_ptr = base_ptr;
@@ -196,6 +197,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
       }
     }
   }
+  #endif
   return 0;
 //}//end function TSODLULS_qsort_inlined__short_MAX_THRESH
 

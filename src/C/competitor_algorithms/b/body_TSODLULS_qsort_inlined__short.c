@@ -151,7 +151,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
      for partitions below MAX_THRESH size. BASE_PTR points to the beginning
      of the array to sort, and END_PTR points at the very last element in
      the array (*not* one beyond it!). */
-
+  #if TSODLULS_MAX_THRESH > 1
   {
     t_TSODLULS_sort_element__short* const end_ptr = &base_ptr[(i_number_of_elements - 1)];
     t_TSODLULS_sort_element__short* tmp_ptr = base_ptr;
@@ -196,6 +196,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
       }
     }
   }
+  #endif
   return 0;
 //}//end function TSODLULS_qsort_inlined__short_MAX_THRESH
 
