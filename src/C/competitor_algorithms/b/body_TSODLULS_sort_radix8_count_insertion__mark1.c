@@ -233,10 +233,11 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
      the array (*not* one beyond it!). */
 
   label_insertion_sort:
+  #if TSODLULS_MAX_THRESH > 1
   {
     t_TSODLULS_sort_element* const end_ptr = &arr_elements[(i_number_of_elements - 1)];
     t_TSODLULS_sort_element* tmp_ptr = arr_elements;
-    t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, arr_elements + TSODLULS_MAX_THRESH);
+    t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, arr_elements + TSODLULS_MAX_THRESH - 1);
     t_TSODLULS_sort_element* run_ptr;
     size_t i;
     size_t i_max;
@@ -295,21 +296,17 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
       }
       ++tmp_ptr;
       if(tmp_ptr != run_ptr){
-        t_TSODLULS_sort_element* trav;
-
-        trav = run_ptr + 1;
-        while(--trav >= run_ptr){
-          tmp_cell = *trav;
-          t_TSODLULS_sort_element* hi;
-          t_TSODLULS_sort_element* lo;
-          for (hi = lo = trav; (--lo) >= tmp_ptr; hi = lo){
-            *hi = *lo;
-          }
-          *hi = tmp_cell;
+        tmp_cell = *run_ptr;
+        t_TSODLULS_sort_element* hi;
+        t_TSODLULS_sort_element* lo;
+        for (hi = lo = run_ptr; (--lo) >= tmp_ptr; hi = lo){
+          *hi = *lo;
         }
+        *hi = tmp_cell;
       }
     }
   }
+  #endif
 
   return 0;
 //}//end function TSODLULS_sort_radix8_count_insertion__mark1()

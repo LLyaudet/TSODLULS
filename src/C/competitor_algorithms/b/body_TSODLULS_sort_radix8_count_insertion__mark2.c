@@ -167,26 +167,12 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
           arr_instances[i_current_instance].b_copy = 0;
           ++i_current_instance;
         }
-        else if(arr_counts[i] == TSODLULS_MAX_THRESH_SEQUEL
+        else if(arr_counts[i] >= 2 //at least two elements needs to be sorted
           //for nextified strings this test can be done on only one element
           && arr_elements[current_instance.i_offset_first + arr_offsets[i] - 1].i_key_size
                > current_instance.i_depth + 1
         ){
-          p_cell1 = &(arr_elements[current_instance.i_offset_first + arr_offsets[i] - 2]);
-          p_cell2 = p_cell1 + 1;
-          for(
-            size_t j = current_instance.i_depth + 1, j_max = TSODLULS_min_exp(p_cell1->i_key_size, p_cell2->i_key_size);
-            j < j_max;
-            ++j
-          ){
-            if(p_cell2->s_key[j] < p_cell1->s_key[j]){
-              tmp_cell = *p_cell1; *p_cell1 = *p_cell2; *p_cell2 = tmp_cell;//swapping
-              break;
-            }
-            if(p_cell2->s_key[j] > p_cell1->s_key[j]){
-              break;
-            }
-          }
+          #include "../f/fragment_partial_insertion_sort_for_long.c"
         }
       }//end for(int i = 0; i < 256; ++i)
     }
@@ -236,26 +222,12 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
             &(arr_elements_copy[current_instance.i_offset_first + arr_offsets[i] - arr_counts[i]]),
             arr_counts[i] * sizeof(t_TSODLULS_sort_element)
           );
-          if(arr_counts[i] == TSODLULS_MAX_THRESH_SEQUEL
+          if(arr_counts[i] >= 2 //at least two elements needs to be sorted
             //for nextified strings this test can be done on only one element
             && arr_elements_copy[current_instance.i_offset_first + arr_offsets[i] - 1].i_key_size
                  > current_instance.i_depth + 1
           ){
-            p_cell1 = &(arr_elements[current_instance.i_offset_first + arr_offsets[i] - 2]);
-            p_cell2 = p_cell1 + 1;
-            for(
-              size_t j = current_instance.i_depth + 1, j_max = TSODLULS_min_exp(p_cell1->i_key_size, p_cell2->i_key_size);
-              j < j_max;
-              ++j
-            ){
-              if(p_cell2->s_key[j] < p_cell1->s_key[j]){
-                tmp_cell = *p_cell1; *p_cell1 = *p_cell2; *p_cell2 = tmp_cell;//swapping
-                break;
-              }
-              if(p_cell2->s_key[j] > p_cell1->s_key[j]){
-                break;
-              }
-            }
+            #include "../f/fragment_partial_insertion_sort_for_long.c"
           }
         }
       }//end for(int i = 0; i < 256; ++i)
@@ -282,10 +254,11 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
      the array (*not* one beyond it!). */
 
   label_insertion_sort:
+  #if TSODLULS_MAX_THRESH > 1
   {
     t_TSODLULS_sort_element* const end_ptr = &arr_elements[(i_number_of_elements - 1)];
     t_TSODLULS_sort_element* tmp_ptr = arr_elements;
-    t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, arr_elements + TSODLULS_MAX_THRESH);
+    t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, arr_elements + TSODLULS_MAX_THRESH - 1);
     t_TSODLULS_sort_element* run_ptr;
     size_t i;
     size_t i_max;
@@ -343,21 +316,17 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
       }
       ++tmp_ptr;
       if(tmp_ptr != run_ptr){
-        t_TSODLULS_sort_element* trav;
-
-        trav = run_ptr + 1;
-        while(--trav >= run_ptr){
-          tmp_cell = *trav;
-          t_TSODLULS_sort_element* hi;
-          t_TSODLULS_sort_element* lo;
-          for (hi = lo = trav; (--lo) >= tmp_ptr; hi = lo){
-            *hi = *lo;
-          }
-          *hi = tmp_cell;
+        tmp_cell = *run_ptr;
+        t_TSODLULS_sort_element* hi;
+        t_TSODLULS_sort_element* lo;
+        for (hi = lo = run_ptr; (--lo) >= tmp_ptr; hi = lo){
+          *hi = *lo;
         }
+        *hi = tmp_cell;
       }
     }
   }
+  #endif
 
   return 0;
 //}//end function TSODLULS_sort_radix8_count_insertion__mark2()
