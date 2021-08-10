@@ -80,6 +80,23 @@ If you want to understand this function body, please look first at stdlib/qsort.
       the while loops. */
 
       t_TSODLULS_sort_element* mid = lo + ((hi - lo) >> 1);
+      #if TSODLULS_MAX_THRESH <= 1
+      if(mid == lo){//2 elements
+        // swapping low and high if needed
+        TSODLULS_set_min_length__macraff(i_max__compare, lo, hi);
+        for(i__compare = 0; i__compare < i_max__compare; ++i__compare){
+          i_result__compare = ((int)(lo->s_key[i__compare])) - ((int)(hi->s_key[i__compare]));
+          if(i_result__compare != 0){
+            if(i_result__compare > 0){
+              tmp_cell = *hi; *hi = *lo; *lo = tmp_cell;//swapping
+            }
+            break;
+          }
+        }
+        TSODLULS_POP (lo, hi);
+        continue;
+      }
+      #endif
 
       // swapping low and middle if needed
       TSODLULS_set_min_length__macraff(i_max__compare, lo, mid);
@@ -117,6 +134,12 @@ If you want to understand this function body, please look first at stdlib/qsort.
           break;
         }
       }
+      #if TSODLULS_MAX_THRESH <= 2
+      if((hi - lo) == 2){//3 elements
+        TSODLULS_POP (lo, hi);
+        continue;
+      }
+      #endif
 
       left_ptr  = lo + 1;
       right_ptr = hi - 1;
@@ -181,8 +204,8 @@ If you want to understand this function body, please look first at stdlib/qsort.
          ignore one or both.  Otherwise, push the larger partition's
          bounds on the stack and continue sorting the smaller one. */
 
-      if((size_t)(right_ptr - lo) <= TSODLULS_MAX_THRESH){
-        if ((size_t) (hi - left_ptr) <= TSODLULS_MAX_THRESH){
+      if((right_ptr - lo) < TSODLULS_MAX_THRESH){
+        if((hi - left_ptr) < TSODLULS_MAX_THRESH){
           /* Ignore both small partitions. */
           TSODLULS_POP (lo, hi);
         }
@@ -191,7 +214,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
           lo = left_ptr;
         }
       }
-      else if ((size_t) (hi - left_ptr) <= TSODLULS_MAX_THRESH){
+      else if((hi - left_ptr) < TSODLULS_MAX_THRESH){
         /* Ignore small right partition. */
         hi = right_ptr;
       }
@@ -217,7 +240,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
   {
     t_TSODLULS_sort_element* const end_ptr = &base_ptr[(i_number_of_elements - 1)];
     t_TSODLULS_sort_element* tmp_ptr = base_ptr;
-    t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, base_ptr + TSODLULS_MAX_THRESH);
+    t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, base_ptr + TSODLULS_MAX_THRESH - 1);
     t_TSODLULS_sort_element* run_ptr;
 
     /* Find smallest element in first threshold and place it at the
@@ -262,18 +285,13 @@ If you want to understand this function body, please look first at stdlib/qsort.
       }
       ++tmp_ptr;
       if(tmp_ptr != run_ptr){
-        t_TSODLULS_sort_element* trav;
-
-        trav = run_ptr + 1;
-        while(--trav >= run_ptr){
-          tmp_cell = *trav;
-          t_TSODLULS_sort_element* hi;
-          t_TSODLULS_sort_element* lo;
-          for (hi = lo = trav; (--lo) >= tmp_ptr; hi = lo){
-            *hi = *lo;
-          }
-          *hi = tmp_cell;
+        tmp_cell = *run_ptr;
+        t_TSODLULS_sort_element* hi;
+        t_TSODLULS_sort_element* lo;
+        for (hi = lo = run_ptr; (--lo) >= tmp_ptr; hi = lo){
+          *hi = *lo;
         }
+        *hi = tmp_cell;
       }
     }
   }

@@ -44,7 +44,20 @@ If you want to understand this function body, please look first at stdlib/qsort.
 //  #define TSODLULS_MAX_THRESH 5
 //  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
   char* base_ptr = (char*) arr_elements;
-  const size_t max_threshold_size = TSODLULS_MAX_THRESH * i_element_size;
+
+  const size_t max_threshold_size = (TSODLULS_MAX_THRESH - 1) * i_element_size;
+  /*
+  -1 because it is used in offsets (4 elements -> 3 offsets).
+  I saw this bug when testing with TSODLULS_MAX_THRESH = 1.
+  Insertion sort does not use this at the end except for finding the smallest element in first threshold.
+  Overestimating the first threshold and the size of parts for insertion does not yield a functional bug.
+  Thus only because I added "#if TSODLULS_MAX_THRESH > 1" before insertion sort yielded a bug.
+  There was a mismatch between the initial line "if(i_number_of_elements > TSODLULS_MAX_THRESH){"
+  just below (at most TSODLULS_MAX_THRESH elements for insertion sort)
+  and the further lines "if((size_t)(right_ptr - lo) <= max_threshold_size){"
+  (at most TSODLULS_MAX_THRESH + 1 elements before correction for insertion sort).
+  This mismatch does exist in glibc qsort at time of writing.
+  */
 
   if(i_number_of_elements < 2){//this is an optimization over glibc qsort! :P >< >< ><
     /* Avoid lossage with unsigned arithmetic below.  */
@@ -70,6 +83,15 @@ If you want to understand this function body, please look first at stdlib/qsort.
       the while loops. */
 
       char* mid = lo + i_element_size * ((hi - lo) / i_element_size >> 1);
+      #if TSODLULS_MAX_THRESH <= 1
+      if(mid == lo){//2 elements
+        if((*fn_comparison) ((void *) hi, (void *) lo) < 0){
+          TSODLULS_SWAP_VAR(hi, lo, i_element_size);
+        }
+        TSODLULS_POP (lo, hi);
+        continue;
+      }
+      #endif
 
       if((*fn_comparison) ((void *) mid, (void *) lo) < 0){
         TSODLULS_SWAP_VAR(mid, lo, i_element_size);
@@ -80,6 +102,12 @@ If you want to understand this function body, please look first at stdlib/qsort.
           TSODLULS_SWAP_VAR(mid, lo, i_element_size);
         }
       }
+      #if TSODLULS_MAX_THRESH <= 2
+      if((hi - lo) / i_element_size == 2){//3 elements
+        TSODLULS_POP (lo, hi);
+        continue;
+      }
+      #endif
 
       left_ptr  = lo + i_element_size;
       right_ptr = hi - i_element_size;
@@ -114,6 +142,12 @@ If you want to understand this function body, please look first at stdlib/qsort.
         }
       }
       while (left_ptr <= right_ptr);
+      // lo <= right_ptr < left_ptr <= hi
+      // [lo, left_ptr[ at most *mid
+      // ]right_ptr, hi] at least *mid
+      // right_ptr + 1 or 2 = left_ptr
+      // if right_ptr + 2 = left_ptr, *(right_ptr + 1) = *mid
+      // hence [lo, right_ptr] at most *mid, [left_ptr, hi] at least *mid and ]right_ptr, left_ptr[ = *mid
 
       /* Set up pointers for next iteration.  First determine whether
          left and right partitions are below the threshold size.  If so,
