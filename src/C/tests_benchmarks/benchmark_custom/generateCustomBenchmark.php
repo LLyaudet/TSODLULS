@@ -23,7 +23,7 @@ include('../getUserChoiceFunctions.php');
 $sMessage = "Hello, please choose a first algorithm to benchmark\n"
            ." (input the number before the name and press return).\n\n";
 
-$arrDataAlgorithm1 = getChoiceForAlgorithm($sMessage);
+$arrDataAlgorithm1 = getArrChoiceOfAlgorithmsWithParameters($sMessage)[0];
 
 $bWithMacraff1 = false;
 if($arrDataAlgorithm1['celltype'] != 'direct'){
@@ -33,7 +33,7 @@ if($arrDataAlgorithm1['celltype'] != 'direct'){
 $sMessage = "Hello, please choose a second algorithm to benchmark\n"
            ." (input the number before the name and press return).\n\n";
 
-$arrDataAlgorithm2 = getChoiceForAlgorithm($sMessage);
+$arrDataAlgorithm2 = getArrChoiceOfAlgorithmsWithParameters($sMessage)[0];
 
 $bWithMacraff2 = false;
 if($arrDataAlgorithm2['celltype'] != 'direct'){

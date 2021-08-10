@@ -204,72 +204,21 @@ $arrArrSortingAlgorithms = array(
     'comparison' => false,
     'stable' => true,
   ),
-  'TSODLULS_sort_radix8_count_insertion__mark1' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__mark1',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__mark1',
-    'celltype' => 'long',
-    'size' => false,
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__mark2' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__mark2',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__mark2',
-    'celltype' => 'long',
-    'size' => false,
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__mark3' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__mark3',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__mark3',
-    'celltype' => 'long',
-    'size' => false,
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__mark4' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__mark4',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__mark4',
-    'celltype' => 'long',
-    'size' => false,
-    'comparison' => false,
-    'stable' => true,
-  ),
 );
 
-$iMinThreshold = 3;
-$iMaxThreshold = 8;
-for($i = $iMinThreshold; $i <= $iMaxThreshold; ++$i){
-  $arrArrSortingAlgorithms['TSODLULS_qsort_inlined__short_'.$i] = array(
-    'name' => 'TSODLULS_qsort_inlined__short_'.$i,
-    'function' => 'TSODLULS_qsort_inlined__short_'.$i,
-    'celltype' => 'short',
-    'size' => false,
-    'comparison' => false,
-    'stable' => false,
-  );
-}
-for($i = $iMinThreshold; $i <= $iMaxThreshold; ++$i){
-  $arrArrSortingAlgorithms['TSODLULS_qsort_inlined__long_'.$i] = array(
-    'name' => 'TSODLULS_qsort_inlined__long_'.$i,
-    'function' => 'TSODLULS_qsort_inlined__long_'.$i,
-    'celltype' => 'long',
-    'size' => false,
-    'comparison' => false,
-    'stable' => false,
-  );
-}
-for($j = 1; $j <= 6; ++$j){
-  for($i = $iMinThreshold; $i <= $iMaxThreshold; ++$i){
-    $arrArrSortingAlgorithms['TSODLULS_qsort__comparison_callback_'.$i.'_'.$j] = array(
-      'name' => 'TSODLULS_qsort__comparison_callback_'.$i.'_'.$j,
-      'function' => 'TSODLULS_qsort__comparison_callback_'.$i.'_'.$j,
-      'celltype' => 'direct',
-      'size' => 'cell',
-      'comparison' => 'direct',
-      'stable' => false,
-    );
+
+include('../../competitor_algorithms/code_generation/competitorsListByFile.php');
+$arrFilesIncluded = array(
+  'TSODLULS_sorting_comparison_callback__competitor__generated',
+  'TSODLULS_sorting_long_orders__competitor__generated',
+  'TSODLULS_sorting_short_orders__competitor__generated',
+);
+foreach($arrFilesIncluded as $sFile){
+  foreach($arrArrCompetitorsListByFile[$sFile]['functions'] as $arrSortingAlgorithm){
+    if(!isset($arrSortingAlgorithm['name'])){
+      $arrSortingAlgorithm['name'] = $arrSortingAlgorithm['function'];
+    }
+    $arrArrSortingAlgorithms[$arrSortingAlgorithm['name']] = $arrSortingAlgorithm;
   }
 }
 

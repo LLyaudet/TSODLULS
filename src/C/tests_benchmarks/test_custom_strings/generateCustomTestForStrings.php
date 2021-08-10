@@ -25,22 +25,14 @@ $sMessage = "Hello, please choose an algorithm to test\n"
            ."The test will compare the sorted array obtained with qsort direct\n"
            ." and the one obtained with the algorithm you selected.\n\n";
 
-$arrDataAlgorithm = getChoiceForAlgorithm($sMessage, true, true);
+$arrArrDataAlgorithm = getArrChoiceOfAlgorithmsWithParameters($sMessage, true, true);
 
-if($arrDataAlgorithm === -1){
-  global $arrArrSortingAlgorithms;
-  $arrArrDataAlgorithm = $arrArrSortingAlgorithms;
-  foreach($arrArrDataAlgorithm as $key => $arr){
-    if($arr['celltype'] === 'short'){
-      unset($arrArrDataAlgorithm[$key]);
-    }
-  }
+if(count($arrArrDataAlgorithm) > 1){
   $bWithBitLevelPadding = 'both';
 }
 else{
-  $arrArrDataAlgorithm = array($arrDataAlgorithm);
   $bWithBitLevelPadding = false;
-  if($arrDataAlgorithm['celltype'] === 'long'){
+  if($arrArrDataAlgorithm[0]['celltype'] === 'long'){
     $bWithBitLevelPadding = getBChoiceForBitLevelPadding();
   }
 }

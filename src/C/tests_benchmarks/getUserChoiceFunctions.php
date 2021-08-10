@@ -20,8 +20,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 //This file is used with custom tests and benchmarks
 
 include('../sortingAlgorithmsList.php');
+include('../../competitor_algorithms/code_generation/competitorsParameters.php');
 
-function getChoiceForAlgorithm($sMessage, $bNotShortCells = false, $bAll = false){
+function getArrChoiceOfAlgorithms($sMessage, $bNotShortCells = false, $bAll = false){
   global $arrArrSortingAlgorithms;
 
   $arrArrSortingAlgorithmsFiltered = $arrArrSortingAlgorithms;
@@ -69,7 +70,7 @@ function getChoiceForAlgorithm($sMessage, $bNotShortCells = false, $bAll = false
 
   if($iChosenAlgorithm === -1){
     echo "You selected all algorithms.\n";
-    return -1;
+    return $arrArrSortingAlgorithmsFiltered;
   }
 
   $i = 0;
@@ -81,8 +82,46 @@ function getChoiceForAlgorithm($sMessage, $bNotShortCells = false, $bAll = false
   }
 
   echo "You selected [$iChosenAlgorithm] $sName.\n";
-  return $arrDataAlgorithm;
-}
+  return array($arrDataAlgorithm);
+}//end function getArrChoiceOfAlgorithms()
+
+
+
+function getArrChoiceOfAlgorithmsWithParameters($sMessage, $bNotShortCells = false, $bAll = false){
+  $arrAlgorithms = getArrChoiceOfAlgorithms($sMessage, $bNotShortCells, $bAll);
+  $bAllAlgorithmsSelected = count($arrAlgorithms) > 1;
+  $arrFinalListOfAlgorithms = array();
+  foreach($arrAlgorithms as $arrFunctionData){
+    if(!isset($arrFunctionData['parameters'])){
+      $arrFinalListOfAlgorithms []= $arrFunctionData;
+      continue;
+    }
+    if($bAllAlgorithmsSelected){
+      $arrArrParametersChoices = getAllChoicesForParameters($arrFunctionData['parameters']);
+    }
+    else{
+      $arrArrParametersChoices = getArrArrChoicesForParameters($arrFunctionData['parameters'], !$bAll);
+    }
+    $iMaxParameters = count($arrFunctionData['parameters']) - 1;
+    $iNumberOfParametersValuesCombinations = 1;
+    for($i = 0; $i <= $iMaxParameters; ++$i){
+      $iNumberOfParametersValuesCombinations *= count($arrArrParametersChoices[$i]);
+    }
+    for($j = 0; $j < $iNumberOfParametersValuesCombinations; ++$j){
+      $arrCurrentParametersValues = array();
+      $k = $j;
+      for($i = 0; $i <= $iMaxParameters; ++$i){
+        $arrCurrentParametersValues []= $arrArrParametersChoices[$i][$k % count($arrArrParametersChoices[$i])];
+        $k /= count($arrArrParametersChoices[$i]);
+      }
+      $arrDataAlgorithmCopy = $arrFunctionData;
+      $arrDataAlgorithmCopy['name'] = getFunctionNameWithParameters($arrFunctionData, $arrCurrentParametersValues);
+      $arrDataAlgorithmCopy['function'] = $arrDataAlgorithmCopy['name'];
+      $arrFinalListOfAlgorithms []= $arrDataAlgorithmCopy;
+    }
+  }
+  return $arrFinalListOfAlgorithms;
+}//end function getArrChoiceOfAlgorithmsWithParameters()
 
 
 
@@ -222,6 +261,166 @@ function getBChoiceForBitLevelPadding(){
   }
   while(true);
 }//end function getBChoiceForBitLevelPadding()
+
+
+
+function getArrIFromS($s, $iMinValue, $iMaxValue){
+  $arrSInputs = explode(',', $s);
+  $arrResult = array();
+  foreach($arrSInputs as $sInput){
+    $sInput = trim($sInput);
+    if(!ctype_digit($sInput)
+      || strlen($sInput) > 18
+      || ((int)$sInput) < $iMinValue
+      || ((int)$sInput) > $iMaxValue
+    ){
+      echo "Invalid input. Please input a positive integer in the range ["
+          .$iMinValue.",".$iMaxValue."].\n";
+      return false;
+    }
+    $arrResult []= (int)$sInput;
+  }
+  return $arrResult;
+}//end function getArrIFromS()
+
+
+
+function getArrIChoiceForIntegerRangeParameter($arrParameter, $bOnlyOneValue){
+  do{
+    echo "Please, set the value of parameter ".$arrParameter['macro'].".\n";
+    echo "Type an integer between ".$arrParameter['min_value']
+        ." and ".$arrParameter['max_value']." [default: ".$arrParameter['default']."].\n";
+    if(!$bOnlyOneValue){
+      echo "You may also type \"all\" for testing or benchmarking all the range values,\n"
+          ." or you may type a list of two or more integers like \""
+          .$arrParameter['min_value'].", ".($arrParameter['min_value'] + 1)."\".\n";
+    }
+    $input = readline();
+    if($input === ''){
+      return array($arrParameter['default']);
+    }
+    if($input === 'all'){
+      if($bOnlyOneValue){
+        echo "Invalid input. Only one value must be given.\n";
+        continue;
+      }
+      return range($arrParameter['min_value'], $arrParameter['max_value']);
+    }
+
+    $arr = getArrIFromS($input, $arrParameter['min_value'], $arrParameter['max_value']);
+    if($arr !== false){
+      if($bOnlyOneValue && count($arr) > 1){
+        echo "Invalid input. Only one value must be given.\n";
+        continue;
+      }
+      return $arr;
+    }
+  }
+  while(true);
+}//end function getArrIChoiceForIntegerRangeParameter()
+
+
+
+function getArrChoiceForEnumParameter($arrParameter, $bOnlyOneValue){
+  $sMessage = (
+    "Please, set the value of parameter ".$arrParameter['macro'].".\n"
+   ."Possible values:\n"
+  );
+  for($i = 0, $iMax = count($arrParameter['values']); $i < $iMax; ++$i){
+    $sMessage .= "  [".($i+1)."] ".$arrParameter['values'][$i]['value_for_macro_def']."\n";
+  }
+  $sMessage .= "Type an integer between 1 and ".$iMax." [default: 1]\n";
+  if(!$bOnlyOneValue){
+    $sMessage .= (
+      "You may also type \"all\" for testing or benchmarking all the enum values,\n"
+     ." or you may type a list of two or more integers like \"1,2\" for the corresponding enum values.\n"
+    );
+  }
+
+  do{
+    echo $sMessage;
+    $input = readline();
+    if($input === ''){
+      return array($arrParameter['default']);
+    }
+    if($input === 'all'){
+      if($bOnlyOneValue){
+        echo "Invalid input. Only one value must be given.\n";
+        continue;
+      }
+      return $arrParameter['values'];
+    }
+
+    $arr = getArrIFromS($input, 1, $iMax);
+    if($arr !== false){
+      if($bOnlyOneValue && count($arr) > 1){
+        echo "Invalid input. Only one value must be given.\n";
+        continue;
+      }
+      $arrValues = array();
+      foreach($arr as $i){
+        $arrValues []= $arrParameter['values'][$i - 1];
+      }
+      return $arrValues;
+    }
+
+  }
+  while(true);
+}//end function getArrChoiceForEnumParameter()
+
+
+
+function getAllChoicesForParameters($arrParameters){
+  $arrArrParametersChoices = array();
+  foreach($arrParameters as $arrParameter){
+    switch($arrParameter['type']){
+      case 'integer_range':
+        $arrArrParametersChoices []= range($arrParameter['min_value'], $arrParameter['max_value']);
+      break;
+      case 'enum':
+        $arrArrParametersChoices []= $arrParameter['values'];
+      break;
+    }
+  }
+  return $arrArrParametersChoices;
+}//end function getAllChoicesForParameters()
+
+
+
+function getArrArrChoicesForParameters($arrParameters, $bOnlyOneValue){
+  $arrArrParametersChoices = array();
+  if(!$bOnlyOneValue){
+    do{
+      echo "Would-you like to test/benchmark it using all possible parameters ? [y/N]\n";
+      $input = readline();
+      if($input === 'y'){
+        return getAllChoicesForParameters($arrParameters);
+      }
+      if(in_array($input, array('n', 'N', ''))){
+        break;
+      }
+      echo "Type 'y' or 'n' please.\n";
+    }
+    while(true);
+  }
+  foreach($arrParameters as $arrParameter){
+    switch($arrParameter['type']){
+      case 'integer_range':
+        $arrArrParametersChoices []= getArrIChoiceForIntegerRangeParameter(
+          $arrParameter,
+          $bOnlyOneValue
+        );
+      break;
+      case 'enum':
+        $arrArrParametersChoices []= getArrChoiceForEnumParameter(
+          $arrParameter,
+          $bOnlyOneValue
+        );
+      break;
+    }
+  }
+  return $arrArrParametersChoices;
+}//end function getArrArrChoicesForParameters()
 
 
 

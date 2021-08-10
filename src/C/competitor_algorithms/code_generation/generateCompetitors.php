@@ -19,22 +19,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 include('competitorsListByFile.php');
-
-
-
-function getSParametersStringForFunctionName($arrParameters){
-  $sParameters = '';
-  foreach($arrParameters as $parameter){
-    $sParameters .= '_';
-    if(is_array($parameter)){
-      $sParameters .= $parameter['value_for_function_name'];
-    }
-    else{
-      $sParameters .= $parameter;
-    }
-  }
-  return $sParameters;
-}// end function getSParametersStringForFunctionName()
+include('competitorsParameters.php');
 
 
 
@@ -115,30 +100,6 @@ function getSCodeForFunctionAndParametersValues(
   $sCode .= '}//end function '.$arrFunctionData['function'].$sParameters."()\n\n\n\n";
   return $sCode;
 }//end function getSCodeForFunctionAndParametersValues()
-
-
-
-function getNextParameterValue($currentValue, $arrParameterData){
-  switch($arrParameterData['type']){
-    case 'integer_range':
-      if($currentValue === null){
-        return $arrParameterData['min_value'];
-      }
-      if($currentValue + 1 <= $arrParameterData['max_value']){
-        return $currentValue + 1;
-      }
-    break;
-    case 'enum':
-      if($currentValue === null){
-        return $arrParameterData['values'][0];
-      }
-      if(isset($arrParameterData['values'][$currentValue['index'] + 1])){
-        return $arrParameterData['values'][$currentValue['index'] + 1];
-      }
-    break;
-  }
-  return null;
-}//end function getNextParameterValue()
 
 
 

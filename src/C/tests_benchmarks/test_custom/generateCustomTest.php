@@ -25,15 +25,7 @@ $sMessage = "Hello, please choose an algorithm to test\n"
            ."The test will compare the sorted array obtained with qsort direct\n"
            ." and the one obtained with the algorithm you selected.\n\n";
 
-$arrDataAlgorithm = getChoiceForAlgorithm($sMessage, false, true);
-
-if($arrDataAlgorithm === -1){
-  global $arrArrSortingAlgorithms;
-  $arrArrDataAlgorithm = $arrArrSortingAlgorithms;
-}
-else{
-  $arrArrDataAlgorithm = array($arrDataAlgorithm);
-}
+$arrArrDataAlgorithm = getArrChoiceOfAlgorithmsWithParameters($sMessage, false, true);
 
 include('../generatingFunctions.php');
 
