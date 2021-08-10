@@ -84,7 +84,7 @@ $arrArrCompetitorsListByFile = array(
         'return_type' => 'int',
         'function_comment' => " * Qsort from glibc with minor modifications.\n",
         'parameters' => array(
-          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 3, 'max_value' => 8,),
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 4,),
           $arrSwapVarParameter,
         ),
       ),
@@ -114,7 +114,85 @@ $arrArrCompetitorsListByFile = array(
         'return_type' => 'int',
         'function_comment' => " * Qsort from glibc inlined with long cells.\n",
         'parameters' => array(
-          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 3, 'max_value' => 8,),
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 4,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__mark1',
+        'celltype' => 'long',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most TSODLULS_MAX_THRESH (5 for example), we use insertion sort.\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__mark2',
+        'celltype' => 'long',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most:\n"
+         ." *   - TSODLULS_MAX_THRESH (5 for example),\n"
+         ." *   - or TSODLULS_MAX_THRESH_SEQUEL (2 for example) for radix sequel,\n"
+         ." * we use insertion sort.\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          array('macro' => 'TSODLULS_MAX_THRESH_SEQUEL', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 2,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__mark3',
+        'celltype' => 'long',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most:\n"
+         ." *   - TSODLULS_MAX_THRESH (5 for example),\n"
+         ." *   - or TSODLULS_MAX_THRESH_SEQUEL (2 for example) for radix sequel,\n"
+         ." * we use insertion sort.\n"
+         ." * No data move if the array is already sorted (code variant).\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          array('macro' => 'TSODLULS_MAX_THRESH_SEQUEL', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 2,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__mark4',
+        'celltype' => 'long',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most:\n"
+         ." *   - TSODLULS_MAX_THRESH (5 for example),\n"
+         ." *   - or TSODLULS_MAX_THRESH_SEQUEL (2 for example) for radix sequel,\n"
+         ." * we use insertion sort.\n"
+         ." * No data move if the array is already sorted (code variant, double loop).\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          array('macro' => 'TSODLULS_MAX_THRESH_SEQUEL', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 2,),
         ),
       ),
     ),
@@ -143,7 +221,7 @@ $arrArrCompetitorsListByFile = array(
         'return_type' => 'int',
         'function_comment' => " * Qsort from glibc inlined with short cells.\n",
         'parameters' => array(
-          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 3, 'max_value' => 8,),
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 4,),
         ),
       ),
     ),

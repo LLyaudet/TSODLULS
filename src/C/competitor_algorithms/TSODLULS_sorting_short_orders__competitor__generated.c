@@ -34,6 +34,36 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
  * Sorting functions for short nextified strings
  * Qsort from glibc inlined with short cells.
  */
+int TSODLULS_qsort_inlined__short_1(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 1
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_1()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_2(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 2
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_2()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
 int TSODLULS_qsort_inlined__short_3(
   t_TSODLULS_sort_element__short* arr_elements,
   size_t i_number_of_elements
@@ -117,6 +147,126 @@ int TSODLULS_qsort_inlined__short_8(
   #include "./b/body_TSODLULS_qsort_inlined__short.c"
   #undef TSODLULS_MAX_THRESH
 }//end function TSODLULS_qsort_inlined__short_8()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_9(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 9
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_9()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_10(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 10
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_10()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_11(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 11
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_11()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_12(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 12
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_12()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_13(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 13
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_13()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_14(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 14
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_14()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_15(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 15
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_15()
+
+
+
+/**
+ * Sorting functions for short nextified strings
+ * Qsort from glibc inlined with short cells.
+ */
+int TSODLULS_qsort_inlined__short_16(
+  t_TSODLULS_sort_element__short* arr_elements,
+  size_t i_number_of_elements
+){
+  #define TSODLULS_MAX_THRESH 16
+  #include "./b/body_TSODLULS_qsort_inlined__short.c"
+  #undef TSODLULS_MAX_THRESH
+}//end function TSODLULS_qsort_inlined__short_16()
 
 
 
