@@ -63,16 +63,8 @@ $arrArrCompetitorsListByFile = array(
   'TSODLULS_sorting_comparison_callback__competitor__generated' => array(
     'header_head' => '',
     'header_tail' => '',
-    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n"
-                  ."#define TSODLULS_STACK_SIZE  (CHAR_BIT * sizeof(size_t))\n"
-                  ."#define TSODLULS_PUSH(low, high)  ((void) ((top->p_low = (low)), (top->p_high = (high)), ++top))\n"
-                  ."#define TSODLULS_POP(low, high)  ((void) (--top, (low = top->p_low), (high = top->p_high)))\n"
-                  ."#define TSODLULS_STACK_NOT_EMPTY  (stack < top)\n\n\n\n",
-    'code_tail' => "\n"
-                  ."#undef TSODLULS_STACK_SIZE\n"
-                  ."#undef TSODLULS_PUSH\n"
-                  ."#undef TSODLULS_POP\n"
-                  ."#undef TSODLULS_STACK_NOT_EMPTY\n\n",
+    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n\n\n",
+    'code_tail' => "",
     'functions_section_header' => " * Sorting functions using a comparison callback for arbitrary data structures.\n",
     'functions' => array(
       array(
@@ -93,16 +85,8 @@ $arrArrCompetitorsListByFile = array(
   'TSODLULS_sorting_long_orders__competitor__generated' => array(
     'header_head' => '',
     'header_tail' => '',
-    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n"
-                  ."#define TSODLULS_STACK_SIZE  (CHAR_BIT * sizeof(size_t))\n"
-                  ."#define TSODLULS_PUSH(low, high)  ((void) ((top->p_low = (low)), (top->p_high = (high)), ++top))\n"
-                  ."#define TSODLULS_POP(low, high)  ((void) (--top, (low = top->p_low), (high = top->p_high)))\n"
-                  ."#define TSODLULS_STACK_NOT_EMPTY  (stack < top)\n\n\n\n",
-    'code_tail' => "\n"
-                  ."#undef TSODLULS_STACK_SIZE\n"
-                  ."#undef TSODLULS_PUSH\n"
-                  ."#undef TSODLULS_POP\n"
-                  ."#undef TSODLULS_STACK_NOT_EMPTY\n\n",
+    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n\n\n",
+    'code_tail' => "",
     'functions_section_header' => " * Sorting functions for long nextified strings\n",
     'functions' => array(
       array(
@@ -200,16 +184,8 @@ $arrArrCompetitorsListByFile = array(
   'TSODLULS_sorting_short_orders__competitor__generated' => array(
     'header_head' => '',
     'header_tail' => '',
-    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n"
-                  ."#define TSODLULS_STACK_SIZE  (CHAR_BIT * sizeof(size_t))\n"
-                  ."#define TSODLULS_PUSH(low, high)  ((void) ((top->p_low = (low)), (top->p_high = (high)), ++top))\n"
-                  ."#define TSODLULS_POP(low, high)  ((void) (--top, (low = top->p_low), (high = top->p_high)))\n"
-                  ."#define TSODLULS_STACK_NOT_EMPTY  (stack < top)\n\n\n\n",
-    'code_tail' => "\n"
-                  ."#undef TSODLULS_STACK_SIZE\n"
-                  ."#undef TSODLULS_PUSH\n"
-                  ."#undef TSODLULS_POP\n"
-                  ."#undef TSODLULS_STACK_NOT_EMPTY\n\n",
+    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n\n\n",
+    'code_tail' => "",
     'functions_section_header' => " * Sorting functions for short nextified strings\n",
     'functions' => array(
       array(

@@ -36,11 +36,12 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 #define I_HALF_BYTE -1//sometimes 4 bits are sufficient for padding
 
 //Error codes
-//Positive error codes are defined in this library for algorithmical, profile parsing and technical errors
+//Positive error codes are defined in this library for algorithmical and technical errors
 //-general errors
 #define I_ERROR__COULD_NOT_OPEN_FILE 1
 #define I_ERROR__COULD_NOT_ALLOCATE_MEMORY 2
 #define I_ERROR__COULD_NOT_WRITE_CHARACTER 3
+#define I_ERROR__NOT_YET_IMPLEMENTED 4
 //-padding parameters errors
 #define I_ERROR__BOTH_LEX_AND_CONTRELEX_PADDING_BYTES_BEFORE_MUST_BE_HALF_BYTES 100
 #define I_ERROR__BOTH_LEX_AND_CONTRELEX_PADDING_BYTES_AFTER_MUST_BE_HALF_BYTES 101
@@ -326,115 +327,22 @@ int TSODLULS_add_bytes_to_key_from_uint64(
 
 
 //------------------------------------------------------------------------------------
+//Sorting with comparison callback
+//------------------------------------------------------------------------------------
+#include "TSODLULS_sorting_comparison_callback.h"
+
+
+
+//------------------------------------------------------------------------------------
 //Sorting long orders
 //------------------------------------------------------------------------------------
-/**
- * Sorting functions for long nextified strings
- * The current state of the art sorting function for nextified strings.
- * Its implementation may change without warning.
- */
-int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
-
-
-
-/**
- * Sorting functions for long nextified strings
- * The current state of the art stable sorting function for nextified strings.
- * Its implementation may change without warning.
- */
-int TSODLULS_sort_stable(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
-
-
-
-/**
- * Sorting functions for long nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- */
-int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements);
-
-
-
-/**
- * Sorting functions for long nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- * When the number of elements to sort is at most: 5 for initial sort or 2 for radix sequel, we use insertion sort
- */
-int TSODLULS_sort_radix8_count_insertion(
-  t_TSODLULS_sort_element* arr_elements,
-  size_t i_number_of_elements
-);
-
+#include "TSODLULS_sorting_long_orders.h"
 
 
 //------------------------------------------------------------------------------------
 //Sorting short orders
 //------------------------------------------------------------------------------------
-/**
- * Sorting functions for short nextified strings
- * The current state of the art sorting function for nextified strings.
- * Its implementation may change without warning.
- */
-int TSODLULS_sort__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements,
-  uint8_t i_max_length
-);
-
-
-
-/**
- * Sorting functions for short nextified strings
- * The current state of the art stable sorting function for nextified strings.
- * Its implementation may change without warning.
- */
-int TSODLULS_sort_stable__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements,
-  uint8_t i_max_length
-);
-
-
-
-/**
- * Sorting functions for short nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- */
-int TSODLULS_sort_radix8_count__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements,
-  uint8_t i_max_length
-);
-
-
-
-/**
- * Sorting functions for short nextified strings
- * Qsort from glibc inlined with short cells.
- */
-int TSODLULS_qsort_inlined__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements
-);
-
-
-
-/**
- * Sorting functions for short nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- * When the number of elements to sort is at most 5, we use insertion sort
- * A variant with single memory allocation adapted to the max-depth.
- * No insertion sort if there is more than 5 elements and it is 8 bits datatype.
- * This is the current best algorithm and it is a stable one :)
- */
-int TSODLULS_sort_radix8_count_insertion__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements,
-  uint8_t i_max_length
-);
+#include "TSODLULS_sorting_short_orders.h"
 
 
 

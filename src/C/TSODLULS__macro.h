@@ -116,6 +116,13 @@ The macraffs in this library use the following auxiliary variables:
 
 
 
+#define TSODLULS_STACK_SIZE  (CHAR_BIT * sizeof(size_t))
+#define TSODLULS_PUSH(low, high)  ((void) ((top->p_low = (low)), (top->p_high = (high)), ++top))
+#define TSODLULS_POP(low, high)  ((void) (--top, (low = top->p_low), (high = top->p_high)))
+#define TSODLULS_STACK_NOT_EMPTY  (stack < top)
+
+
+
 /*
 There is no simple and portable way to have double char, quad char and octo char in C.
 Where the interesting feature of char is to be the smallest addressable memory unit.

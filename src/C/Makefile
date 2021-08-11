@@ -33,6 +33,7 @@ HEADERS=./TSODLULS.h ./TSODLULS__macro.h ./TSODLULS_finite_orders__macro.h ./TSO
 HEADERS-COMPETITOR=$(HEADERS) ./competitor_algorithms/TSODLULS__competitor.h
 
 OBJECTS-STATIC=$(OBJECTS-DIRECTORY)TSODLULS_finite_orders.o \
+               $(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback.o \
                $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders.o \
                $(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders.o \
                $(OBJECTS-DIRECTORY)TSODLULS_comparison.o \
@@ -40,6 +41,7 @@ OBJECTS-STATIC=$(OBJECTS-DIRECTORY)TSODLULS_finite_orders.o \
                $(OBJECTS-DIRECTORY)TSODLULS_padding.o
 
 OBJECTS-DYNAMIC=$(OBJECTS-DIRECTORY)TSODLULS_finite_orders_dyn.o \
+                $(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback_dyn.o \
                 $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders_dyn.o \
                 $(OBJECTS-DIRECTORY)TSODLULS_sorting_short_orders_dyn.o \
                 $(OBJECTS-DIRECTORY)TSODLULS_comparison_dyn.o \
@@ -99,6 +101,9 @@ $(LIB-DIRECTORY)libTSODLULS_$(VERSION).a: $(OBJECTS-STATIC)
 $(OBJECTS-DIRECTORY)TSODLULS_finite_orders.o: $(HEADERS) ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -c ./TSODLULS_finite_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_finite_orders.o
 
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback.o: $(HEADERS) ./TSODLULS_sorting_comparison_callback.c $(FUNCTIONS-BODIES-SORTING-COMPARISON-CALLBACK)
+	$(CC) $(CFLAGS) -c ./TSODLULS_sorting_comparison_callback.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback.o
+
 $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders.o: $(HEADERS) ./TSODLULS_sorting_long_orders.c $(FUNCTIONS-BODIES-SORTING-LONG)
 	$(CC) $(CFLAGS) -c ./TSODLULS_sorting_long_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders.o
 
@@ -122,6 +127,9 @@ $(LIB-DIRECTORY)libTSODLULS_$(VERSION).so: $(OBJECTS-DYNAMIC)
 
 $(OBJECTS-DIRECTORY)TSODLULS_finite_orders_dyn.o: $(HEADERS) ./TSODLULS_finite_orders.c
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_finite_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_finite_orders_dyn.o
+
+$(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback_dyn.o: $(HEADERS) ./TSODLULS_sorting_comparison_callback.c $(FUNCTIONS-BODIES-SORTING-COMPARISON-CALLBACK)
+	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting_comparison_callback.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_comparison_callback_dyn.o
 
 $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders_dyn.o: $(HEADERS) ./TSODLULS_sorting_long_orders.c $(FUNCTIONS-BODIES-SORTING-LONG)
 	$(CC) $(CFLAGS) -fPIC -c ./TSODLULS_sorting_long_orders.c -o $(OBJECTS-DIRECTORY)TSODLULS_sorting_long_orders_dyn.o

@@ -30,7 +30,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
  * Its implementation may change without warning.
  */
 int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
-  return TSODLULS_sort_radix8_count_insertion(arr_elements, i_number_of_elements);
+  return TSODLULS_sort_stable(arr_elements, i_number_of_elements);
 }//end function TSODLULS_sort()
 
 
@@ -41,38 +41,12 @@ int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elem
  * Its implementation may change without warning.
  */
 int TSODLULS_sort_stable(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
-  return TSODLULS_sort_radix8_count_insertion(arr_elements, i_number_of_elements);
-}//end function TSODLULS_sort_stable()
-
-
-
-/**
- * Sorting functions for long nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- */
-int TSODLULS_sort_radix8_count(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
-  #include "./competitor_algorithms/b/body_TSODLULS_sort_radix8_count__mark1.c"
-}//end function TSODLULS_sort_radix8_count()
-
-
-
-/**
- * Sorting functions for long nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- * When the number of elements to sort is at most: 5 for initial sort or 2 for radix sequel, we use insertion sort
- */
-int TSODLULS_sort_radix8_count_insertion(
-  t_TSODLULS_sort_element* arr_elements,
-  size_t i_number_of_elements
-){
   #define TSODLULS_MAX_THRESH 5
   #define TSODLULS_MAX_THRESH_SEQUEL 2
   #include "./competitor_algorithms/b/body_TSODLULS_sort_radix8_count_insertion__mark2.c"
   #undef TSODLULS_MAX_THRESH
   #undef TSODLULS_MAX_THRESH_SEQUEL
-}//end function TSODLULS_sort_radix8_count_insertion()
+}//end function TSODLULS_sort_stable()
 
 
 

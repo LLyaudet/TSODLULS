@@ -22,7 +22,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------------
 /**
  * Sorting functions for short nextified strings
- * The current state of the art sorting function for nextified strings.
+ * The current state of the art sorting function for short nextified strings.
  * Its implementation may change without warning.
  */
 int TSODLULS_sort__short(
@@ -35,51 +35,10 @@ int TSODLULS_sort__short(
 
 /**
  * Sorting functions for short nextified strings
- * The current state of the art stable sorting function for nextified strings.
+ * The current state of the art stable sorting function for short nextified strings.
  * Its implementation may change without warning.
  */
 int TSODLULS_sort_stable__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements,
-  uint8_t i_max_length
-);
-
-
-
-/**
- * Sorting functions for short nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- */
-int TSODLULS_sort_radix8_count__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements,
-  uint8_t i_max_length
-);
-
-
-
-/**
- * Sorting functions for short nextified strings
- * Qsort from glibc inlined with short cells.
- */
-int TSODLULS_qsort_inlined__short(
-  t_TSODLULS_sort_element__short* arr_elements,
-  size_t i_number_of_elements
-);
-
-
-
-/**
- * Sorting functions for short nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- * When the number of elements to sort is at most 5, we use insertion sort
- * A variant with single memory allocation adapted to the max-depth.
- * No insertion sort if there is more than 5 elements and it is 8 bits datatype.
- * This is the current best algorithm and it is a stable one :)
- */
-int TSODLULS_sort_radix8_count_insertion__short(
   t_TSODLULS_sort_element__short* arr_elements,
   size_t i_number_of_elements,
   uint8_t i_max_length
