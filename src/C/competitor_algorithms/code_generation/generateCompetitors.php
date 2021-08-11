@@ -102,6 +102,7 @@ function getSCodeForFunctionAndParametersValues(
 }//end function getSCodeForFunctionAndParametersValues()
 
 
+$arrSFunctionNamesToFilter = array_slice($argv, 1);
 
 $sLicense = file_get_contents('TSODLULS_license.tpl');
 
@@ -122,15 +123,19 @@ foreach($arrArrCompetitorsListByFile as $sFile => $arrFileData){
                        .$arrFunctionData['function_comment']
                        ." */\n";
     if(!isset($arrFunctionData['parameters'])){
-      $sHeaderContent .= $sFunctionComment.getSHeaderForFunctionAndParameters(
-         $arrFunctionData,
-         ''
-      );
-      $sCodeContent .= $sFunctionComment.getSCodeForFunctionAndParametersValues(
-         $arrFunctionData,
-         [],
-         ''
-      );
+      if(empty($arrSFunctionNamesToFilter)
+        || in_array($arrFunctionData['function'], $arrSFunctionNamesToFilter)
+      ){
+        $sHeaderContent .= $sFunctionComment.getSHeaderForFunctionAndParameters(
+           $arrFunctionData,
+           ''
+        );
+        $sCodeContent .= $sFunctionComment.getSCodeForFunctionAndParametersValues(
+           $arrFunctionData,
+           [],
+           ''
+        );
+      }
       continue;
     }
     $arrCurrentParameters = array();
@@ -141,16 +146,20 @@ foreach($arrArrCompetitorsListByFile as $sFile => $arrFileData){
           $arrFunctionData['parameters'][$i]
       );
     }
-    $sParameters = getSParametersStringForFunctionName($arrCurrentParameters);
-    $sHeaderContent .= $sFunctionComment.getSHeaderForFunctionAndParameters(
-        $arrFunctionData,
-        $sParameters
-    );
-    $sCodeContent .= $sFunctionComment.getSCodeForFunctionAndParametersValues(
-        $arrFunctionData,
-        $arrCurrentParameters,
-        $sParameters
-    );
+    if(empty($arrSFunctionNamesToFilter)
+      || in_array(getFunctionNameWithParameters($arrFunctionData, $arrCurrentParameters), $arrSFunctionNamesToFilter)
+    ){
+      $sParameters = getSParametersStringForFunctionName($arrCurrentParameters);
+      $sHeaderContent .= $sFunctionComment.getSHeaderForFunctionAndParameters(
+          $arrFunctionData,
+          $sParameters
+      );
+      $sCodeContent .= $sFunctionComment.getSCodeForFunctionAndParametersValues(
+          $arrFunctionData,
+          $arrCurrentParameters,
+          $sParameters
+      );
+    }
 
     $iCurrentParameterIndex = $iMaxParameters;
     while(true){
@@ -166,16 +175,20 @@ foreach($arrArrCompetitorsListByFile as $sFile => $arrFileData){
       }
       else{
         if($iCurrentParameterIndex === $iMaxParameters){
-          $sParameters = getSParametersStringForFunctionName($arrCurrentParameters);
-          $sHeaderContent .= $sFunctionComment.getSHeaderForFunctionAndParameters(
-              $arrFunctionData,
-              $sParameters
-          );
-          $sCodeContent .= $sFunctionComment.getSCodeForFunctionAndParametersValues(
-              $arrFunctionData,
-              $arrCurrentParameters,
-              $sParameters
-          );
+          if(empty($arrSFunctionNamesToFilter)
+            || in_array(getFunctionNameWithParameters($arrFunctionData, $arrCurrentParameters), $arrSFunctionNamesToFilter)
+          ){
+            $sParameters = getSParametersStringForFunctionName($arrCurrentParameters);
+            $sHeaderContent .= $sFunctionComment.getSHeaderForFunctionAndParameters(
+                $arrFunctionData,
+                $sParameters
+            );
+            $sCodeContent .= $sFunctionComment.getSCodeForFunctionAndParametersValues(
+                $arrFunctionData,
+                $arrCurrentParameters,
+                $sParameters
+            );
+          }
         }
         else{
           ++$iCurrentParameterIndex;

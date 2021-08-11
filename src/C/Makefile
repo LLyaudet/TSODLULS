@@ -19,7 +19,7 @@ CC=gcc
 
 CFLAGS=-Wall -O3
 
-VERSION=0_2_0
+VERSION=0_3_0
 
 OBJECTS-DIRECTORY=../../build_temp/C/
 
@@ -85,7 +85,7 @@ FUNCTIONS-BODIES=$(FUNCTIONS-BODIES-SORTING-COMPARISON-CALLBACK) \
 #-----------------------------------------------------------
 #Build library
 #-----------------------------------------------------------
-build: build-static build-dynamic build-static-with-competitor-algorithms
+build: build-static build-dynamic
 
 
 #Static library
