@@ -42,6 +42,7 @@ $iMaxLengthOfString = getIMaxLengthOfString();
 $iLengthOfCommonPrefix = getILengthOfCommonPrefix($iMinLengthOfString);
 
 include('../generatingFunctionsString.php');
+include('../../competitor_algorithms/code_generation/competitorsGeneration.php');
 
 foreach($arrArrDataAlgorithm as $arrDataAlgorithm){
   if($bWithBitLevelPadding === 'both'){
@@ -86,6 +87,11 @@ function build_and_run_test_for_algorithm_data(
   global $arrSubTests;
 
   $sName = $arrDataAlgorithm['name'];
+
+  chdir('../../competitor_algorithms/code_generation/');
+  callGenerateCompetitorsForFunctionsNames(array($sName));
+  chdir('../../tests_benchmarks/test_custom_strings/');
+
   if($bWithBitLevelPadding){
     $sBitLevelPadding = 'with bit-level padding';
   }

@@ -28,6 +28,7 @@ $sMessage = "Hello, please choose an algorithm to test\n"
 $arrArrDataAlgorithm = getArrChoiceOfAlgorithmsWithParameters($sMessage, false, true);
 
 include('../generatingFunctions.php');
+include('../../competitor_algorithms/code_generation/competitorsGeneration.php');
 
 foreach($arrArrDataAlgorithm as $arrDataAlgorithm){
   build_and_run_test_for_algorithm_data($arrDataAlgorithm);
@@ -38,6 +39,10 @@ foreach($arrArrDataAlgorithm as $arrDataAlgorithm){
 function build_and_run_test_for_algorithm_data($arrDataAlgorithm){
   global $arrSubTests;
   $sName = $arrDataAlgorithm['name'];
+
+  chdir('../../competitor_algorithms/code_generation/');
+  callGenerateCompetitorsForFunctionsNames(array($sName));
+  chdir('../../tests_benchmarks/test_custom/');
 
   echo "Generating file test_custom.c for $sName\n";
   $sCustomTest = file_get_contents('./test_custom.c.tpl');

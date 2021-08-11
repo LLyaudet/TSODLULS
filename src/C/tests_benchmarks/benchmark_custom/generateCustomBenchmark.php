@@ -48,6 +48,14 @@ echo $arrDataAlgorithm1['name'], ($bWithMacraff1 ? " with macraffs" : ""), " and
      " will be compared with a number of elements",
      " between $iNumberOfElementsMin and $iNumberOfElementsMax.\n";
 
+include('../../competitor_algorithms/code_generation/competitorsGeneration.php');
+chdir('../../competitor_algorithms/code_generation/');
+callGenerateCompetitorsForFunctionsNames(array(
+  $arrDataAlgorithm1['name'],
+  $arrDataAlgorithm2['name']
+));
+chdir('../../tests_benchmarks/benchmark_custom/');
+
 include('../generatingFunctions.php');
 
 echo "Generating file benchmark_custom.c\n";

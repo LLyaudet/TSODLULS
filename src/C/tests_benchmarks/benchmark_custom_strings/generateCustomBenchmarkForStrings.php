@@ -63,6 +63,14 @@ echo $arrDataAlgorithm1['name'], ($bWithMacraff1 ? " with macraffs" : ""), ($bWi
      "Each string will have length between $iMinLengthOfString and $iMaxLengthOfString,",
      " and a common prefix of length $iLengthOfCommonPrefix.\n";
 
+include('../../competitor_algorithms/code_generation/competitorsGeneration.php');
+chdir('../../competitor_algorithms/code_generation/');
+callGenerateCompetitorsForFunctionsNames(array(
+  $arrDataAlgorithm1['name'],
+  $arrDataAlgorithm2['name']
+));
+chdir('../../tests_benchmarks/benchmark_custom_strings/');
+
 include('../generatingFunctionsString.php');
 
 echo "Generating file benchmark_custom_strings.c\n";
