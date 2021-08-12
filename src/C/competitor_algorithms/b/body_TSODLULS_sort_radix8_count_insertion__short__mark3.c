@@ -69,10 +69,10 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
   //This is depth first in a tree of degree 256 and depth at most i_max_length - 1,
   //so we will not need more that (i_max_length - 1) * 256
-  //We also doesn't need more than i_number_of_elements / 6 because of the use of insertion sort
+  //We also doesn't need more than i_number_of_elements / (TSODLULS_MAX_THRESH + 1) because of the use of insertion sort
   if(i_max_length - 1 > 0){
     arr_instances = calloc(
-        TSODLULS_min_exp((i_max_length - 1) * 256, i_number_of_elements / 6),
+        TSODLULS_min_exp((i_max_length - 1) * 256, i_number_of_elements / (TSODLULS_MAX_THRESH + 1)),
         sizeof(t_TSODLULS_radix_instance)
     );
     if(arr_instances == NULL){
