@@ -101,7 +101,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
   SET_THRESHOLD(i_max_length)
   if(i_number_of_elements <= i_threshold){
-    return TSODLULS_qsort_inlined__short(arr_elements, i_number_of_elements);
+    return TSODLULS_qsort_inlined__short_5(arr_elements, i_number_of_elements);
   }
 
   current_instance.i_offset_first = 0;
@@ -175,7 +175,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
           );
         }
         if(i_max_length > current_instance.i_depth){
-          i_result = TSODLULS_qsort_inlined__short(
+          i_result = TSODLULS_qsort_inlined__short_5(
               &(arr_elements[current_instance.i_offset_first]),
               (current_instance.i_offset_last - current_instance.i_offset_first + 1)
           );
@@ -209,7 +209,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
           //We branch for qsort if needed
           if(arr_counts[i] <= i_threshold){
-            i_result = TSODLULS_qsort_inlined__short(
+            i_result = TSODLULS_qsort_inlined__short_5(
                 &(arr_elements[current_instance.i_offset_first + arr_offsets[i] - arr_counts[i]]),
                 arr_counts[i]
             );
@@ -269,7 +269,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
               &(arr_elements_copy[current_instance.i_offset_first + arr_offsets[i] - arr_counts[i]]),
               arr_counts[i] * sizeof(t_TSODLULS_sort_element__short)
             );
-            i_result = TSODLULS_qsort_inlined__short(
+            i_result = TSODLULS_qsort_inlined__short_5(
                 &(arr_elements[current_instance.i_offset_first + arr_offsets[i] - arr_counts[i]]),
                 arr_counts[i]
             );
