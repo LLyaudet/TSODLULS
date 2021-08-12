@@ -31,11 +31,20 @@ function getSSignatureForFunctionAndParameters(
                ."  t_comparison_function fn_comparison\n",
     'long' => "  t_TSODLULS_sort_element* arr_elements,\n"
              ."  size_t i_number_of_elements\n",
-    'short' => "  t_TSODLULS_sort_element__short* arr_elements,\n"
+    'short' => array(
+      false => "  t_TSODLULS_sort_element__short* arr_elements,\n"
               ."  size_t i_number_of_elements\n",
+      'direct' => "  t_TSODLULS_sort_element__short* arr_elements,\n"
+                 ."  size_t i_number_of_elements,\n"
+                 ."  uint8_t i_max_length\n",
+    ),
   );
+  $sArguments = $arrArgumentsByCellType[$arrFunctionData['celltype']];
+  if($arrFunctionData['celltype'] === 'short'){
+    $sArguments = $sArguments[$arrFunctionData['size']];
+  }
   return $arrFunctionData['return_type'].' '.$arrFunctionData['function'].$sParameters."(\n"
-        .$arrArgumentsByCellType[$arrFunctionData['celltype']]
+        .$sArguments
         .")";
 }//end function getSSignatureForFunctionAndParameters()
 

@@ -73,6 +73,7 @@ $arrArrCompetitorsListByFile = array(
         'size' => 'cell',
         'comparison' => 'direct',
         'stable' => false,
+        'logspace' => true,
         'return_type' => 'int',
         'function_comment' => " * Qsort from glibc with minor modifications.\n",
         'parameters' => array(
@@ -95,6 +96,7 @@ $arrArrCompetitorsListByFile = array(
         'size' => false,
         'comparison' => false,
         'stable' => false,
+        'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only logarithmic additional space
         'return_type' => 'int',
         'function_comment' => " * Qsort from glibc inlined with long cells.\n",
         'parameters' => array(
@@ -107,6 +109,7 @@ $arrArrCompetitorsListByFile = array(
         'size' => false,
         'comparison' => false,
         'stable' => true,
+        'logspace' => false,
         'return_type' => 'int',
         'function_comment' => (
           " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
@@ -123,6 +126,7 @@ $arrArrCompetitorsListByFile = array(
         'size' => false,
         'comparison' => false,
         'stable' => true,
+        'logspace' => false,
         'return_type' => 'int',
         'function_comment' => (
           " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
@@ -143,6 +147,7 @@ $arrArrCompetitorsListByFile = array(
         'size' => false,
         'comparison' => false,
         'stable' => true,
+        'logspace' => false,
         'return_type' => 'int',
         'function_comment' => (
           " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
@@ -164,6 +169,7 @@ $arrArrCompetitorsListByFile = array(
         'size' => false,
         'comparison' => false,
         'stable' => true,
+        'logspace' => false,
         'return_type' => 'int',
         'function_comment' => (
           " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
@@ -185,6 +191,7 @@ $arrArrCompetitorsListByFile = array(
         'size' => false,
         'comparison' => false,
         'stable' => true,
+        'logspace' => false,
         'return_type' => 'int',
         'function_comment' => (
           " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
@@ -206,10 +213,186 @@ $arrArrCompetitorsListByFile = array(
         'size' => false,
         'comparison' => false,
         'stable' => false,
+        'logspace' => 'pseudo',
         'return_type' => 'int',
         'function_comment' => " * Qsort from glibc inlined with short cells.\n",
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 4,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count__short__mark1',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count__short__mark2',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * A variant with single memory allocation, but it requires a lot of it.\n"
+         ." * It is slightly faster for 32 and 64 bits datatypes, but greatly slower for 8 bits datatypes.\n"
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count__short__mark3',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * A variant with single memory allocation adapted to the max-depth.\n"
+         ." * It is slightly faster for 32 and 64 bits datatypes.\n"
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_qsort__short',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => false,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements is below some threshold, it uses glibc qsort.\n"
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark1',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most TSODLULS_MAX_THRESH (5 for example), we use insertion sort.\n"
+         ." * A variant with single memory allocation adapted to the max-depth.\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark2',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most TSODLULS_MAX_THRESH (5 for example), we use insertion sort.\n"
+         ." * A variant with single memory allocation adapted to the max-depth.\n"
+         ." * No insertion sort if there is more than TSODLULS_MAX_THRESH elements and it is 8 bits datatype.\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark3',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most TSODLULS_MAX_THRESH (5 for example), we use insertion sort.\n"
+         ." * A variant with single memory allocation adapted to the max-depth.\n"
+         ." * No insertion sort if there is more than TSODLULS_MAX_THRESH elements and it is 8 bits datatype.\n"
+         ." * Simplified inner loops ( if(i_max_length > current_instance.i_depth + 1) )\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark4',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most TSODLULS_MAX_THRESH (5 for example), we use insertion sort.\n"
+         ." * A variant with single memory allocation adapted to the max-depth.\n"
+         ." * No insertion sort if there is more than TSODLULS_MAX_THRESH elements and it is 8 bits datatype.\n"
+         ." * Simplified inner loops ( if(i_max_length > current_instance.i_depth + 1) )\n"
+         ." * No instance in copy buffer: after each step, copy is moved in original buffer.\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark5',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most TSODLULS_MAX_THRESH (5 for example), we use insertion sort.\n"
+         ." * A variant with single memory allocation adapted to the max-depth.\n"
+         ." * No insertion sort if there is more than TSODLULS_MAX_THRESH elements and it is 8 bits datatype.\n"
+         ." * No data move if the array is already sorted.\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+        ),
+      ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark6',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most TSODLULS_MAX_THRESH (5 for example), we use insertion sort.\n"
+         ." * A variant with single memory allocation adapted to the max-depth.\n"
+         ." * No insertion sort if there is more than TSODLULS_MAX_THRESH elements and it is 8 bits datatype.\n"
+         ." * No data move if the array is already sorted (code variant).\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
         ),
       ),
     ),

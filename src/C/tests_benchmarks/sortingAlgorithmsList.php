@@ -27,6 +27,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'cell',
     'comparison' => 'direct',//When activated, comparison matches the celltype
     'stable' => false,
+    'logspace' => true,
   ),
   'qsort long cells' => array(
     'name' => 'qsort long cells',
@@ -35,6 +36,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'cell',
     'comparison' => 'long',
     'stable' => false,
+    'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only logarithmic additional space
   ),
   'qsort short cells' => array(
     'name' => 'qsort short cells',
@@ -43,6 +45,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'cell',
     'comparison' => 'short',
     'stable' => false,
+    'logspace' => 'pseudo',
   ),
   'TSODLULS sort comparison callback' => array(
     'name' => 'TSODLULS sort comparison callback',
@@ -51,6 +54,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'cell',
     'comparison' => 'direct',
     'stable' => false,
+    'logspace' => false,
   ),
   'TSODLULS sort long cells' => array(
     'name' => 'TSODLULS sort long cells',
@@ -59,6 +63,7 @@ $arrArrSortingAlgorithms = array(
     'size' => false,
     'comparison' => false,
     'stable' => false,
+    'logspace' => false,
   ),
   'TSODLULS sort short cells' => array(
     'name' => 'TSODLULS sort short cells',
@@ -67,6 +72,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'direct',
     'comparison' => false,
     'stable' => false,
+    'logspace' => false,
   ),
   'TSODLULS sort stable comparison callback' => array(
     'name' => 'TSODLULS sort stable comparison callback',
@@ -75,6 +81,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'cell',
     'comparison' => 'direct',
     'stable' => false,
+    'logspace' => false,
   ),
   'TSODLULS sort stable long cells' => array(
     'name' => 'TSODLULS sort stable long cells',
@@ -83,6 +90,7 @@ $arrArrSortingAlgorithms = array(
     'size' => false,
     'comparison' => false,
     'stable' => true,
+    'logspace' => false,
   ),
   'TSODLULS sort stable short cells' => array(
     'name' => 'TSODLULS sort stable short cells',
@@ -91,6 +99,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'direct',
     'comparison' => false,
     'stable' => true,
+    'logspace' => false,
   ),
   'TSODLULS sort logspace comparison callback' => array(
     'name' => 'TSODLULS sort logspace comparison callback',
@@ -99,6 +108,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'cell',
     'comparison' => 'direct',
     'stable' => false,
+    'logspace' => true,
   ),
   'TSODLULS sort stable logspace comparison callback' => array(
     'name' => 'TSODLULS sort stable logspace comparison callback',
@@ -107,102 +117,7 @@ $arrArrSortingAlgorithms = array(
     'size' => 'cell',
     'comparison' => 'direct',
     'stable' => false,
-  ),
-  'TSODLULS_sort_radix8_count__short' => array(
-    'name' => 'TSODLULS_sort_radix8_count__short',
-    'function' => 'TSODLULS_sort_radix8_count__short',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count__short__mark1' => array(
-    'name' => 'TSODLULS_sort_radix8_count__short__mark1',
-    'function' => 'TSODLULS_sort_radix8_count__short__mark1',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count__short__mark2' => array(
-    'name' => 'TSODLULS_sort_radix8_count__short__mark2',
-    'function' => 'TSODLULS_sort_radix8_count__short__mark2',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count__short__mark3' => array(
-    'name' => 'TSODLULS_sort_radix8_count__short__mark3',
-    'function' => 'TSODLULS_sort_radix8_count__short__mark3',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_qsort__short' => array(
-    'name' => 'TSODLULS_sort_radix8_count_qsort__short',
-    'function' => 'TSODLULS_sort_radix8_count_qsort__short',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => false,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__short' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__short',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__short',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__short__mark1' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark1',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark1',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__short__mark2' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark2',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark2',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__short__mark3' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark3',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark3',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__short__mark4' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark4',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark4',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__short__mark5' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark5',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark5',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
-  ),
-  'TSODLULS_sort_radix8_count_insertion__short__mark6' => array(
-    'name' => 'TSODLULS_sort_radix8_count_insertion__short__mark6',
-    'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark6',
-    'celltype' => 'short',
-    'size' => 'direct',
-    'comparison' => false,
-    'stable' => true,
+    'logspace' => true,
   ),
 );
 
