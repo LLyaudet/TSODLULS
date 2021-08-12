@@ -24,20 +24,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------------
 //External functions
 //------------------------------------------------------------------------------------
-/**
- * Sorting functions for long nextified strings
- * A stable sorting algorithm for nextified strings based on radix sort with octets digits
- * and counting sort as a subroutine.
- */
-int TSODLULS_sort_radix8_count__mark1(
-  t_TSODLULS_sort_element* arr_elements,
-  size_t i_number_of_elements
-){
-  #include "./b/body_TSODLULS_sort_radix8_count__mark1.c"
-}//end function TSODLULS_sort_radix8_count__mark1()
-
-
-
 #include "TSODLULS_sorting_long_orders__competitor__generated.c"
 
 

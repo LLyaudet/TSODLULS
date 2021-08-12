@@ -179,6 +179,18 @@ $arrArrCompetitorsListByFile = array(
           array('macro' => 'TSODLULS_MAX_THRESH_SEQUEL', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 2,),
         ),
       ),
+      array(
+        'function' => 'TSODLULS_sort_radix8_count__mark1',
+        'celltype' => 'long',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+        ),
+      ),
     ),
   ),
   'TSODLULS_sorting_short_orders__competitor__generated' => array(
