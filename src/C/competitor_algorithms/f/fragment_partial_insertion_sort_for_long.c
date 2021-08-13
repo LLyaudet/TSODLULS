@@ -24,38 +24,17 @@ for(
   //p_cell1 = run_ptr
   p_cell2 = p_first_cell;//tmp_ptr
 
-  /* Find smallest element and place it at the
-     array's beginning.  This is the smallest array element,
-     and the operation speeds up insertion sort's inner loop. */
-  for(p_cell1 = p_cell2 + 1; p_cell1  <= p_last_cell; ++p_cell1){
-    //nextified strings
-    for(
-      size_t j = current_instance.i_depth + 1, j_max = TSODLULS_min_exp(p_cell1->i_key_size, p_cell2->i_key_size);
-      j < j_max;
-      ++j
-    ){
-      if(p_cell2->s_key[j] < p_cell1->s_key[j]){
-        break;
-      }
-      if(p_cell2->s_key[j] > p_cell1->s_key[j]){
-        p_cell2 = p_cell1;
-        break;
-      }
-    }
-  }
-
-  if(p_cell2 != p_first_cell){
-    tmp_cell = *p_cell2; *p_cell2 = *p_first_cell; *p_first_cell = tmp_cell;//swapping
-  }
-
   /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-  p_cell1 = p_first_cell + 1;
+  p_cell1 = p_first_cell;
   while((++p_cell1) <= p_last_cell){
     int b_do_while = 1;
     p_cell2 = p_cell1;
     //while(p_cell1->i_key < p_cell2->i_key){
     while(b_do_while){
       --p_cell2;
+      if(p_cell2 < p_first_cell){
+        break;
+      }
       b_do_while = 0;
       //nextified strings
       for(

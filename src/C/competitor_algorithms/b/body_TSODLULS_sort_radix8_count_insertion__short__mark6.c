@@ -245,30 +245,18 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
   {
     t_TSODLULS_sort_element__short* const end_ptr = &arr_elements[(i_number_of_elements - 1)];
     t_TSODLULS_sort_element__short* tmp_ptr = arr_elements;
-    t_TSODLULS_sort_element__short* thresh = TSODLULS_min_exp(end_ptr, arr_elements + TSODLULS_MAX_THRESH - 1);
     t_TSODLULS_sort_element__short* run_ptr;
     t_TSODLULS_sort_element__short tmp_cell;
 
-    /* Find smallest element in first threshold and place it at the
-       array's beginning.  This is the smallest array element,
-       and the operation speeds up insertion sort's inner loop. */
-
-    for(run_ptr = tmp_ptr + 1; run_ptr <= thresh; ++run_ptr){
-      if(run_ptr->i_key < tmp_ptr->i_key){
-        tmp_ptr = run_ptr;
-      }
-    }
-
-    if(tmp_ptr != arr_elements){
-      tmp_cell = *tmp_ptr; *tmp_ptr = *arr_elements; *arr_elements = tmp_cell;//swapping
-    }
-
     /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-    run_ptr = arr_elements + 1;
+    run_ptr = arr_elements;
     while((++run_ptr) <= end_ptr){
       tmp_ptr = run_ptr - 1;
       while(run_ptr->i_key < tmp_ptr->i_key){
         --tmp_ptr;
+        if(tmp_ptr < arr_elements){
+          break;
+        }
       }
       ++tmp_ptr;
       if(tmp_ptr != run_ptr){
