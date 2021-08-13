@@ -81,6 +81,19 @@ $arrArrCompetitorsListByFile = array(
           $arrSwapVarParameter,
         ),
       ),
+      array(
+        'function' => 'TSODLULS_insertion_sort__comparison_callback__mark1',
+        'celltype' => 'direct',
+        'size' => 'cell',
+        'comparison' => 'direct',
+        'stable' => false,
+        'logspace' => true,
+        'return_type' => 'int',
+        'function_comment' => " * Insertion sort from qsort from glibc with minor modifications.\n",
+        'parameters' => array(
+          $arrSwapVarParameter,
+        ),
+      ),
     ),
   ),
   'TSODLULS_sorting_long_orders__competitor__generated' => array(
@@ -197,6 +210,16 @@ $arrArrCompetitorsListByFile = array(
           " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
          ." * and counting sort as a subroutine.\n"
         ),
+      ),
+      array(
+        'function' => 'TSODLULS_insertion_sort__long__mark1',
+        'celltype' => 'long',
+        'size' => false,
+        'comparison' => false,
+        'stable' => false,
+        'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only constant additional space
+        'return_type' => 'int',
+        'function_comment' => " * Insertion sort from qsort from glibc with long cells.\n",
       ),
     ),
   ),
@@ -394,6 +417,16 @@ $arrArrCompetitorsListByFile = array(
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
         ),
+      ),
+      array(
+        'function' => 'TSODLULS_insertion_sort__short__mark1',
+        'celltype' => 'short',
+        'size' => false,
+        'comparison' => false,
+        'stable' => false,
+        'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only constant additional space
+        'return_type' => 'int',
+        'function_comment' => " * Insertion sort from qsort from glibc with short cells.\n",
       ),
     ),
   ),

@@ -233,5 +233,5 @@ If you want to understand this function body, please look first at stdlib/qsort.
   }
   #endif
   return 0;
-//}//end function TSODLULS_qsort_inlined__short_MAX_THRESH
+//}//end function TSODLULS_qsort__comparison_callback
 
