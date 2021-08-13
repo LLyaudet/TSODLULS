@@ -94,6 +94,16 @@ $arrArrCompetitorsListByFile = array(
           $arrSwapVarParameter,
         ),
       ),
+      array(
+        'function' => 'TSODLULS_insertion_sort_stable__comparison_callback__mark1',
+        'celltype' => 'direct',
+        'size' => 'cell',
+        'comparison' => 'direct',
+        'stable' => true,
+        'logspace' => true,
+        'return_type' => 'int',
+        'function_comment' => " * Stable insertion sort from qsort from glibc with minor modifications.\n",
+      ),
     ),
   ),
   'TSODLULS_sorting_long_orders__competitor__generated' => array(
@@ -220,6 +230,16 @@ $arrArrCompetitorsListByFile = array(
         'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only constant additional space
         'return_type' => 'int',
         'function_comment' => " * Insertion sort from qsort from glibc with long cells.\n",
+      ),
+      array(
+        'function' => 'TSODLULS_insertion_sort_stable__long__mark1',
+        'celltype' => 'long',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only constant additional space
+        'return_type' => 'int',
+        'function_comment' => " * Stable insertion sort from qsort from glibc with long cells.\n",
       ),
     ),
   ),
@@ -427,6 +447,16 @@ $arrArrCompetitorsListByFile = array(
         'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only constant additional space
         'return_type' => 'int',
         'function_comment' => " * Insertion sort from qsort from glibc with short cells.\n",
+      ),
+      array(
+        'function' => 'TSODLULS_insertion_sort_stable__short__mark1',
+        'celltype' => 'short',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only constant additional space
+        'return_type' => 'int',
+        'function_comment' => " * Stable insertion sort from qsort from glibc with short cells.\n",
       ),
     ),
   ),
