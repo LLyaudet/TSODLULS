@@ -111,13 +111,44 @@ $arrInsertionSortLongParameter = array(
   ),
 );
 
+$arrInsertionSortComparisonCallbackParameter = array(
+  'macro' => 'TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD',
+  'type' => 'enum',
+  'default' => 1,// see getUserChoiceFunctions
+  'values' => array(
+    array(
+     'index' => 0,
+     'value_for_macro_def' => '"../f/fragment_insertion_sort_with_threshold_for_comparison_callback.c"',
+     'value_for_function_name' => '1',
+     'stable' => false,
+    ),
+    array(
+     'index' => 1,
+     'value_for_macro_def' => '"../f/fragment_insertion_sort_stable_with_threshold_for_comparison_callback.c"',
+     'value_for_function_name' => '2',
+     'stable' => true,
+    ),
+    array(
+     'index' => 2,
+     'value_for_macro_def' => '"../f/fragment_binary_insertion_sort_stable_with_threshold_for_comparison_callback.c"',
+     'value_for_function_name' => '3',
+     'stable' => true,
+    ),
+  ),
+);
+
 
 $arrArrCompetitorsListByFile = array(
   'TSODLULS_sorting_comparison_callback__competitor__generated' => array(
     'header_head' => '',
     'header_tail' => '',
-    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n\n\n",
-    'code_tail' => "",
+    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n"
+                  ."#define TSODLULS_COMPARE_CAN_ERROR 0\n"
+                  ."#define TSODLULS_COMPARE_CALL TSODLULS_COMPARE_CALL_SIMPLE\n"
+                  ."\n\n\n",
+    'code_tail' => "#undef TSODLULS_COMPARE_CAN_ERROR\n"
+                  ."#undef TSODLULS_COMPARE_CALL\n"
+                  ."\n\n\n",
     'functions_section_header' => " * Sorting functions using a comparison callback for arbitrary data structures.\n",
     'functions' => array(
       array(
@@ -132,6 +163,7 @@ $arrArrCompetitorsListByFile = array(
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 4,),
           $arrSwapVarParameter,
+          $arrInsertionSortComparisonCallbackParameter,
         ),
       ),
       array(
@@ -177,6 +209,7 @@ $arrArrCompetitorsListByFile = array(
         'function_comment' => " * Qsort from glibc inlined with long cells.\n",
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 4,),
+          $arrInsertionSortLongParameter,
         ),
       ),
       array(
@@ -318,6 +351,7 @@ $arrArrCompetitorsListByFile = array(
         'function_comment' => " * Qsort from glibc inlined with short cells.\n",
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 4,),
+          $arrInsertionSortShortParameter,
         ),
       ),
       array(

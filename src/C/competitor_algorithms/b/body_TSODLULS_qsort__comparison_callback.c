@@ -188,48 +188,9 @@ If you want to understand this function body, please look first at stdlib/qsort.
      the array (*not* one beyond it!). */
   #if TSODLULS_MAX_THRESH > 1
   {
-    char* const end_ptr = &base_ptr[i_element_size * (i_number_of_elements - 1)];
-    char* tmp_ptr = base_ptr;
-    char* thresh = TSODLULS_min_exp(end_ptr, base_ptr + max_threshold_size);
-    char* run_ptr;
-
-    /* Find smallest element in first threshold and place it at the
-       array's beginning.  This is the smallest array element,
-       and the operation speeds up insertion sort's inner loop. */
-
-    for(run_ptr = tmp_ptr + i_element_size; run_ptr <= thresh; run_ptr += i_element_size){
-      if((*fn_comparison) ((void *) run_ptr, (void *) tmp_ptr) < 0){
-        tmp_ptr = run_ptr;
-      }
-    }
-
-    if(tmp_ptr != base_ptr){
-      TSODLULS_SWAP_VAR(tmp_ptr, base_ptr, i_element_size);
-    }
-
-    /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-    run_ptr = base_ptr + i_element_size;
-    while((run_ptr += i_element_size) <= end_ptr){
-      tmp_ptr = run_ptr - i_element_size;
-      while((*fn_comparison) ((void *) run_ptr, (void *) tmp_ptr) < 0){
-        tmp_ptr -= i_element_size;
-      }
-      tmp_ptr += i_element_size;
-      if(tmp_ptr != run_ptr){
-        char* trav;
-
-        trav = run_ptr + i_element_size;
-        while(--trav >= run_ptr){
-          char c = *trav;
-          char* hi;
-          char* lo;
-          for (hi = lo = trav; (lo -= i_element_size) >= tmp_ptr; hi = lo){
-            *hi = *lo;
-          }
-          *hi = c;
-        }
-      }
-    }
+    char* const start_ptr = base_ptr;
+    char* const end_ptr = &start_ptr[i_element_size * (i_number_of_elements - 1)];
+    #include TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
   }
   #endif
   return 0;

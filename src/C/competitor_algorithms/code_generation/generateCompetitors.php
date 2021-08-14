@@ -26,9 +26,9 @@ include('competitorsGeneration.php');
 $arrSFunctionNamesToFilter = array_slice($argv, 1);
 if(!empty($arrSFunctionNamesToFilter)
   && in_array('TSODLULS_sort_radix8_count_qsort__short', $arrSFunctionNamesToFilter)
-  && !in_array('TSODLULS_qsort_inlined__short_5', $arrSFunctionNamesToFilter)
+  && !in_array('TSODLULS_qsort_inlined__short_5_1', $arrSFunctionNamesToFilter)
 ){
-  $arrSFunctionNamesToFilter []= 'TSODLULS_qsort_inlined__short_5';
+  $arrSFunctionNamesToFilter []= 'TSODLULS_qsort_inlined__short_5_1';
 }
 
 $sLicense = file_get_contents('TSODLULS_license.tpl');

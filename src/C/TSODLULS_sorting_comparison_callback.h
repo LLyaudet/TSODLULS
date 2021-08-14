@@ -76,3 +76,7 @@ int TSODLULS_sort_stable_logspace__comparison_callback(
 
 
 
+#define TSODLULS_COMPARE_CALL_SIMPLE(a, b) ((*fn_comparison) ((void *) a, (void *) b))
+#define TSODLULS_COMPARE_CALL_REENTRANT(a, b) ((*fn_comparison) ((void *) a, (void *) b, context))
+
+

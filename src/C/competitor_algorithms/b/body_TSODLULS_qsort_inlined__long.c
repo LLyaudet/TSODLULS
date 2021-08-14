@@ -238,62 +238,9 @@ If you want to understand this function body, please look first at stdlib/qsort.
      the array (*not* one beyond it!). */
   #if TSODLULS_MAX_THRESH > 1
   {
-    t_TSODLULS_sort_element* const end_ptr = &base_ptr[(i_number_of_elements - 1)];
-    t_TSODLULS_sort_element* tmp_ptr = base_ptr;
-    t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, base_ptr + TSODLULS_MAX_THRESH - 1);
-    t_TSODLULS_sort_element* run_ptr;
-
-    /* Find smallest element in first threshold and place it at the
-       array's beginning.  This is the smallest array element,
-       and the operation speeds up insertion sort's inner loop. */
-
-    for(run_ptr = tmp_ptr + 1; run_ptr <= thresh; ++run_ptr){
-      TSODLULS_set_min_length__macraff(i_max__compare, run_ptr, tmp_ptr);
-      for(i__compare = 0; i__compare < i_max__compare; ++i__compare){
-        i_result__compare = ((int)(run_ptr->s_key[i__compare])) - ((int)(tmp_ptr->s_key[i__compare]));
-        if(i_result__compare != 0){
-          if(i_result__compare < 0){
-            tmp_ptr = run_ptr;
-          }
-          break;
-        }
-      }
-    }
-
-    if(tmp_ptr != base_ptr){
-      tmp_cell = *tmp_ptr; *tmp_ptr = *base_ptr; *base_ptr = tmp_cell;//swapping
-    }
-
-    /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-    run_ptr = base_ptr + 1;
-    while((++run_ptr) <= end_ptr){
-      tmp_ptr = run_ptr - 1;
-      b_continue = 1;
-      while(b_continue > 0){
-        b_continue = 0;
-        TSODLULS_set_min_length__macraff(i_max__compare, run_ptr, tmp_ptr);
-        for(i__compare = 0; i__compare < i_max__compare; ++i__compare){
-          i_result__compare = ((int)(run_ptr->s_key[i__compare])) - ((int)(tmp_ptr->s_key[i__compare]));
-          if(i_result__compare != 0){
-            if(i_result__compare < 0){
-              b_continue = 1;
-              --tmp_ptr;
-            }
-            break;
-          }
-        }
-      }
-      ++tmp_ptr;
-      if(tmp_ptr != run_ptr){
-        tmp_cell = *run_ptr;
-        t_TSODLULS_sort_element* hi;
-        t_TSODLULS_sort_element* lo;
-        for (hi = lo = run_ptr; (--lo) >= tmp_ptr; hi = lo){
-          *hi = *lo;
-        }
-        *hi = tmp_cell;
-      }
-    }
+    t_TSODLULS_sort_element* const start_ptr = arr_elements;
+    t_TSODLULS_sort_element* const end_ptr = &start_ptr[(i_number_of_elements - 1)];
+    #include TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
   }
   #endif
   return 0;

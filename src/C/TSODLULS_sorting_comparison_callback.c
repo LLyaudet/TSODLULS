@@ -19,6 +19,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "TSODLULS.h"
 
+#define TSODLULS_COMPARE_CAN_ERROR 0
+#define TSODLULS_COMPARE_CALL TSODLULS_COMPARE_CALL_SIMPLE
+
 
 
 //------------------------------------------------------------------------------------
@@ -74,10 +77,12 @@ int TSODLULS_sort_logspace__comparison_callback(
 ){
   #define TSODLULS_MAX_THRESH 5
   #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  #define TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD "../f/fragment_insertion_sort_with_threshold_for_comparison_callback.c"
   size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
   #include "./competitor_algorithms/b/body_TSODLULS_qsort__comparison_callback.c"
   #undef TSODLULS_MAX_THRESH
   #undef TSODLULS_SWAP_VAR
+  #undef TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
 }//end function TSODLULS_sort_logspace__comparison_callback()
 
 
@@ -97,4 +102,7 @@ int TSODLULS_sort_stable_logspace__comparison_callback(
 }//end function TSODLULS_sort_stable_logspace__comparison_callback()
 
 
+
+#undef TSODLULS_COMPARE_CAN_ERROR
+#undef TSODLULS_COMPARE_CALL
 
