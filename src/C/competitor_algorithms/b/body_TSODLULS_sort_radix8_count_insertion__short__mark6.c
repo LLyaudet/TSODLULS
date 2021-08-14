@@ -243,32 +243,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
   label_insertion_sort:
   #if TSODLULS_MAX_THRESH > 1
   {
-    t_TSODLULS_sort_element__short* const end_ptr = &arr_elements[(i_number_of_elements - 1)];
-    t_TSODLULS_sort_element__short* tmp_ptr = arr_elements;
-    t_TSODLULS_sort_element__short* run_ptr;
-    t_TSODLULS_sort_element__short tmp_cell;
-
-    /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-    run_ptr = arr_elements;
-    while((++run_ptr) <= end_ptr){
-      tmp_ptr = run_ptr - 1;
-      while(run_ptr->i_key < tmp_ptr->i_key){
-        --tmp_ptr;
-        if(tmp_ptr < arr_elements){
-          break;
-        }
-      }
-      ++tmp_ptr;
-      if(tmp_ptr != run_ptr){
-        tmp_cell = *run_ptr;
-        t_TSODLULS_sort_element__short* hi;
-        t_TSODLULS_sort_element__short* lo;
-        for (hi = lo = run_ptr; (--lo) >= tmp_ptr; hi = lo){
-          *hi = *lo;
-        }
-        *hi = tmp_cell;
-      }
-    }
+    t_TSODLULS_sort_element__short* const start_ptr = arr_elements;
+    t_TSODLULS_sort_element__short* const end_ptr = &start_ptr[(i_number_of_elements - 1)];
+    #include TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
   }
   #endif
 

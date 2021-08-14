@@ -34,7 +34,11 @@ int TSODLULS_sort__short(
   size_t i_number_of_elements,
   uint8_t i_max_length
 ){
-  return TSODLULS_sort_stable__short(arr_elements, i_number_of_elements, i_max_length);
+  #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD "../f/fragment_insertion_sort_with_threshold_for_short_cells.c"
+  #include "./competitor_algorithms/b/body_TSODLULS_sort_radix8_count_insertion__short__mark2.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
 }//end function TSODLULS_sort__short()
 
 
@@ -50,8 +54,10 @@ int TSODLULS_sort_stable__short(
   uint8_t i_max_length
 ){
   #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD "../f/fragment_insertion_sort_stable_with_threshold_for_short_cells.c"
   #include "./competitor_algorithms/b/body_TSODLULS_sort_radix8_count_insertion__short__mark2.c"
   #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
 }//end function TSODLULS_sort_stable__short()
 
 

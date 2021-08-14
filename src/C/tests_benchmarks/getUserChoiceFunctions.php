@@ -329,7 +329,7 @@ function getArrChoiceForEnumParameter($arrParameter, $bOnlyOneValue){
   for($i = 0, $iMax = count($arrParameter['values']); $i < $iMax; ++$i){
     $sMessage .= "  [".($i+1)."] ".$arrParameter['values'][$i]['value_for_macro_def']."\n";
   }
-  $sMessage .= "Type an integer between 1 and ".$iMax." [default: 1]\n";
+  $sMessage .= "Type an integer between 1 and ".$iMax." [default: ".$arrParameter['default']."]\n";
   if(!$bOnlyOneValue){
     $sMessage .= (
       "You may also type \"all\" for testing or benchmarking all the enum values,\n"

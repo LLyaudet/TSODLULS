@@ -22,6 +22,7 @@ $arrSwapVarParameter = array(
   'macro' => 'TSODLULS_SWAP_VAR',
   'macro_args' => 3,
   'type' => 'enum',
+  'default' => 1,// see getUserChoiceFunctions
   'values' => array(
     array('index' => 0, 'value_for_macro_def' => 'TSODLULS_SWAP_VAR_1', 'value_for_function_name' => '1'),
     array('index' => 1, 'value_for_macro_def' => 'TSODLULS_SWAP_VAR_2', 'value_for_function_name' => '2',
@@ -54,6 +55,32 @@ $arrSwapVarParameter = array(
             't_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_1;',
             't_TSODLULS_sizables_pointers_union TSODLULS_macraff_sizables_pointers_union_2;',
           ),
+    ),
+  ),
+);
+
+$arrInsertionSortShortParameter = array(
+  'macro' => 'TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD',
+  'type' => 'enum',
+  'default' => 1,// see getUserChoiceFunctions
+  'values' => array(
+    array(
+     'index' => 0,
+     'value_for_macro_def' => '"../f/fragment_insertion_sort_with_threshold_for_short_cells.c"',
+     'value_for_function_name' => '1',
+     'stable' => false,
+    ),
+    array(
+     'index' => 1,
+     'value_for_macro_def' => '"../f/fragment_insertion_sort_stable_with_threshold_for_short_cells.c"',
+     'value_for_function_name' => '2',
+     'stable' => true,
+    ),
+    array(
+     'index' => 2,
+     'value_for_macro_def' => '"../f/fragment_binary_insertion_sort_stable_with_threshold_for_short_cells.c"',
+     'value_for_function_name' => '3',
+     'stable' => true,
     ),
   ),
 );
@@ -336,6 +363,7 @@ $arrArrCompetitorsListByFile = array(
         ),
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          $arrInsertionSortShortParameter,
         ),
       ),
       array(
@@ -355,6 +383,7 @@ $arrArrCompetitorsListByFile = array(
         ),
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          $arrInsertionSortShortParameter,
         ),
       ),
       array(
@@ -375,6 +404,7 @@ $arrArrCompetitorsListByFile = array(
         ),
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          $arrInsertionSortShortParameter,
         ),
       ),
       array(
@@ -396,6 +426,7 @@ $arrArrCompetitorsListByFile = array(
         ),
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          $arrInsertionSortShortParameter,
         ),
       ),
       array(
@@ -416,6 +447,7 @@ $arrArrCompetitorsListByFile = array(
         ),
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          $arrInsertionSortShortParameter,
         ),
       ),
       array(
@@ -436,6 +468,7 @@ $arrArrCompetitorsListByFile = array(
         ),
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          $arrInsertionSortShortParameter,
         ),
       ),
       array(
