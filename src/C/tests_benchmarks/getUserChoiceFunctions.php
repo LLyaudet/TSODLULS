@@ -45,7 +45,7 @@ function getArrChoiceOfAlgorithms($sMessage, $bNotShortCells = false, $bAll = fa
     }
 
     if($bAll){
-      echo "[all] all algorithms\n";
+      echo "[all] all algorithms (don't do this if you have no time, there are tens of algorithms that becomes thousands of variants with the combinations of parameters.)\n";
     }
 
     $input = readline();
