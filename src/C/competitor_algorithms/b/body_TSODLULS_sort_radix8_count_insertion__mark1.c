@@ -235,47 +235,10 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
   label_insertion_sort:
   #if TSODLULS_MAX_THRESH > 1
   {
-    t_TSODLULS_sort_element* const end_ptr = &arr_elements[(i_number_of_elements - 1)];
-    t_TSODLULS_sort_element* tmp_ptr = arr_elements;
-    t_TSODLULS_sort_element* run_ptr;
-    size_t i;
-    size_t i_max;
+    t_TSODLULS_sort_element* const start_ptr = arr_elements;
+    t_TSODLULS_sort_element* const end_ptr = &start_ptr[(i_number_of_elements - 1)];
     t_TSODLULS_sort_element tmp_cell;
-
-    /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-    run_ptr = arr_elements;
-    while((++run_ptr) <= end_ptr){
-      tmp_ptr = run_ptr - 1;
-      int b_do_while = 1;
-      //while(run_ptr->i_key < tmp_ptr->i_key){
-      while(b_do_while){
-        b_do_while = 0;
-        //nextified strings
-        for(i = 0, i_max = TSODLULS_min_exp(run_ptr->i_key_size, tmp_ptr->i_key_size); i < i_max; ++i){
-          if(run_ptr->s_key[i] < tmp_ptr->s_key[i]){
-            b_do_while = 1;
-            --tmp_ptr;
-            break;
-          }
-          if(run_ptr->s_key[i] > tmp_ptr->s_key[i]){
-            break;
-          }
-        }
-        if(tmp_ptr < arr_elements){
-          break;
-        }
-      }
-      ++tmp_ptr;
-      if(tmp_ptr != run_ptr){
-        tmp_cell = *run_ptr;
-        t_TSODLULS_sort_element* hi;
-        t_TSODLULS_sort_element* lo;
-        for (hi = lo = run_ptr; (--lo) >= tmp_ptr; hi = lo){
-          *hi = *lo;
-        }
-        *hi = tmp_cell;
-      }
-    }
+    #include TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
   }
   #endif
 

@@ -30,7 +30,13 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
  * Its implementation may change without warning.
  */
 int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
-  return TSODLULS_sort_stable(arr_elements, i_number_of_elements);
+  #define TSODLULS_MAX_THRESH 5
+  #define TSODLULS_MAX_THRESH_SEQUEL 2
+  #define TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD "../f/fragment_insertion_sort_with_threshold_for_long_cells.c"
+  #include "./competitor_algorithms/b/body_TSODLULS_sort_radix8_count_insertion__mark2.c"
+  #undef TSODLULS_MAX_THRESH
+  #undef TSODLULS_MAX_THRESH_SEQUEL
+  #undef TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
 }//end function TSODLULS_sort()
 
 
@@ -43,9 +49,11 @@ int TSODLULS_sort(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elem
 int TSODLULS_sort_stable(t_TSODLULS_sort_element* arr_elements, size_t i_number_of_elements){
   #define TSODLULS_MAX_THRESH 5
   #define TSODLULS_MAX_THRESH_SEQUEL 2
+  #define TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD "../f/fragment_insertion_sort_stable_with_threshold_for_long_cells.c"
   #include "./competitor_algorithms/b/body_TSODLULS_sort_radix8_count_insertion__mark2.c"
   #undef TSODLULS_MAX_THRESH
   #undef TSODLULS_MAX_THRESH_SEQUEL
+  #undef TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
 }//end function TSODLULS_sort_stable()
 
 

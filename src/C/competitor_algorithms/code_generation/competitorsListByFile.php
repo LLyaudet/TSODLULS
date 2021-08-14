@@ -85,6 +85,32 @@ $arrInsertionSortShortParameter = array(
   ),
 );
 
+$arrInsertionSortLongParameter = array(
+  'macro' => 'TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD',
+  'type' => 'enum',
+  'default' => 1,// see getUserChoiceFunctions
+  'values' => array(
+    array(
+     'index' => 0,
+     'value_for_macro_def' => '"../f/fragment_insertion_sort_with_threshold_for_long_cells.c"',
+     'value_for_function_name' => '1',
+     'stable' => false,
+    ),
+    array(
+     'index' => 1,
+     'value_for_macro_def' => '"../f/fragment_insertion_sort_stable_with_threshold_for_long_cells.c"',
+     'value_for_function_name' => '2',
+     'stable' => true,
+    ),
+    array(
+     'index' => 2,
+     'value_for_macro_def' => '"../f/fragment_binary_insertion_sort_stable_with_threshold_for_long_cells.c"',
+     'value_for_function_name' => '3',
+     'stable' => true,
+    ),
+  ),
+);
+
 
 $arrArrCompetitorsListByFile = array(
   'TSODLULS_sorting_comparison_callback__competitor__generated' => array(
@@ -168,6 +194,7 @@ $arrArrCompetitorsListByFile = array(
         ),
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          $arrInsertionSortLongParameter,
         ),
       ),
       array(
@@ -189,6 +216,7 @@ $arrArrCompetitorsListByFile = array(
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
           array('macro' => 'TSODLULS_MAX_THRESH_SEQUEL', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 2,),
+          $arrInsertionSortLongParameter,
         ),
       ),
       array(
@@ -211,6 +239,7 @@ $arrArrCompetitorsListByFile = array(
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
           array('macro' => 'TSODLULS_MAX_THRESH_SEQUEL', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 2,),
+          $arrInsertionSortLongParameter,
         ),
       ),
       array(
@@ -233,6 +262,7 @@ $arrArrCompetitorsListByFile = array(
         'parameters' => array(
           array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
           array('macro' => 'TSODLULS_MAX_THRESH_SEQUEL', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 2,),
+          $arrInsertionSortLongParameter
         ),
       ),
       array(
