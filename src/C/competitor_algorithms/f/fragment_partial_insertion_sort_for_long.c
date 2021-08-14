@@ -1,3 +1,24 @@
+/*
+This file is part of TSODLULS library.
+
+TSODLULS is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+TSODLULS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
+
+©Copyright 2018-2021 Laurent Lyaudet
+*/
+
+
+
 #if TSODLULS_MAX_THRESH_SEQUEL <= 2
 p_cell1 = &(arr_elements[current_instance.i_offset_first + arr_offsets[i] - 2]);
 p_cell2 = p_cell1 + 1;
@@ -25,16 +46,11 @@ for(
   p_cell2 = p_first_cell;//tmp_ptr
 
   /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-  p_cell1 = p_first_cell;
-  while((++p_cell1) <= p_last_cell){
-    int b_do_while = 1;
-    p_cell2 = p_cell1;
-    //while(p_cell1->i_key < p_cell2->i_key){
-    while(b_do_while){
-      --p_cell2;
-      if(p_cell2 < p_first_cell){
-        break;
-      }
+  p_cell1 = p_first_cell + 1;
+  do{
+    int b_do_while;
+    p_cell2 = p_cell1 - 1;
+    do{
       b_do_while = 0;
       //nextified strings
       for(
@@ -46,11 +62,14 @@ for(
           break;
         }
         if(p_cell2->s_key[j] > p_cell1->s_key[j]){
-          b_do_while = 1;
+          --p_cell2;
+          if(p_cell2 >= p_first_cell){
+            b_do_while = 1;
+          }
           break;
         }
       }
-    }
+    }while(b_do_while);
     ++p_cell2;
     if(p_cell2 != p_cell1){
       tmp_cell = *p_cell1;
@@ -61,7 +80,7 @@ for(
       }
       *high = tmp_cell;
     }
-  }
+  }while((++p_cell1) <= p_last_cell);
 }
 #endif
 
