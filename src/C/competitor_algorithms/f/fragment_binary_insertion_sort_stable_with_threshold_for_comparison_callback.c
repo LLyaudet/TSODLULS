@@ -31,14 +31,19 @@ Modifications in this library to do a *binary* insertion sort:
   /* Insertion sort, running from left-hand-side up to right-hand-side.  */
   run_ptr = start_ptr;
   while((run_ptr += i_element_size) <= end_ptr){
+    #if TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
+    //[start_ptr, search_range_left[ <= run_ptr
+    char* search_range_left = start_ptr;
+    #else
     //[start_ptr, search_range_left[ <= run_ptr
     char* search_range_left = run_ptr - max_threshold_size;
-    //[search_range_right, run_ptr[ > run_ptr
-    char* search_range_right = run_ptr;
-    char* search_range_middle;
     if(search_range_left < start_ptr){
       search_range_left = start_ptr;
     }
+    #endif
+    //[search_range_right, run_ptr[ > run_ptr
+    char* search_range_right = run_ptr;
+    char* search_range_middle;
     do{
       // the compiler should optimize "/ 2" to ">> 1", otherwise change compiler :P
       search_range_middle = search_range_left + (((search_range_right - search_range_left) / i_element_size) / 2) * i_element_size;

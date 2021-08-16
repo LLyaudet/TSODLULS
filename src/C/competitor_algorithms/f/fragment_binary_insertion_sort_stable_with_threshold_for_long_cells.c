@@ -32,14 +32,19 @@ Modifications in this library to do a *binary* insertion sort:
   /* Insertion sort, running from left-hand-side up to right-hand-side.  */
   run_ptr = start_ptr;
   while((++run_ptr) <= end_ptr){
+    #if TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
+    //[start_ptr, search_range_left[ <= run_ptr
+    t_TSODLULS_sort_element* search_range_left = start_ptr;
+    #else
     //[start_ptr, search_range_left[ <= run_ptr
     t_TSODLULS_sort_element* search_range_left = run_ptr - TSODLULS_MAX_THRESH + 1;
-    //[search_range_right, run_ptr[ > run_ptr
-    t_TSODLULS_sort_element* search_range_right = run_ptr;
-    t_TSODLULS_sort_element* search_range_middle;
     if(search_range_left < start_ptr){
       search_range_left = start_ptr;
     }
+    #endif
+    //[search_range_right, run_ptr[ > run_ptr
+    t_TSODLULS_sort_element* search_range_right = run_ptr;
+    t_TSODLULS_sort_element* search_range_middle;
     do{
       // the compiler should optimize "/ 2" to ">> 1", otherwise change compiler :P
       search_range_middle = search_range_left + ((search_range_right - search_range_left) / 2);

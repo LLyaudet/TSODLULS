@@ -29,7 +29,11 @@ Modifications in this library:
 {
   t_TSODLULS_sort_element* tmp_ptr = start_ptr;
   t_TSODLULS_sort_element* run_ptr;
+  #if TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
+  t_TSODLULS_sort_element* thresh = end_ptr;
+  #else
   t_TSODLULS_sort_element* thresh = TSODLULS_min_exp(end_ptr, start_ptr + TSODLULS_MAX_THRESH - 1);
+  #endif
 
   /* Find smallest element in first threshold and place it at the
      array's beginning.  This is the smallest array element,

@@ -27,7 +27,11 @@ Modifications in this library:
 //char* const end_ptr = &start_ptr[i_element_size * (i_number_of_elements - 1)];
 {
   char* tmp_ptr = start_ptr;
+  #if TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
+  char* thresh = end_ptr;
+  #else
   char* thresh = TSODLULS_min_exp(end_ptr, start_ptr + max_threshold_size);
+  #endif
   char* run_ptr;
 
   /* Find smallest element in first threshold and place it at the

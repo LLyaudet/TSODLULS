@@ -32,9 +32,6 @@ Modifications in this library:
 //  t_TSODLULS_sort_element__short* arr_elements,
 //  size_t i_number_of_elements
 //){
-  t_TSODLULS_sort_element__short* const end_ptr = &arr_elements[(i_number_of_elements - 1)];
-  t_TSODLULS_sort_element__short* tmp_ptr = arr_elements;
-  t_TSODLULS_sort_element__short* run_ptr;
   t_TSODLULS_sort_element__short tmp_cell;//for swapping
 
   if(i_number_of_elements < 2){
@@ -48,27 +45,18 @@ Modifications in this library:
     return 0;
   }
 
-  /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-  run_ptr = arr_elements;
-  while((++run_ptr) <= end_ptr){
-    tmp_ptr = run_ptr - 1;
-    while(run_ptr->i_key < tmp_ptr->i_key){
-      --tmp_ptr;
-      if(tmp_ptr < arr_elements){
-        break;
-      }
-    }
-    ++tmp_ptr;
-    if(tmp_ptr != run_ptr){
-      tmp_cell = *run_ptr;
-      t_TSODLULS_sort_element__short* hi;
-      t_TSODLULS_sort_element__short* lo;
-      for (hi = lo = run_ptr; (--lo) >= tmp_ptr; hi = lo){
-        *hi = *lo;
-      }
-      *hi = tmp_cell;
-    }
+  {
+    //technical def without real meaning
+    #define TSODLULS_MAX_THRESH 2
+    //but this one sets that we will not use the threshold in fragment
+    #define TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD 1
+    t_TSODLULS_sort_element__short* const start_ptr = arr_elements;
+    t_TSODLULS_sort_element__short* const end_ptr = &start_ptr[(i_number_of_elements - 1)];
+    #include "../f/fragment_insertion_sort_stable_with_threshold_for_short_cells.c"
+    #undef TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
+    #undef TSODLULS_MAX_THRESH
   }
+
   return 0;
 //}//end function TSODLULS_insertion_sort_stable__short__mark1
 

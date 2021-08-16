@@ -238,9 +238,11 @@ If you want to understand this function body, please look first at stdlib/qsort.
      the array (*not* one beyond it!). */
   #if TSODLULS_MAX_THRESH > 1
   {
+    #define TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD 0
     t_TSODLULS_sort_element* const start_ptr = arr_elements;
     t_TSODLULS_sort_element* const end_ptr = &start_ptr[(i_number_of_elements - 1)];
     #include TSODLULS_INSERTION_SORT_TEMPLATE_WITH_THRESHOLD
+    #undef TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
   }
   #endif
   return 0;

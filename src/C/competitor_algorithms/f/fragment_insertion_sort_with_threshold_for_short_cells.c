@@ -27,7 +27,11 @@ Modifications in this library:
 //t_TSODLULS_sort_element__short* const end_ptr = &start_ptr[(i_number_of_elements - 1)];
 {
   t_TSODLULS_sort_element__short* tmp_ptr = start_ptr;
+  #if TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
+  t_TSODLULS_sort_element__short* thresh = end_ptr;
+  #else
   t_TSODLULS_sort_element__short* thresh = TSODLULS_min_exp(end_ptr, start_ptr + TSODLULS_MAX_THRESH - 1);
+  #endif
   t_TSODLULS_sort_element__short* run_ptr;
   t_TSODLULS_sort_element__short tmp_cell;
 

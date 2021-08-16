@@ -32,14 +32,10 @@ Modifications in this library:
 //  t_TSODLULS_sort_element* arr_elements,
 //  size_t i_number_of_elements
 //){
-  t_TSODLULS_sort_element* const end_ptr = &arr_elements[(i_number_of_elements - 1)];
-  t_TSODLULS_sort_element* tmp_ptr = arr_elements;
-  t_TSODLULS_sort_element* run_ptr;
   t_TSODLULS_sort_element tmp_cell;//for swapping
   size_t i__compare;
   size_t i_max__compare;
   int i_result__compare;
-  int b_continue;
 
   if(i_number_of_elements < 2){
     return 0;
@@ -59,58 +55,18 @@ Modifications in this library:
     return 0;
   }
 
-
-  /* Find smallest element in array and place it at the array's beginning.
-  This operation speeds up insertion sort's inner loop.
-  But it is not stable. */
-
-  for(run_ptr = tmp_ptr + 1; run_ptr <= end_ptr; ++run_ptr){
-    TSODLULS_set_min_length__macraff(i_max__compare, run_ptr, tmp_ptr);
-    for(i__compare = 0; i__compare < i_max__compare; ++i__compare){
-      i_result__compare = ((int)(run_ptr->s_key[i__compare])) - ((int)(tmp_ptr->s_key[i__compare]));
-      if(i_result__compare != 0){
-        if(i_result__compare < 0){
-          tmp_ptr = run_ptr;
-        }
-        break;
-      }
-    }
+  {
+    //technical def without real meaning
+    #define TSODLULS_MAX_THRESH 2
+    //but this one sets that we will not use the threshold in fragment
+    #define TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD 1
+    t_TSODLULS_sort_element* const start_ptr = arr_elements;
+    t_TSODLULS_sort_element* const end_ptr = &start_ptr[(i_number_of_elements - 1)];
+    #include "../f/fragment_insertion_sort_with_threshold_for_long_cells.c"
+    #undef TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
+    #undef TSODLULS_MAX_THRESH
   }
 
-  if(tmp_ptr != arr_elements){
-    tmp_cell = *tmp_ptr; *tmp_ptr = *arr_elements; *arr_elements = tmp_cell;//swapping
-  }
-
-  /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-  run_ptr = arr_elements + 1;
-  while((++run_ptr) <= end_ptr){
-    tmp_ptr = run_ptr - 1;
-    b_continue = 1;
-    while(b_continue > 0){
-      b_continue = 0;
-      TSODLULS_set_min_length__macraff(i_max__compare, run_ptr, tmp_ptr);
-      for(i__compare = 0; i__compare < i_max__compare; ++i__compare){
-        i_result__compare = ((int)(run_ptr->s_key[i__compare])) - ((int)(tmp_ptr->s_key[i__compare]));
-        if(i_result__compare != 0){
-          if(i_result__compare < 0){
-            b_continue = 1;
-            --tmp_ptr;
-          }
-          break;
-        }
-      }
-    }
-    ++tmp_ptr;
-    if(tmp_ptr != run_ptr){
-      tmp_cell = *run_ptr;
-      t_TSODLULS_sort_element* hi;
-      t_TSODLULS_sort_element* lo;
-      for (hi = lo = run_ptr; (--lo) >= tmp_ptr; hi = lo){
-        *hi = *lo;
-      }
-      *hi = tmp_cell;
-    }
-  }
   return 0;
 //}//end function TSODLULS_insertion_sort__long__mark1
 

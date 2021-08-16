@@ -14,21 +14,16 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
-Most of the code here is from glibc:
-  Written by Douglas C. Schmidt (schmidt@ics.uci.edu).
-  Copyright (C) 1991-2018 Free Software Foundation, Inc.
-
-Modifications in this library:
 ©Copyright 2018-2021 Laurent Lyaudet
 */
 
 
 
 /**
- * Sorting functions for short nextified strings
- * Insertion sort from qsort from glibc with short cells.
+ * Sorting functions for short nextified strings.
+ * Binary insertion sort stable with short cells.
  */
-//int TSODLULS_insertion_sort__short__mark1(
+//int TSODLULS_binary_insertion_sort_stable__short__mark1(
 //  t_TSODLULS_sort_element__short* arr_elements,
 //  size_t i_number_of_elements
 //){
@@ -52,11 +47,11 @@ Modifications in this library:
     #define TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD 1
     t_TSODLULS_sort_element__short* const start_ptr = arr_elements;
     t_TSODLULS_sort_element__short* const end_ptr = &start_ptr[(i_number_of_elements - 1)];
-    #include "../f/fragment_insertion_sort_with_threshold_for_short_cells.c"
+    #include "../f/fragment_binary_insertion_sort_stable_with_threshold_for_short_cells.c"
     #undef TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
     #undef TSODLULS_MAX_THRESH
   }
 
   return 0;
-//}//end function TSODLULS_insertion_sort__short__mark1
+//}//end function TSODLULS_binary_insertion_sort_stable__short__mark1
 

@@ -34,41 +34,23 @@ Modifications in this library:
 //  size_t i_element_size,
 //  t_comparison_function fn_comparison
 //){
-  char* const base_ptr = (char*) arr_elements;
-  char* const end_ptr = &base_ptr[i_element_size * (i_number_of_elements - 1)];
-  char* tmp_ptr = base_ptr;
-  char* run_ptr;
 
   if(i_number_of_elements < 2){
     return 0;
   }
 
-  /* Insertion sort, running from left-hand-side up to right-hand-side.  */
-  run_ptr = base_ptr;
-  while((run_ptr += i_element_size) <= end_ptr){
-    tmp_ptr = run_ptr - i_element_size;
-    while((*fn_comparison) ((void *) run_ptr, (void *) tmp_ptr) < 0){
-      tmp_ptr -= i_element_size;
-      if(tmp_ptr < base_ptr){
-        break;
-      }
-    }
-    tmp_ptr += i_element_size;
-    if(tmp_ptr != run_ptr){
-      char* trav;
-
-      trav = run_ptr + i_element_size;
-      while(--trav >= run_ptr){
-        char c = *trav;
-        char* hi;
-        char* lo;
-        for (hi = lo = trav; (lo -= i_element_size) >= tmp_ptr; hi = lo){
-          *hi = *lo;
-        }
-        *hi = c;
-      }
-    }
+  {
+    //technical def without real meaning
+    #define TSODLULS_MAX_THRESH 2
+    //but this one sets that we will not use the threshold in fragment
+    #define TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD 1
+    char* const start_ptr = (char*) arr_elements;
+    char* const end_ptr = &start_ptr[i_element_size * (i_number_of_elements - 1)];
+    #include "../f/fragment_insertion_sort_stable_with_threshold_for_comparison_callback.c"
+    #undef TSODLULS_OPTIMIZE_INSERTION_SORT_WITHOUT_THRESHOLD
+    #undef TSODLULS_MAX_THRESH
   }
+
   return 0;
 //}//end function TSODLULS_insertion_sort_stable__comparison_callback__mark1
 
