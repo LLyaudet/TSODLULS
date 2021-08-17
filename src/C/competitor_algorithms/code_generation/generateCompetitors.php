@@ -23,12 +23,38 @@ include('competitorsParameters.php');
 include('competitorsGeneration.php');
 
 
+function isPrefixOfSomeStringInArray($s, $arrS){
+  foreach($arrS as $s2){
+    if(strpos($s2, $s) === 0){
+      return true;
+    }
+  }
+  return false;
+}
+
+
 $arrSFunctionNamesToFilter = array_slice($argv, 1);
-if(!empty($arrSFunctionNamesToFilter)
-  && in_array('TSODLULS_sort_radix8_count_qsort__short', $arrSFunctionNamesToFilter)
-  && !in_array('TSODLULS_qsort_inlined__short_5_1', $arrSFunctionNamesToFilter)
-){
-  $arrSFunctionNamesToFilter []= 'TSODLULS_qsort_inlined__short_5_1';
+if(!empty($arrSFunctionNamesToFilter)){
+  if(isPrefixOfSomeStringInArray('TSODLULS_sort_radix8_count_qsort__short', $arrSFunctionNamesToFilter)
+    && !in_array('TSODLULS_qsort_inlined__short_5_1', $arrSFunctionNamesToFilter)
+  ){
+    $arrSFunctionNamesToFilter []= 'TSODLULS_qsort_inlined__short_5_1';
+  }
+  if(isPrefixOfSomeStringInArray('TSODLULS_Tim_sort__comparison_callback__mark1', $arrSFunctionNamesToFilter)
+    && !in_array('TSODLULS_binary_insertion_sort_stable__comparison_callback__mark1', $arrSFunctionNamesToFilter)
+  ){
+    $arrSFunctionNamesToFilter []= 'TSODLULS_binary_insertion_sort_stable__comparison_callback__mark1';
+  }
+  if(isPrefixOfSomeStringInArray('TSODLULS_Tim_sort__long__mark1', $arrSFunctionNamesToFilter)
+    && !in_array('TSODLULS_binary_insertion_sort_stable__long__mark1', $arrSFunctionNamesToFilter)
+  ){
+    $arrSFunctionNamesToFilter []= 'TSODLULS_binary_insertion_sort_stable__long__mark1';
+  }
+  if(isPrefixOfSomeStringInArray('TSODLULS_Tim_sort__short__mark1', $arrSFunctionNamesToFilter)
+    && !in_array('TSODLULS_binary_insertion_sort_stable__short__mark1', $arrSFunctionNamesToFilter)
+  ){
+    $arrSFunctionNamesToFilter []= 'TSODLULS_binary_insertion_sort_stable__short__mark1';
+  }
 }
 
 $sLicense = file_get_contents('TSODLULS_license.tpl');

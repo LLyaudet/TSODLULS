@@ -145,9 +145,13 @@ $arrArrCompetitorsListByFile = array(
     'code_head' => "#include \"TSODLULS__competitor.h\"\n\n"
                   ."#define TSODLULS_COMPARE_CAN_ERROR 0\n"
                   ."#define TSODLULS_COMPARE_CALL TSODLULS_COMPARE_CALL_SIMPLE\n"
+                  ."#define TSODLULS_COMPARE_TYPE TSODLULS_COMPARE_TYPE_SIMPLE\n"
+                  ."#define TSODLULS_COMPARE_TIM_SORT_MERGE_STATE TSODLULS_COMPARE_TIM_SORT_MERGE_STATE_SIMPLE\n"
                   ."\n\n\n",
     'code_tail' => "#undef TSODLULS_COMPARE_CAN_ERROR\n"
                   ."#undef TSODLULS_COMPARE_CALL\n"
+                  ."#undef TSODLULS_COMPARE_TYPE\n"
+                  ."#undef TSODLULS_COMPARE_TIM_SORT_MERGE_STATE\n"
                   ."\n\n\n",
     'functions_section_header' => " * Sorting functions using a comparison callback for arbitrary data structures.\n",
     'functions' => array(
@@ -198,6 +202,19 @@ $arrArrCompetitorsListByFile = array(
         'logspace' => true,
         'return_type' => 'int',
         'function_comment' => " * Binary insertion sort stable with comparison callback.\n",
+      ),
+      array(
+        'function' => 'TSODLULS_Tim_sort__comparison_callback__mark1',
+        'celltype' => 'direct',
+        'size' => 'cell',
+        'comparison' => 'direct',
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => " * The famous Tim sort with comparison callback.\n",
+        'parameters' => array(
+          $arrSwapVarParameter,
+        ),
       ),
     ),
   ),
@@ -350,6 +367,16 @@ $arrArrCompetitorsListByFile = array(
         'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only constant additional space
         'return_type' => 'int',
         'function_comment' => " * Binary insertion sort stable with long cells.\n",
+      ),
+      array(
+        'function' => 'TSODLULS_Tim_sort__long__mark1',
+        'celltype' => 'long',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => " * The famous Tim sort with long cells.\n",
       ),
     ),
   ),
@@ -584,6 +611,16 @@ $arrArrCompetitorsListByFile = array(
         'logspace' => 'pseudo',// the cost of cells is linear but the sorting algorithm uses only constant additional space
         'return_type' => 'int',
         'function_comment' => " * Binary insertion sort stable with short cells.\n",
+      ),
+      array(
+        'function' => 'TSODLULS_Tim_sort__short__mark1',
+        'celltype' => 'short',
+        'size' => false,
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => " * The famous Tim sort with short cells.\n",
       ),
     ),
   ),

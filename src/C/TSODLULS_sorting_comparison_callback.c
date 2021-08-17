@@ -21,6 +21,8 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
 #define TSODLULS_COMPARE_CAN_ERROR 0
 #define TSODLULS_COMPARE_CALL TSODLULS_COMPARE_CALL_SIMPLE
+#define TSODLULS_COMPARE_TYPE TSODLULS_COMPARE_TYPE_SIMPLE
+#define TSODLULS_COMPARE_TIM_SORT_MERGE_STATE TSODLULS_COMPARE_TIM_SORT_MERGE_STATE_SIMPLE
 
 
 
@@ -59,7 +61,20 @@ int TSODLULS_sort_stable__comparison_callback(
   size_t i_element_size,
   t_comparison_function fn_comparison
 ){
-  return I_ERROR__NOT_YET_IMPLEMENTED;
+
+  int TSODLULS_binary_insertion_sort_stable__comparison_callback__mark1(
+    void* arr_elements,
+    size_t i_number_of_elements,
+    size_t i_element_size,
+    t_comparison_function fn_comparison
+  ){
+    #include "./competitor_algorithms/b/body_TSODLULS_binary_insertion_sort_stable__comparison_callback__mark1.c"
+  }
+
+  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
+  #include "./competitor_algorithms/b/body_TSODLULS_Tim_sort__comparison_callback__mark1.c"
+  #undef TSODLULS_SWAP_VAR
 }//end function TSODLULS_sort_stable__comparison_callback()
 
 
@@ -98,11 +113,14 @@ int TSODLULS_sort_stable_logspace__comparison_callback(
   size_t i_element_size,
   t_comparison_function fn_comparison
 ){
-  return I_ERROR__NOT_YET_IMPLEMENTED;
+  //Probably not really state of the art, will be improved later
+  #include "./competitor_algorithms/b/body_TSODLULS_binary_insertion_sort_stable__comparison_callback__mark1.c"
 }//end function TSODLULS_sort_stable_logspace__comparison_callback()
 
 
 
 #undef TSODLULS_COMPARE_CAN_ERROR
 #undef TSODLULS_COMPARE_CALL
+#undef TSODLULS_COMPARE_TYPE
+#undef TSODLULS_COMPARE_TIM_SORT_MERGE_STATE
 

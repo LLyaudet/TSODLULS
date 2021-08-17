@@ -134,6 +134,64 @@ typedef struct {
 
 
 typedef int (*t_comparison_function) (const void *, const void *);
+typedef int (*t_reentrant_comparison_function) (const void *, const void *, void*);
+
+
+
+typedef struct {
+  t_TSODLULS_sort_element* p_base;
+  size_t i_length;
+} t_TSODLULS_Tim_sort_run_instance;
+
+typedef struct {
+  t_TSODLULS_sort_element__short* p_base;
+  size_t i_length;
+} t_TSODLULS_Tim_sort_run_instance__short;
+
+typedef struct {
+  char* p_base;
+  size_t i_length;
+} t_TSODLULS_Tim_sort_run_instance__comparison_callback;
+
+#define TSODLULS_TIM_SORT_MAX_RUNS_TO_MERGE 85
+#define TSODLULS_TIM_SORT_MIN_GALLOP 7
+#define TSODLULS_TIM_SORT_MERGESTATE_TEMP_SIZE 256
+
+typedef struct {
+  t_TSODLULS_Tim_sort_run_instance arr_run_instances[TSODLULS_TIM_SORT_MAX_RUNS_TO_MERGE];
+  size_t i_run_instances_count;
+  size_t i_min_gallop;
+  t_TSODLULS_sort_element* arr_elements_copy;
+  size_t i_max_number_of_elements_copy;
+} t_TSODLULS_Tim_sort_merge_state;
+
+typedef struct {
+  t_TSODLULS_Tim_sort_run_instance__short arr_run_instances[TSODLULS_TIM_SORT_MAX_RUNS_TO_MERGE];
+  size_t i_run_instances_count;
+  size_t i_min_gallop;
+  t_TSODLULS_sort_element__short* arr_elements_copy;
+  size_t i_max_number_of_elements_copy;
+} t_TSODLULS_Tim_sort_merge_state__short;
+
+typedef struct {
+  size_t i_element_size;
+  t_comparison_function fn_comparison;
+  t_TSODLULS_Tim_sort_run_instance__comparison_callback arr_run_instances[TSODLULS_TIM_SORT_MAX_RUNS_TO_MERGE];
+  size_t i_run_instances_count;
+  size_t i_min_gallop;
+  char* arr_elements_copy;
+  size_t i_max_number_of_elements_copy;
+} t_TSODLULS_Tim_sort_merge_state__comparison_callback;
+
+typedef struct {
+  size_t i_element_size;
+  t_reentrant_comparison_function fn_comparison;
+  t_TSODLULS_Tim_sort_run_instance__comparison_callback arr_run_instances[TSODLULS_TIM_SORT_MAX_RUNS_TO_MERGE];
+  size_t i_run_instances_count;
+  size_t i_min_gallop;
+  char* arr_elements_copy;
+  size_t i_max_number_of_elements_copy;
+} t_TSODLULS_Tim_sort_merge_state__reentrant_comparison_callback;
 
 
 
