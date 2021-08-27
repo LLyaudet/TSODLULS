@@ -91,22 +91,22 @@ $arrInsertionSortLongParameter = array(
   'default' => 1,// see getUserChoiceFunctions
   'values' => array(
     array(
-     'index' => 0,
-     'value_for_macro_def' => '"../f/fragment_insertion_sort_with_threshold_for_long_cells.c"',
-     'value_for_function_name' => '1',
-     'stable' => false,
+      'index' => 0,
+      'value_for_macro_def' => '"../f/fragment_insertion_sort_with_threshold_for_long_cells.c"',
+      'value_for_function_name' => '1',
+      'stable' => false,
     ),
     array(
-     'index' => 1,
-     'value_for_macro_def' => '"../f/fragment_insertion_sort_stable_with_threshold_for_long_cells.c"',
-     'value_for_function_name' => '2',
-     'stable' => true,
+      'index' => 1,
+      'value_for_macro_def' => '"../f/fragment_insertion_sort_stable_with_threshold_for_long_cells.c"',
+      'value_for_function_name' => '2',
+      'stable' => true,
     ),
     array(
-     'index' => 2,
-     'value_for_macro_def' => '"../f/fragment_binary_insertion_sort_stable_with_threshold_for_long_cells.c"',
-     'value_for_function_name' => '3',
-     'stable' => true,
+      'index' => 2,
+      'value_for_macro_def' => '"../f/fragment_binary_insertion_sort_stable_with_threshold_for_long_cells.c"',
+      'value_for_function_name' => '3',
+      'stable' => true,
     ),
   ),
 );
@@ -117,22 +117,48 @@ $arrInsertionSortComparisonCallbackParameter = array(
   'default' => 1,// see getUserChoiceFunctions
   'values' => array(
     array(
-     'index' => 0,
-     'value_for_macro_def' => '"../f/fragment_insertion_sort_with_threshold_for_comparison_callback.c"',
-     'value_for_function_name' => '1',
-     'stable' => false,
+      'index' => 0,
+      'value_for_macro_def' => '"../f/fragment_insertion_sort_with_threshold_for_comparison_callback.c"',
+      'value_for_function_name' => '1',
+      'stable' => false,
     ),
     array(
-     'index' => 1,
-     'value_for_macro_def' => '"../f/fragment_insertion_sort_stable_with_threshold_for_comparison_callback.c"',
-     'value_for_function_name' => '2',
-     'stable' => true,
+      'index' => 1,
+      'value_for_macro_def' => '"../f/fragment_insertion_sort_stable_with_threshold_for_comparison_callback.c"',
+      'value_for_function_name' => '2',
+      'stable' => true,
     ),
     array(
-     'index' => 2,
-     'value_for_macro_def' => '"../f/fragment_binary_insertion_sort_stable_with_threshold_for_comparison_callback.c"',
-     'value_for_function_name' => '3',
-     'stable' => true,
+      'index' => 2,
+      'value_for_macro_def' => '"../f/fragment_binary_insertion_sort_stable_with_threshold_for_comparison_callback.c"',
+      'value_for_function_name' => '3',
+      'stable' => true,
+    ),
+  ),
+);
+
+$arrNaturalMergeMainStrategyParameter = array(
+  'macro' => 'TSODLULS_NATURAL_MERGE_MAIN_STRATEGY',
+  'type' => 'enum',
+  'default' => 1,// see getUserChoiceFunctions
+  'values' => array(
+    array(
+      'index' => 0,
+      'value_for_macro_def' => 'TSODLULS_natural_merge_main_strategy__Tim_sort',
+      'value_for_function_name' => 'Tim',
+      'stable' => true,
+    ),
+    array(
+      'index' => 1,
+      'value_for_macro_def' => 'TSODLULS_natural_merge_main_strategy__Shivers_sort',
+      'value_for_function_name' => 'Shivers',
+      'stable' => true,
+    ),
+    array(
+      'index' => 2,
+      'value_for_macro_def' => 'TSODLULS_natural_merge_main_strategy__adaptive_Shivers_sort',
+      'value_for_function_name' => 'adaptive_Shivers',
+      'stable' => true,
     ),
   ),
 );
@@ -147,11 +173,13 @@ $arrArrCompetitorsListByFile = array(
                   ."#define TSODLULS_COMPARE_CALL TSODLULS_COMPARE_CALL_SIMPLE\n"
                   ."#define TSODLULS_COMPARE_TYPE TSODLULS_COMPARE_TYPE_SIMPLE\n"
                   ."#define TSODLULS_COMPARE_TIM_SORT_MERGE_STATE TSODLULS_COMPARE_TIM_SORT_MERGE_STATE_SIMPLE\n"
+                  ."#define TSODLULS_MERGE_TWO_RUNS TSODLULS_merge_two_runs__comparison_callback\n"
                   ."\n\n\n",
     'code_tail' => "#undef TSODLULS_COMPARE_CAN_ERROR\n"
                   ."#undef TSODLULS_COMPARE_CALL\n"
                   ."#undef TSODLULS_COMPARE_TYPE\n"
                   ."#undef TSODLULS_COMPARE_TIM_SORT_MERGE_STATE\n"
+                  ."#undef TSODLULS_MERGE_TWO_RUNS\n"
                   ."\n\n\n",
     'functions_section_header' => " * Sorting functions using a comparison callback for arbitrary data structures.\n",
     'functions' => array(
@@ -214,6 +242,7 @@ $arrArrCompetitorsListByFile = array(
         'function_comment' => " * The famous Tim sort with comparison callback.\n",
         'parameters' => array(
           $arrSwapVarParameter,
+          $arrNaturalMergeMainStrategyParameter,
         ),
       ),
     ),
@@ -221,8 +250,11 @@ $arrArrCompetitorsListByFile = array(
   'TSODLULS_sorting_long_orders__competitor__generated' => array(
     'header_head' => '',
     'header_tail' => '',
-    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n\n\n",
-    'code_tail' => "",
+    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n"
+                  ."#define TSODLULS_MERGE_TWO_RUNS TSODLULS_merge_two_runs__long\n"
+                  ."\n\n\n",
+    'code_tail' => "#undef TSODLULS_MERGE_TWO_RUNS\n"
+                  ."\n\n\n",
     'functions_section_header' => " * Sorting functions for long nextified strings\n",
     'functions' => array(
       array(
@@ -377,14 +409,20 @@ $arrArrCompetitorsListByFile = array(
         'logspace' => false,
         'return_type' => 'int',
         'function_comment' => " * The famous Tim sort with long cells.\n",
+        'parameters' => array(
+          $arrNaturalMergeMainStrategyParameter,
+        ),
       ),
     ),
   ),
   'TSODLULS_sorting_short_orders__competitor__generated' => array(
     'header_head' => '',
     'header_tail' => '',
-    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n\n\n",
-    'code_tail' => "",
+    'code_head' => "#include \"TSODLULS__competitor.h\"\n\n"
+                  ."#define TSODLULS_MERGE_TWO_RUNS TSODLULS_merge_two_runs__short\n"
+                  ."\n\n\n",
+    'code_tail' => "#undef TSODLULS_MERGE_TWO_RUNS\n"
+                  ."\n\n\n",
     'functions_section_header' => " * Sorting functions for short nextified strings\n",
     'functions' => array(
       array(
@@ -621,6 +659,9 @@ $arrArrCompetitorsListByFile = array(
         'logspace' => false,
         'return_type' => 'int',
         'function_comment' => " * The famous Tim sort with short cells.\n",
+        'parameters' => array(
+          $arrNaturalMergeMainStrategyParameter,
+        ),
       ),
     ),
   ),

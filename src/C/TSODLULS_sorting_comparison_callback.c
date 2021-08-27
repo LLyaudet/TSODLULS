@@ -23,6 +23,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 #define TSODLULS_COMPARE_CALL TSODLULS_COMPARE_CALL_SIMPLE
 #define TSODLULS_COMPARE_TYPE TSODLULS_COMPARE_TYPE_SIMPLE
 #define TSODLULS_COMPARE_TIM_SORT_MERGE_STATE TSODLULS_COMPARE_TIM_SORT_MERGE_STATE_SIMPLE
+#define TSODLULS_MERGE_TWO_RUNS TSODLULS_merge_two_runs__comparison_callback
 
 
 
@@ -72,9 +73,11 @@ int TSODLULS_sort_stable__comparison_callback(
   }
 
   #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_5(a0,a1,a2)
+  #define TSODLULS_NATURAL_MERGE_MAIN_STRATEGY TSODLULS_natural_merge_main_strategy__adaptive_Shivers_sort
   size_t TSODLULS_macraff_i_chunk_size = TSODLULS_CHUNK_SIZE_FOR_SWAP_VAR(i_element_size);
   #include "./competitor_algorithms/b/body_TSODLULS_Tim_sort__comparison_callback__mark1.c"
   #undef TSODLULS_SWAP_VAR
+  #undef TSODLULS_NATURAL_MERGE_MAIN_STRATEGY
 }//end function TSODLULS_sort_stable__comparison_callback()
 
 
@@ -123,4 +126,5 @@ int TSODLULS_sort_stable_logspace__comparison_callback(
 #undef TSODLULS_COMPARE_CALL
 #undef TSODLULS_COMPARE_TYPE
 #undef TSODLULS_COMPARE_TIM_SORT_MERGE_STATE
+#undef TSODLULS_MERGE_TWO_RUNS
 

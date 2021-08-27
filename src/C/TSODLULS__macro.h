@@ -452,3 +452,90 @@ typedef union {
 
 
 
+/**
+ * This strategy is from TimSort:
+ * See wikipedia and the source code/and the emails by Tim Peter's on the mailing list of Python.
+ * The 4th case was added to correct the upper bound on the number of runs.
+ */
+#define TSODLULS_natural_merge_main_strategy__Tim_sort \
+while(merge_state.i_run_instances_count > 1){\
+  size_t i_merge_at = merge_state.i_run_instances_count - 2;\
+  if(i_merge_at > 0\
+    && merge_state.arr_run_instances[i_merge_at - 1].i_length <= merge_state.arr_run_instances[i_merge_at].i_length + merge_state.arr_run_instances[i_merge_at + 1].i_length\
+  ){\
+    if(merge_state.arr_run_instances[i_merge_at - 1].i_length < merge_state.arr_run_instances[i_merge_at + 1].i_length){\
+      --i_merge_at;\
+    }\
+    i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
+    if(i_compare_result != 0){\
+      goto clean_and_return_error;\
+    }\
+  }\
+  else if(merge_state.arr_run_instances[i_merge_at].i_length <= merge_state.arr_run_instances[i_merge_at + 1].i_length){\
+    i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
+    if(i_compare_result != 0){\
+      goto clean_and_return_error;\
+    }\
+  }\
+  else if(i_merge_at > 1\
+    && merge_state.arr_run_instances[i_merge_at - 2].i_length <= merge_state.arr_run_instances[i_merge_at - 1].i_length + merge_state.arr_run_instances[i_merge_at].i_length\
+  ){\
+    i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
+    if(i_compare_result != 0){\
+      goto clean_and_return_error;\
+    }\
+  }\
+  else{\
+    break;\
+  }\
+}\
+
+
+
+/**
+ * This strategy is from ShiversSort:
+ * see the research report by Olin Shivers, Georgia Institute of Technology, 2002.
+ * It uses bitwise tricks to check condition on floor of logarithms in base 2 of runs lengths.
+ * When I benchmark it, it is slightly faster than Tim's sort strategy.
+ */
+#define TSODLULS_natural_merge_main_strategy__Shivers_sort \
+while(merge_state.i_run_instances_count > 1){\
+  size_t i_merge_at = merge_state.i_run_instances_count - 2;\
+  size_t i_order_of_magnitude = merge_state.arr_run_instances[i_merge_at + 1].i_length;\
+  if(i_order_of_magnitude < ((~i_order_of_magnitude) & merge_state.arr_run_instances[i_merge_at].i_length) ){\
+    break;\
+  }\
+  i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
+  if(i_compare_result != 0){\
+    goto clean_and_return_error;\
+  }\
+}\
+
+
+
+/**
+ * This strategy is from AdaptiveShiversSort:
+ * see the articles by Vincent Jugé, for example 1024 Bulletin de la SIF, avril 2020, in French,
+ * or the preprint on arXiv or SODA 2020 proceedings.
+ * It uses bitwise tricks to check condition on floor of logarithms in base 2 of runs lengths.
+ * When I benchmark it, it is slightly faster than Tim's sort strategy.
+ * Despite its ressemblance with Shivers's sort,
+ * the distinct properties of this strategy make that JugéSort would probably be a better name than AdaptiveShiversSort,
+ * or an even better name for the whole algorithm should be TimShiversJugéSort and I must have missed many names ;)
+ * With AdaptiveShiversSort we avoid 'é' and diacritics in function names ;P
+ */
+#define TSODLULS_natural_merge_main_strategy__adaptive_Shivers_sort \
+while(merge_state.i_run_instances_count > 2){\
+  size_t i_merge_at = merge_state.i_run_instances_count - 3;\
+  size_t i_order_of_magnitude = merge_state.arr_run_instances[i_merge_at + 1].i_length | merge_state.arr_run_instances[i_merge_at + 2].i_length;\
+  if(i_order_of_magnitude < ((~i_order_of_magnitude) & merge_state.arr_run_instances[i_merge_at].i_length) ){\
+    break;\
+  }\
+  i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
+  if(i_compare_result != 0){\
+    goto clean_and_return_error;\
+  }\
+}\
+
+
+

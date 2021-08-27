@@ -54,6 +54,7 @@ See the source code of Python for the original implementation of Tim Peters's li
   size_t i__compare;
   size_t i_max__compare;
   int i_result__compare = 0;
+  int i_compare_result = 0;
 
   if(i_number_of_elements < 2){
     return 0;
@@ -177,30 +178,7 @@ See the source code of Python for the original implementation of Tim Peters's li
     ++merge_state.i_run_instances_count;
 
     //merge right now if needed
-    while(merge_state.i_run_instances_count > 1){
-      size_t i_merge_at = merge_state.i_run_instances_count - 2;
-      if(i_merge_at > 0
-        && merge_state.arr_run_instances[i_merge_at - 1].i_length <= merge_state.arr_run_instances[i_merge_at].i_length + merge_state.arr_run_instances[i_merge_at + 1].i_length
-      ){
-        if(merge_state.arr_run_instances[i_merge_at - 1].i_length < merge_state.arr_run_instances[i_merge_at + 1].i_length){
-          --i_merge_at;
-        }
-        i_result__compare = TSODLULS_merge_two_runs__long(&merge_state, i_merge_at);
-        if(i_result__compare != 0){
-          goto clean_and_return_error;
-        }
-      }
-      else if(merge_state.arr_run_instances[i_merge_at].i_length <= merge_state.arr_run_instances[i_merge_at + 1].i_length){
-        i_result__compare = TSODLULS_merge_two_runs__long(&merge_state, i_merge_at);
-        if(i_result__compare != 0){
-          goto clean_and_return_error;
-        }
-      }
-      else{
-        break;
-      }
-
-    }
+    TSODLULS_NATURAL_MERGE_MAIN_STRATEGY
 
     p_current_lower_element += i_current_run_number_of_elements;
   }while(p_current_lower_element < p_current_higher_element);
@@ -213,7 +191,7 @@ See the source code of Python for the original implementation of Tim Peters's li
     ){
       --i_merge_at;
     }
-    i_result__compare = TSODLULS_merge_two_runs__long(&merge_state, i_merge_at);
+    i_result__compare = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);
     if(i_result__compare != 0){
       goto clean_and_return_error;
     }
@@ -224,6 +202,6 @@ See the source code of Python for the original implementation of Tim Peters's li
     TSODLULS_free(merge_state.arr_elements_copy);
   }
 
-  return i_result__compare;
+  return i_result__compare | i_compare_result;
 //}//end function TSODLULS_Tim_sort__long__mark1
 
