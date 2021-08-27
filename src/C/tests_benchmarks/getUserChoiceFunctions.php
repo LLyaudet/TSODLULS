@@ -341,7 +341,7 @@ function getArrChoiceForEnumParameter($arrParameter, $bOnlyOneValue){
     echo $sMessage;
     $input = readline();
     if($input === ''){
-      return array($arrParameter['default']);
+      return array($arrParameter['values'][$arrParameter['default'] - 1]);
     }
     if($input === 'all'){
       if($bOnlyOneValue){
