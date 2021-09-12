@@ -455,13 +455,21 @@ typedef union {
 /**
  * This strategy is from TimSort:
  * See wikipedia and the source code/and the emails by Tim Peter's on the mailing list of Python.
- * The 4th case was added to correct the upper bound on the number of runs.
+ * It maintains the invariant that any stack element is bigger than the sum of the at most two next stack elements.
+ * The upper on the stack, the (exponentially like Fibonacci) lighter.
+ * The case i_merge_at > 1 was added to maintain the invariant and correct the upper bound on the number of runs.
  */
 #define TSODLULS_natural_merge_main_strategy__Tim_sort \
 while(merge_state.i_run_instances_count > 1){\
   size_t i_merge_at = merge_state.i_run_instances_count - 2;\
-  if(i_merge_at > 0\
-    && merge_state.arr_run_instances[i_merge_at - 1].i_length <= merge_state.arr_run_instances[i_merge_at].i_length + merge_state.arr_run_instances[i_merge_at + 1].i_length\
+  if(\
+      (i_merge_at > 0\
+      && merge_state.arr_run_instances[i_merge_at - 1].i_length <= merge_state.arr_run_instances[i_merge_at].i_length + merge_state.arr_run_instances[i_merge_at + 1].i_length\
+      )\
+    ||\
+      (i_merge_at > 1\
+      && merge_state.arr_run_instances[i_merge_at - 2].i_length <= merge_state.arr_run_instances[i_merge_at - 1].i_length + merge_state.arr_run_instances[i_merge_at].i_length\
+      )\
   ){\
     if(merge_state.arr_run_instances[i_merge_at - 1].i_length < merge_state.arr_run_instances[i_merge_at + 1].i_length){\
       --i_merge_at;\
@@ -472,14 +480,6 @@ while(merge_state.i_run_instances_count > 1){\
     }\
   }\
   else if(merge_state.arr_run_instances[i_merge_at].i_length <= merge_state.arr_run_instances[i_merge_at + 1].i_length){\
-    i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
-    if(i_compare_result != 0){\
-      goto clean_and_return_error;\
-    }\
-  }\
-  else if(i_merge_at > 1\
-    && merge_state.arr_run_instances[i_merge_at - 2].i_length <= merge_state.arr_run_instances[i_merge_at - 1].i_length + merge_state.arr_run_instances[i_merge_at].i_length\
-  ){\
     i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
     if(i_compare_result != 0){\
       goto clean_and_return_error;\
@@ -537,5 +537,46 @@ while(merge_state.i_run_instances_count > 2){\
   }\
 }\
 
+
+
+/**
+ * This strategy is from AdaptiveShiversSort:
+ * a variant of the previous strategy that is probably closer to what Vincent Jugé intended.
+ */
+#define TSODLULS_natural_merge_main_strategy__adaptive_Shivers_sort_v2 \
+while(merge_state.i_run_instances_count > 2){\
+  size_t i_merge_at = merge_state.i_run_instances_count - 3;\
+  size_t i_order_of_magnitude = merge_state.arr_run_instances[i_merge_at + 1].i_length | merge_state.arr_run_instances[i_merge_at + 2].i_length;\
+  if(i_order_of_magnitude < ((~i_order_of_magnitude) & merge_state.arr_run_instances[i_merge_at].i_length) ){\
+    break;\
+  }\
+  if(merge_state.arr_run_instances[i_merge_at + 2].i_length < merge_state.arr_run_instances[i_merge_at].i_length){\
+    ++i_merge_at;\
+  }\
+  i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
+  if(i_compare_result != 0){\
+    goto clean_and_return_error;\
+  }\
+}\
+
+
+
+/**
+ * This strategy is from AdaptiveShiversSort:
+ * a variant of the previous strategy that is probably not what Vincent Jugé intended,
+ * but we test it anyway.
+ */
+#define TSODLULS_natural_merge_main_strategy__adaptive_Shivers_sort_v3 \
+while(merge_state.i_run_instances_count > 2){\
+  size_t i_merge_at = merge_state.i_run_instances_count - 2;\
+  size_t i_order_of_magnitude = merge_state.arr_run_instances[i_merge_at].i_length | merge_state.arr_run_instances[i_merge_at + 1].i_length;\
+  if(i_order_of_magnitude < ((~i_order_of_magnitude) & merge_state.arr_run_instances[i_merge_at - 1].i_length) ){\
+    break;\
+  }\
+  i_compare_result = TSODLULS_MERGE_TWO_RUNS(&merge_state, i_merge_at);\
+  if(i_compare_result != 0){\
+    goto clean_and_return_error;\
+  }\
+}\
 
 

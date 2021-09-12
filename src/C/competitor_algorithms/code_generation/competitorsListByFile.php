@@ -160,6 +160,18 @@ $arrNaturalMergeMainStrategyParameter = array(
       'value_for_function_name' => 'adaptive_Shivers',
       'stable' => true,
     ),
+    array(
+      'index' => 3,
+      'value_for_macro_def' => 'TSODLULS_natural_merge_main_strategy__adaptive_Shivers_sort_v2',
+      'value_for_function_name' => 'adaptive_Shivers_v2',
+      'stable' => true,
+    ),
+    array(
+      'index' => 4,
+      'value_for_macro_def' => 'TSODLULS_natural_merge_main_strategy__adaptive_Shivers_sort_v3',
+      'value_for_function_name' => 'adaptive_Shivers_v3',
+      'stable' => true,
+    ),
   ),
 );
 
