@@ -22,12 +22,22 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 #include "../TSODLULS.h"
 #include "test_macros.c"
 
+
+#define close_file(file) {\
+  another_return = fclose(file);\
+  if(another_return != 0){\
+    printf("Couldn't close file.\n");\
+  }\
+}
+
+
 int mydiff(char* s_filename1, char* s_filename2){
   FILE* file1 = NULL;
   FILE* file2 = NULL;
   int i_result = 0;//no difference
   int c1;//that's a char but getc returns an int
   int c2;//that's a char but getc returns an int
+  int another_return;
 
   file1 = fopen(s_filename1, "r");
   if(file1 == NULL){
@@ -36,7 +46,7 @@ int mydiff(char* s_filename1, char* s_filename2){
 
   file2 = fopen(s_filename2, "r");
   if(file2 == NULL){
-    fclose(file1);
+    close_file(file1);
     return I_ERROR__COULD_NOT_OPEN_FILE;
   }
 
@@ -50,8 +60,8 @@ int mydiff(char* s_filename1, char* s_filename2){
   }
   while(c1 != EOF && c2 != EOF);
 
-  fclose(file1);
-  fclose(file2);
+  close_file(file1);
+  close_file(file2);
   return i_result;
 }
 
@@ -63,22 +73,47 @@ int from_file_to_string(
   size_t* p_i_string_length
 ){
   FILE* file;
+  size_t some_return;
+  int another_return;
+  long int yet_another_return;
+
   file = fopen(s_filename, "r");
   if(file == NULL){
     printf("Couldn't open file to convert to string.\n");
     return I_ERROR__COULD_NOT_OPEN_FILE;
   }
-  fseek(file, 0, SEEK_END);
-  *p_i_string_length = ftell(file);
-  fseek(file, 0, SEEK_SET);
+  another_return = fseek(file, 0, SEEK_END);
+  if(another_return != 0){
+    printf("Couldn't seek end of file.\n");
+    return I_ERROR__COULD_NOT_SEEK_FILE;
+  }
+  yet_another_return = ftell(file);
+  if(yet_another_return < 0){
+    printf("Couldn't tell file.\n");
+    return I_ERROR__COULD_NOT_TELL_FILE;
+  }
+  *p_i_string_length = (size_t) yet_another_return;
+  another_return = fseek(file, 0, SEEK_SET);
+  if(another_return != 0){
+    printf("Couldn't seek beginning of file.\n");
+    return I_ERROR__COULD_NOT_SEEK_FILE;
+  }
   *p_s_string = malloc(*p_i_string_length);
   if(*p_s_string == NULL){
-    fclose(file);
     printf("Couldn't allocate string.\n");
+    close_file(file);
     return I_ERROR__COULD_NOT_ALLOCATE_MEMORY;
   }
-  fread(*p_s_string, 1, *p_i_string_length, file);
-  fclose(file);
+  some_return = fread(*p_s_string, 1, *p_i_string_length, file);
+  if(some_return != *p_i_string_length){
+    printf(
+      "fread failed to read all the file: expected:%zu got:%zu.\n",
+      *p_i_string_length,
+      some_return
+    );
+    return I_ERROR__COULD_NOT_READ_FILE;
+  }
+  close_file(file);
   return 0;
 }
 
@@ -90,6 +125,7 @@ int from_string_to_file(
   size_t i_string_length
 ){
   FILE* file;
+  int another_return;
   file = fopen(s_filename, "w");
   if(file == NULL){
     printf("Couldn't open file to dump string to.\n");
@@ -97,11 +133,11 @@ int from_string_to_file(
   }
   for(size_t i = 0; i < i_string_length; ++i){
     if(fputc(s_string[i], file) == EOF){
-      fclose(file);
+      close_file(file);
       return I_ERROR__COULD_NOT_WRITE_CHARACTER;
     }
   }
-  fclose(file);
+  close_file(file);
   return 0;
 }
 
