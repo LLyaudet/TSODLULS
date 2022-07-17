@@ -14,7 +14,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
-©Copyright 2018-2021 Laurent Lyaudet
+©Copyright 2018-2022 Laurent Lyaudet
 */
 
 //------------------------------------------------------------------------------------
