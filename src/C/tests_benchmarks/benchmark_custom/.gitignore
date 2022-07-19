@@ -1,0 +1,6 @@
+benchmark_custom.c
+benchmark_custom.o
+benchmark_custom.exe
+last_result.txt
+last_analysis.txt
+
