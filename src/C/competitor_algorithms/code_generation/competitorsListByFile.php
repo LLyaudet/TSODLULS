@@ -635,6 +635,30 @@ $arrArrCompetitorsListByFile = array(
         ),
       ),
       array(
+        'function' => 'TSODLULS_sort_radix8_count_insertion__short__mark7',
+        'celltype' => 'short',
+        'size' => 'direct',
+        'comparison' => false,
+        'stable' => true,
+        'logspace' => false,
+        'return_type' => 'int',
+        'function_comment' => (
+          " * A stable sorting algorithm for nextified strings based on radix sort with octets digits\n"
+         ." * and counting sort as a subroutine.\n"
+         ." * When the number of elements to sort is at most TSODLULS_MAX_THRESH (5 for example), we use insertion sort.\n"
+         ." * A variant with single memory allocation adapted to the max-depth.\n"
+         ." * No insertion sort if there is more than TSODLULS_MAX_THRESH elements and it is 8 bits datatype.\n"
+         ." * Simplified inner loops ( if(i_max_length > current_instance.i_depth + 1) )\n"
+         ." * Use Hoare's rule : \"avoid the biggest part\" to have at most\n"
+         ." * a logarithmic number of sub-instances at the same time.\n"
+         ." * Since we need linear space anyway, the interest is more pedagogical than for performances.\n"
+        ),
+        'parameters' => array(
+          array('macro' => 'TSODLULS_MAX_THRESH', 'type' => 'integer_range', 'min_value' => 1, 'max_value' => 16, 'default' => 5,),
+          $arrInsertionSortShortParameter,
+        ),
+      ),
+      array(
         'function' => 'TSODLULS_insertion_sort__short__mark1',
         'celltype' => 'short',
         'size' => false,
