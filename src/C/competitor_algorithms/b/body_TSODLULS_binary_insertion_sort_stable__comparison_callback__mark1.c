@@ -27,7 +27,8 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 //  void* arr_elements,
 //  size_t i_number_of_elements,
 //  size_t i_element_size,
-//  t_comparison_function fn_comparison
+//  t_comparison_function or t_reentrant_comparison_function fn_comparison,
+//  and maybe void* context
 //){
   if(i_number_of_elements < 2){
     return 0;

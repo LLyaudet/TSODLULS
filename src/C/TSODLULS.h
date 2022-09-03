@@ -190,6 +190,7 @@ typedef struct {
 typedef struct {
   size_t i_element_size;
   t_reentrant_comparison_function fn_comparison;
+  void* context;
   t_TSODLULS_Tim_sort_run_instance__comparison_callback arr_run_instances[TSODLULS_TIM_SORT_MAX_RUNS_TO_MERGE];
   size_t i_run_instances_count;
   size_t i_min_gallop;

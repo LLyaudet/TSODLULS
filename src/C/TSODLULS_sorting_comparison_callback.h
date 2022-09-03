@@ -18,7 +18,8 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //------------------------------------------------------------------------------------
-//Sorting orders with comparison callback
+//Sorting orders with comparison callback 1:
+// simple comparison callback: no error, not reentrant
 //------------------------------------------------------------------------------------
 /**
  * Sorting functions using a comparison callback for arbitrary data structures.
@@ -76,6 +77,226 @@ int TSODLULS_sort_stable_logspace__comparison_callback(
 
 
 
+//------------------------------------------------------------------------------------
+//Sorting orders with comparison callback 2:
+// can error, not reentrant
+//------------------------------------------------------------------------------------
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback can return int less than -1 to yield an error code.
+ * Significance of error codes is "user defined" or "comparison function developper defined".
+ */
+int TSODLULS_sort__comparison_callback_can_error(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art stable sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback can return int less than -1 to yield an error code.
+ * Significance of error codes is "user defined" or "comparison function developper defined".
+ */
+int TSODLULS_sort_stable__comparison_callback_can_error(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art logspace sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback can return int less than -1 to yield an error code.
+ * Significance of error codes is "user defined" or "comparison function developper defined".
+ */
+int TSODLULS_sort_logspace__comparison_callback_can_error(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art stable logspace sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback can return int less than -1 to yield an error code.
+ * Significance of error codes is "user defined" or "comparison function developper defined".
+ */
+int TSODLULS_sort_stable_logspace__comparison_callback_can_error(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_comparison_function fn_comparison
+);
+
+
+
+//------------------------------------------------------------------------------------
+//Sorting orders with comparison callback 3:
+// no error, reentrant
+//------------------------------------------------------------------------------------
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback takes an additional void* context argument.
+ * With it, you can count the number of comparisons done, for example.
+ */
+int TSODLULS_sort__comparison_callback_reentrant(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_reentrant_comparison_function fn_comparison,
+  void* context
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art stable sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback takes an additional void* context argument.
+ * With it, you can count the number of comparisons done, for example.
+ */
+int TSODLULS_sort_stable__comparison_callback_reentrant(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_reentrant_comparison_function fn_comparison,
+  void* context
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art logspace sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback takes an additional void* context argument.
+ * With it, you can count the number of comparisons done, for example.
+ */
+int TSODLULS_sort_logspace__comparison_callback_reentrant(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_reentrant_comparison_function fn_comparison,
+  void* context
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art stable logspace sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback takes an additional void* context argument.
+ * With it, you can count the number of comparisons done, for example.
+ */
+int TSODLULS_sort_stable_logspace__comparison_callback_reentrant(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_reentrant_comparison_function fn_comparison,
+  void* context
+);
+
+
+
+//------------------------------------------------------------------------------------
+//Sorting orders with comparison callback 4:
+// can error, reentrant
+//------------------------------------------------------------------------------------
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback can return int less than -1 to yield an error code.
+ * Significance of error codes is "user defined" or "comparison function developper defined".
+ * The comparison callback takes an additional void* context argument.
+ * With it, you can count the number of comparisons done, for example.
+ */
+int TSODLULS_sort__comparison_callback_can_error_reentrant(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_reentrant_comparison_function fn_comparison,
+  void* context
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art stable sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback can return int less than -1 to yield an error code.
+ * Significance of error codes is "user defined" or "comparison function developper defined".
+ * The comparison callback takes an additional void* context argument.
+ * With it, you can count the number of comparisons done, for example.
+ */
+int TSODLULS_sort_stable__comparison_callback_can_error_reentrant(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_reentrant_comparison_function fn_comparison,
+  void* context
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art logspace sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback can return int less than -1 to yield an error code.
+ * Significance of error codes is "user defined" or "comparison function developper defined".
+ * The comparison callback takes an additional void* context argument.
+ * With it, you can count the number of comparisons done, for example.
+ */
+int TSODLULS_sort_logspace__comparison_callback_can_error_reentrant(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_reentrant_comparison_function fn_comparison,
+  void* context
+);
+
+
+
+/**
+ * Sorting functions using a comparison callback for arbitrary data structures.
+ * The current state of the art stable logspace sorting function using comparison callback.
+ * Its implementation may change without warning.
+ * The comparison callback can return int less than -1 to yield an error code.
+ * Significance of error codes is "user defined" or "comparison function developper defined".
+ * The comparison callback takes an additional void* context argument.
+ * With it, you can count the number of comparisons done, for example.
+ */
+int TSODLULS_sort_stable_logspace__comparison_callback_can_error_reentrant(
+  void* arr_elements,
+  size_t i_number_of_elements,
+  size_t i_element_size,
+  t_reentrant_comparison_function fn_comparison,
+  void* context
+);
+
+
+
 #define TSODLULS_COMPARE_CALL_SIMPLE(a, b) ((*fn_comparison) ((void *) a, (void *) b))
 #define TSODLULS_COMPARE_CALL_REENTRANT(a, b) ((*fn_comparison) ((void *) a, (void *) b, context))
 
@@ -84,6 +305,4 @@ int TSODLULS_sort_stable_logspace__comparison_callback(
 
 #define TSODLULS_COMPARE_TIM_SORT_MERGE_STATE_SIMPLE t_TSODLULS_Tim_sort_merge_state__comparison_callback
 #define TSODLULS_COMPARE_TIM_SORT_MERGE_STATE_REENTRANT t_TSODLULS_Tim_sort_merge_state__reentrant_comparison_callback
-
-
 

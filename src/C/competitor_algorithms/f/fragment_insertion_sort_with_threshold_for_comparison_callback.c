@@ -41,10 +41,10 @@ Modifications in this library:
   for(run_ptr = tmp_ptr + i_element_size; run_ptr <= thresh; run_ptr += i_element_size){
     #if TSODLULS_COMPARE_CAN_ERROR
     int i_compare_result = TSODLULS_COMPARE_CALL(run_ptr, tmp_ptr);
-    if(i_compare_result <= -2){// user defined error codes
-      return i_compare_result;
-    }
     if(i_compare_result < 0){
+      if(i_compare_result <= -2){// user defined error codes
+        return i_compare_result;
+      }
       tmp_ptr = run_ptr;
     }
     #else

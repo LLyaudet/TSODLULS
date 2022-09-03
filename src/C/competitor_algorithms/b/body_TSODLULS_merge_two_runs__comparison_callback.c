@@ -76,6 +76,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     size_t i_number_of_elements,
     size_t i_element_size,
     TSODLULS_COMPARE_TYPE fn_comparison,
+    #if TSODLULS_COMPARE_REENTRANT
+    void* context,
+    #endif
     size_t i_hint_offset
   ){
     #include "./body_TSODLULS_gallop_left__comparison_callback.c"
@@ -91,6 +94,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     size_t i_number_of_elements,
     size_t i_element_size,
     TSODLULS_COMPARE_TYPE fn_comparison,
+    #if TSODLULS_COMPARE_REENTRANT
+    void* context,
+    #endif
     size_t i_hint_offset
   ){
     #include "./body_TSODLULS_gallop_right__comparison_callback.c"
@@ -122,6 +128,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
       i_length_1,
       merge_state->i_element_size,
       merge_state->fn_comparison,
+      #if TSODLULS_COMPARE_REENTRANT
+      merge_state->context,
+      #endif
       0
   );
   if(i_offset < 0){//user defined error code
@@ -139,6 +148,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
       i_length_2,
       merge_state->i_element_size,
       merge_state->fn_comparison,
+      #if TSODLULS_COMPARE_REENTRANT
+      merge_state->context,
+      #endif
       i_length_2 - 1
   );
   if(i_offset <= 0){//user defined error code (<) or nothing to move (=)
@@ -176,12 +188,12 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
       //normal merge
       while(1){
         i_compare_result = TSODLULS_COMPARE_CALL(p_base_1, p_base_2);
-        #if TSODLULS_COMPARE_CAN_ERROR
-        if(i_compare_result <= -2){// user defined error codes
-          goto break_2_error_1;
-        }
-        #endif
         if(i_compare_result <= 0){
+          #if TSODLULS_COMPARE_CAN_ERROR
+          if(i_compare_result <= -2){// user defined error codes
+            goto break_2_error_1;
+          }
+          #endif
           ++i_consecutive_win_1;
           i_consecutive_win_2 = 0;
           TSODLULS_copy_and_inc(p_current_insertion_point, p_base_1, i_length_1, 1)
@@ -216,6 +228,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
             i_length_1,
             merge_state->i_element_size,
             merge_state->fn_comparison,
+            #if TSODLULS_COMPARE_REENTRANT
+            merge_state->context,
+            #endif
             0
         );
         if(i_offset < 0){//user defined error code
@@ -240,6 +255,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
             i_length_2,
             merge_state->i_element_size,
             merge_state->fn_comparison,
+            #if TSODLULS_COMPARE_REENTRANT
+            merge_state->context,
+            #endif
             0
         );
         if(i_offset < 0){//user defined error code
@@ -306,11 +324,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
       //normal merge
       while(1){
         i_compare_result = TSODLULS_COMPARE_CALL(p_base_1, p_base_2);
-        #if TSODLULS_COMPARE_CAN_ERROR
-        if(i_compare_result <= -2){// user defined error codes
-          goto break_2_error_2;
-        }
-        #endif
         if(i_compare_result > 0){
           ++i_consecutive_win_1;
           i_consecutive_win_2 = 0;
@@ -323,6 +336,11 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
           }
         }
         else{
+          #if TSODLULS_COMPARE_CAN_ERROR
+          if(i_compare_result <= -2){// user defined error codes
+            goto break_2_error_2;
+          }
+          #endif
           ++i_consecutive_win_2;
           i_consecutive_win_1 = 0;
           TSODLULS_copy_and_dec(p_current_insertion_point, p_base_2, i_length_2, 1)
@@ -346,6 +364,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
             i_length_1,
             merge_state->i_element_size,
             merge_state->fn_comparison,
+            #if TSODLULS_COMPARE_REENTRANT
+            merge_state->context,
+            #endif
             i_length_1 - 1
         );
         if(i_offset < 0){//user defined error code
@@ -371,6 +392,9 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
             i_length_2,
             merge_state->i_element_size,
             merge_state->fn_comparison,
+            #if TSODLULS_COMPARE_REENTRANT
+            merge_state->context,
+            #endif
             i_length_2 - 1
         );
         if(i_offset < 0){//user defined error code

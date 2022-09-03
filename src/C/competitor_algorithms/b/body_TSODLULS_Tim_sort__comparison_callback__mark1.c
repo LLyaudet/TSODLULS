@@ -32,7 +32,8 @@ See the source code of Python for the original implementation of Tim Peters's li
 //  void* arr_elements,
 //  size_t i_number_of_elements,
 //  size_t i_element_size,
-//  t_comparison_function fn_comparison
+//  t_comparison_function or t_reentrant_comparison_function fn_comparison,
+//  and maybe void* context
 //){
 //  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
 
@@ -61,6 +62,9 @@ See the source code of Python for the original implementation of Tim Peters's li
 
   merge_state.i_element_size = i_element_size;
   merge_state.fn_comparison = fn_comparison;
+  #if TSODLULS_COMPARE_REENTRANT
+  merge_state.context = context;
+  #endif
   merge_state.i_run_instances_count = 0;
   merge_state.i_min_gallop = TSODLULS_TIM_SORT_MIN_GALLOP;
   merge_state.arr_elements_copy = NULL;
@@ -111,15 +115,15 @@ See the source code of Python for the original implementation of Tim Peters's li
           p_current_element += i_element_size, ++i_current_run_number_of_elements
         ){
           i_compare_result = TSODLULS_COMPARE_CALL(p_current_element - i_element_size, p_current_element);
-          #if TSODLULS_COMPARE_CAN_ERROR
-          if(i_compare_result <= -2){// user defined error codes
-            goto clean_and_return_error;
-          }
-          #endif
           if(i_compare_result <= 0){
             break;
           }
         }
+        #if TSODLULS_COMPARE_CAN_ERROR
+        if(i_compare_result <= -2){// user defined error codes
+          goto clean_and_return_error;
+        }
+        #endif
       }
       else{
         for(
@@ -127,16 +131,16 @@ See the source code of Python for the original implementation of Tim Peters's li
           p_current_element < p_current_higher_element;
           p_current_element += i_element_size, ++i_current_run_number_of_elements
         ){
-          i_compare_result = TSODLULS_COMPARE_CALL(p_current_element - i_element_size, p_current_element);
-          #if TSODLULS_COMPARE_CAN_ERROR
-          if(i_compare_result <= -2){// user defined error codes
-            goto clean_and_return_error;
-          }
-          #endif
-          if(i_compare_result > 0){
+          i_compare_result = TSODLULS_COMPARE_CALL(p_current_element, p_current_element - i_element_size);
+          if(i_compare_result < 0){
             break;
           }
         }
+        #if TSODLULS_COMPARE_CAN_ERROR
+        if(i_compare_result <= -2){// user defined error codes
+          goto clean_and_return_error;
+        }
+        #endif
       }
     }while(0);
 
@@ -164,6 +168,9 @@ See the source code of Python for the original implementation of Tim Peters's li
           i_current_run_number_of_elements,
           i_element_size,
           fn_comparison
+          #if TSODLULS_COMPARE_REENTRANT
+          , context
+          #endif
       );
       if(i_compare_result != 0){
         goto clean_and_return_error;

@@ -39,7 +39,8 @@ If you want to understand this function body, please look first at stdlib/qsort.
 //  void* arr_elements,
 //  size_t i_number_of_elements,
 //  size_t i_element_size,
-//  t_comparison_function fn_comparison
+//  t_comparison_function or t_reentrant_comparison_function fn_comparison,
+//  and maybe void* context
 //){
 //  #define TSODLULS_MAX_THRESH 5
 //  #define TSODLULS_SWAP_VAR(a0,a1,a2) TSODLULS_SWAP_VAR_1(a0,a1,a2)
@@ -75,6 +76,7 @@ If you want to understand this function body, please look first at stdlib/qsort.
     while(TSODLULS_STACK_NOT_EMPTY){
       char* left_ptr;
       char* right_ptr;
+      int i_compare_result = 0;
 
       /* Select median value from among LO, MID, and HI. Rearrange
       LO and HI so the three values are sorted. This lowers the
@@ -85,7 +87,13 @@ If you want to understand this function body, please look first at stdlib/qsort.
       char* mid = lo + i_element_size * ((hi - lo) / i_element_size >> 1);
       #if TSODLULS_MAX_THRESH <= 1
       if(mid == lo){//2 elements
-        if((*fn_comparison) ((void *) hi, (void *) lo) < 0){
+        i_compare_result = TSODLULS_COMPARE_CALL(hi, lo);
+        if(i_compare_result < 0){
+          #if TSODLULS_COMPARE_CAN_ERROR
+          if(i_compare_result <= -2){// user defined error codes
+            return i_compare_result;
+          }
+          #endif
           TSODLULS_SWAP_VAR(hi, lo, i_element_size);
         }
         TSODLULS_POP (lo, hi);
@@ -93,12 +101,30 @@ If you want to understand this function body, please look first at stdlib/qsort.
       }
       #endif
 
-      if((*fn_comparison) ((void *) mid, (void *) lo) < 0){
+      i_compare_result = TSODLULS_COMPARE_CALL(mid, lo);
+      if(i_compare_result < 0){
+        #if TSODLULS_COMPARE_CAN_ERROR
+        if(i_compare_result <= -2){// user defined error codes
+          return i_compare_result;
+        }
+        #endif
         TSODLULS_SWAP_VAR(mid, lo, i_element_size);
       }
-      if((*fn_comparison) ((void *) hi, (void *) mid) < 0){
+      i_compare_result = TSODLULS_COMPARE_CALL(hi, mid);
+      if(i_compare_result < 0){
+        #if TSODLULS_COMPARE_CAN_ERROR
+        if(i_compare_result <= -2){// user defined error codes
+          return i_compare_result;
+        }
+        #endif
         TSODLULS_SWAP_VAR(mid, hi, i_element_size);
-        if((*fn_comparison) ((void *) mid, (void *) lo) < 0){
+        i_compare_result = TSODLULS_COMPARE_CALL(mid, lo);
+        if(i_compare_result < 0){
+          #if TSODLULS_COMPARE_CAN_ERROR
+          if(i_compare_result <= -2){// user defined error codes
+            return i_compare_result;
+          }
+          #endif
           TSODLULS_SWAP_VAR(mid, lo, i_element_size);
         }
       }
@@ -116,13 +142,27 @@ If you want to understand this function body, please look first at stdlib/qsort.
          Gotta like those tight inner loops!  They are the main reason
          that this algorithm runs much faster than others. */
       do{
-        while((*fn_comparison) ((void *) left_ptr, (void *) mid) < 0){
+        i_compare_result = TSODLULS_COMPARE_CALL(mid, left_ptr);
+        while(i_compare_result > 0){
           left_ptr += i_element_size;
+          i_compare_result = TSODLULS_COMPARE_CALL(mid, left_ptr);
         }
+        #if TSODLULS_COMPARE_CAN_ERROR
+        if(i_compare_result <= -2){// user defined error codes
+          return i_compare_result;
+        }
+        #endif
 
-        while((*fn_comparison) ((void *) mid, (void *) right_ptr) < 0){
+        i_compare_result = TSODLULS_COMPARE_CALL(right_ptr, mid);
+        while(i_compare_result > 0){
           right_ptr -= i_element_size;
+          i_compare_result = TSODLULS_COMPARE_CALL(right_ptr, mid);
         }
+        #if TSODLULS_COMPARE_CAN_ERROR
+        if(i_compare_result <= -2){// user defined error codes
+          return i_compare_result;
+        }
+        #endif
 
         if(left_ptr < right_ptr){
           TSODLULS_SWAP_VAR(left_ptr, right_ptr, i_element_size);

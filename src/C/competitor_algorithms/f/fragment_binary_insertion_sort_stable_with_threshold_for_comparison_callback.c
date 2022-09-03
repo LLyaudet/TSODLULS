@@ -49,13 +49,13 @@ Modifications in this library to do a *binary* insertion sort:
       search_range_middle = search_range_left + (((search_range_right - search_range_left) / i_element_size) / 2) * i_element_size;
       #if TSODLULS_COMPARE_CAN_ERROR
       int i_compare_result = TSODLULS_COMPARE_CALL(run_ptr, search_range_middle);
-      if(i_compare_result <= -2){// user defined error codes
-        return i_compare_result;
-      }
       if(i_compare_result >= 0){
         search_range_left = search_range_middle + i_element_size;
       }
       else{
+        if(i_compare_result <= -2){// user defined error codes
+          return i_compare_result;
+        }
         search_range_right = search_range_middle;
       }
       #else

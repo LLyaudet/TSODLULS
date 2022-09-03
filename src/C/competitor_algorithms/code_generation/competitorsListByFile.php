@@ -182,12 +182,14 @@ $arrArrCompetitorsListByFile = array(
     'header_tail' => '',
     'code_head' => "#include \"TSODLULS__competitor.h\"\n\n"
                   ."#define TSODLULS_COMPARE_CAN_ERROR 0\n"
+                  ."#define TSODLULS_COMPARE_REENTRANT 0\n"
                   ."#define TSODLULS_COMPARE_CALL TSODLULS_COMPARE_CALL_SIMPLE\n"
                   ."#define TSODLULS_COMPARE_TYPE TSODLULS_COMPARE_TYPE_SIMPLE\n"
                   ."#define TSODLULS_COMPARE_TIM_SORT_MERGE_STATE TSODLULS_COMPARE_TIM_SORT_MERGE_STATE_SIMPLE\n"
                   ."#define TSODLULS_MERGE_TWO_RUNS TSODLULS_merge_two_runs__comparison_callback\n"
                   ."\n\n\n",
     'code_tail' => "#undef TSODLULS_COMPARE_CAN_ERROR\n"
+                  ."#undef TSODLULS_COMPARE_REENTRANT\n"
                   ."#undef TSODLULS_COMPARE_CALL\n"
                   ."#undef TSODLULS_COMPARE_TYPE\n"
                   ."#undef TSODLULS_COMPARE_TIM_SORT_MERGE_STATE\n"

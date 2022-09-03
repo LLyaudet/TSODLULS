@@ -29,6 +29,7 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 //  size_t i_number_of_elements,
 //  size_t i_element_size,
 //  t_comparison_function or t_reentrant_comparison_function fn_comparison,
+//  and maybe void* context,
 //  size_t i_hint_offset
 //){
   size_t i_current_offset;
@@ -51,11 +52,6 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     size_t const i_max_offset = i_number_of_elements - i_hint_offset;
     while(i_current_offset < i_max_offset){
       i_compare_result = TSODLULS_COMPARE_CALL(p_element, &arr_sorted_elements[i_current_offset * i_element_size]);
-      #if TSODLULS_COMPARE_CAN_ERROR
-      if(i_compare_result <= -2){// user defined error codes
-        return i_compare_result;
-      }
-      #endif
       if(i_compare_result < 0){
         break;
       }
@@ -65,6 +61,11 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
         i_current_offset = i_max_offset;
       }
     }
+    #if TSODLULS_COMPARE_CAN_ERROR
+    if(i_compare_result <= -2){// user defined error codes
+      return i_compare_result;
+    }
+    #endif
     if(i_current_offset > i_max_offset){
       i_current_offset = i_max_offset;
     }
@@ -77,13 +78,8 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     size_t const i_max_offset = i_hint_offset + 1;
     size_t temp_offset;
     while(i_current_offset < i_max_offset){
-      i_compare_result = TSODLULS_COMPARE_CALL(p_element, arr_sorted_elements - (i_current_offset * i_element_size));
-      #if TSODLULS_COMPARE_CAN_ERROR
-      if(i_compare_result <= -2){// user defined error codes
-        return i_compare_result;
-      }
-      #endif
-      if(i_compare_result >= 0){
+      i_compare_result = TSODLULS_COMPARE_CALL(arr_sorted_elements - (i_current_offset * i_element_size), p_element);
+      if(i_compare_result <= 0){
         break;
       }
       i_previous_offset = i_current_offset;
@@ -92,6 +88,11 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
         i_current_offset = i_max_offset;
       }
     }
+    #if TSODLULS_COMPARE_CAN_ERROR
+    if(i_compare_result <= -2){// user defined error codes
+      return i_compare_result;
+    }
+    #endif
     if(i_current_offset > i_max_offset){
       i_current_offset = i_max_offset;
     }
@@ -107,12 +108,12 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
   while(i_previous_offset < i_current_offset){
     size_t i_middle_offset = i_previous_offset + ((i_current_offset - i_previous_offset) / 2);
     int i_compare_result = TSODLULS_COMPARE_CALL(&arr_sorted_elements[i_middle_offset * i_element_size], p_element);
-    #if TSODLULS_COMPARE_CAN_ERROR
-    if(i_compare_result <= -2){// user defined error codes
-      return i_compare_result;
-    }
-    #endif
     if(i_compare_result <= 0){
+      #if TSODLULS_COMPARE_CAN_ERROR
+      if(i_compare_result <= -2){// user defined error codes
+        return i_compare_result;
+      }
+      #endif
       i_previous_offset = i_middle_offset + 1;
     }
     else{
