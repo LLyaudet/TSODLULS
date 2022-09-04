@@ -114,6 +114,24 @@ The macraffs in this library use the following auxiliary variables:
 
 #define TSODLULS_min_exp(x, y) ((x) < (y) ? (x) : (y))
 
+#ifndef SIZE_WIDTH
+  #if SIZE_MAX == ((1 << 8) - 1) * ((1 << 8) + 1)
+    #define SIZE_WIDTH 16
+  #elif SIZE_MAX == ((1 << 16) - 1) * ((1 << 16) + 1)
+    #define SIZE_WIDTH 32
+  //C preprocessor arithmetic seems to be signed,
+  //and issues a warning when int is too big and requires unsigned type
+  //but you cannot cast to (size_t) in C preprocessor #if
+  //Welcome to the undocumented C preprocessor hell ;)
+  //#elif SIZE_MAX == ((1 << 32) - 1) * ((1 << 32) + 1)
+  //  #define SIZE_WIDTH 64
+  #else
+  //  # error "missing SIZE_WIDTH"
+    #define SIZE_WIDTH 64
+  #endif
+#endif
+#define TSODLULS_SIZE_MIN_BEFORE_X2_OVERFLOW (((size_t)1) << (SIZE_WIDTH - 1))
+
 
 
 #define TSODLULS_STACK_SIZE  (CHAR_BIT * sizeof(size_t))

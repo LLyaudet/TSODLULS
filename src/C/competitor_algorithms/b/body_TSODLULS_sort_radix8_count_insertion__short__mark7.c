@@ -89,11 +89,11 @@ along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
     size_t i = 1;
     coarse_logarithmic_bound = 256;
     auxiliary_variable_for_coarse_logarithmic_bound = 256*(TSODLULS_MAX_THRESH + 1);
-    for(
-      ;
-      auxiliary_variable_for_coarse_logarithmic_bound < i_number_of_elements;
-      ++i
-    ){
+    while(auxiliary_variable_for_coarse_logarithmic_bound < i_number_of_elements){
+      ++i;
+      if(TSODLULS_SIZE_MIN_BEFORE_X2_OVERFLOW <= auxiliary_variable_for_coarse_logarithmic_bound){
+        break;
+      }
       auxiliary_variable_for_coarse_logarithmic_bound *= 2;
     }
     coarse_logarithmic_bound *= i;
