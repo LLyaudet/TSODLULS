@@ -19,7 +19,7 @@ Most of the code here is from glibc:
   Copyright (C) 1991-2018 Free Software Foundation, Inc.
 
 Modifications in this library:
-©Copyright 2018-2022 Laurent Lyaudet
+©Copyright 2018-2023 Laurent Lyaudet
 */
 /*
 If you want to understand this function body, please look first at stdlib/qsort.c in glibc library

@@ -19,7 +19,7 @@ Some of the code here is from glibc:
   Copyright (C) 1991-2018 Free Software Foundation, Inc.
 
 Modifications in this library to do a *binary* insertion sort:
-©Copyright 2018-2022 Laurent Lyaudet
+©Copyright 2018-2023 Laurent Lyaudet
 */
 
 #if TSODLULS_MAX_THRESH > 1

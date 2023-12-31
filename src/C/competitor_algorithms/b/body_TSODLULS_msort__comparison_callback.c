@@ -20,7 +20,7 @@ Most of the code here is from glibc:
    An alternative to qsort, with an identical interface.
 
 Modifications in this library:
-©Copyright 2018-2022 Laurent Lyaudet
+©Copyright 2018-2023 Laurent Lyaudet
 */
 /*
 If you want to understand this function body, please look first at stdlib/msort.c in glibc library

@@ -14,7 +14,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with TSODLULS.  If not, see <http://www.gnu.org/licenses/>.
 
-©Copyright 2018-2022 Laurent Lyaudet
+©Copyright 2018-2023 Laurent Lyaudet
 
 http://en.wikipedia.org/wiki/Timsort
 See the source code of Python for the original implementation of Tim Peters's list sort.
